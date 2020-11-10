@@ -3,6 +3,10 @@
 echo "Upgrade apt packages"
 sudo apt-get -y update
 sudo apt-get -y upgrade
+sudo apt-get -y auto-remove
+sudo apt-get -y dist-upgrade
+sudo apt-get install -y grc nmap tree siege httpie tcpdump 
+sudo snap install helm --classic
 
 echo "Install k3s master"
 k3s_version=v1.18.10+k3s2
