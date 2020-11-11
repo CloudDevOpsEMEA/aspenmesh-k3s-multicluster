@@ -27,6 +27,11 @@ gateways:
   istio-ingressgateway:
     type: ClusterIP
 
+  istio-egressgateway:
+    env:
+      # Needed to route traffic via egress gateway if desired.
+      ISTIO_META_REQUESTED_NETWORK_VIEW: "external"
+
 prometheus:
   enabled: true
 
@@ -59,3 +64,19 @@ external-dns:
   #  persistentVolume:
   #    # Add the name of the manually created PVC. (e.g. aspen-mesh-metrics-collector)
   #    existingClaim: ['YOUR_PVC_NAME']
+
+global:
+  # Provides dns resolution for global services
+  podDNSSearchNamespaces:
+    - global
+
+  multiCluster:
+    enabled: true
+    globalDomainSuffix: "global"
+    includeEnvoyFilter: true
+
+  controlPlaneSecurityEnabled: true
+
+# Enable istiocoredns for multicluster routing
+istiocoredns:
+  enabled: true
