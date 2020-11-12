@@ -7,5 +7,5 @@ sudo apt-get -y auto-remove
 sudo apt-get -y dist-upgrade
 
 echo "Install packages"
-sudo apt-get install -y grc nmap tree siege httpie tcpdump 
+sudo apt-get install -y grc nmap tree siege httpie tcpdump make
 sudo snap install helm --classic

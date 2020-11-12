@@ -3,8 +3,8 @@
 # thanks to https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 .PHONY: help
 
-help: ## This help.
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+help: ## This help
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z0-9_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 .DEFAULT_GOAL := help
 
@@ -53,7 +53,7 @@ uninstall-am-1: ## Uninstall aspen mesh in cluster 1
 	helm uninstall istio-telemetry --namespace ${AM_NAMESPACE}
 	kubectl delete ns ${AM_NAMESPACE}
 	
-uninstall-am-2: ## Unnstall aspen mesh in cluster 2
+uninstall-am-2: ## Uninstall aspen mesh in cluster 2
 	helm uninstall istio-base --namespace ${AM_NAMESPACE}
 	helm uninstall istiod --namespace ${AM_NAMESPACE}
 	helm uninstall istio-ingress --namespace ${AM_NAMESPACE}
