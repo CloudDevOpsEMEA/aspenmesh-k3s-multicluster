@@ -27,6 +27,7 @@ install-am-1: ## Install aspen mesh in cluster 1
 		--from-file=${CERT_DIR}/cert-chain.pem 
 	helm install istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE}
 	helm install istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
+	helm install istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
 	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
 	helm install istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
@@ -40,6 +41,7 @@ install-am-2: ## Install aspen mesh in cluster 2
 		--from-file=${CERT_DIR}/cert-chain.pem 
 	helm install istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE}
 	helm install istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
+	helm install istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
 	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
 	helm install istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
@@ -48,6 +50,7 @@ install-am-2: ## Install aspen mesh in cluster 2
 upgrade-am-1: ## Upgrade aspen mesh in cluster 1
 	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE}
 	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
+	helm upgrade istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
 	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
 	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
 	helm upgrade istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
@@ -55,26 +58,21 @@ upgrade-am-1: ## Upgrade aspen mesh in cluster 1
 upgrade-am-2: ## Upgrade aspen mesh in cluster 2
 	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE}
 	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
+	helm upgrade istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
 	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
 	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
 	helm upgrade istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
 
 
-uninstall-am-1: ## Uninstall aspen mesh in cluster 1
-	helm uninstall istio-base --namespace ${AM_NAMESPACE} || true
-	helm uninstall istiod --namespace ${AM_NAMESPACE} || true
-	helm uninstall istio-ingress --namespace ${AM_NAMESPACE} || true
-	helm uninstall istio-egress --namespace ${AM_NAMESPACE} || true
+uninstall-am: ## Uninstall aspen mesh in cluster
 	helm uninstall istio-telemetry --namespace ${AM_NAMESPACE} || true
-	kubectl delete ns ${AM_NAMESPACE} || true
-	
-uninstall-am-2: ## Uninstall aspen mesh in cluster 2
-	helm uninstall istio-base --namespace ${AM_NAMESPACE} || true
-	helm uninstall istiod --namespace ${AM_NAMESPACE} || true
-	helm uninstall istio-ingress --namespace ${AM_NAMESPACE} || true
 	helm uninstall istio-egress --namespace ${AM_NAMESPACE} || true
-	helm uninstall istio-telemetry --namespace ${AM_NAMESPACE} || true
+	helm uninstall istio-ingress --namespace ${AM_NAMESPACE} || true
+	helm uninstall istiocoredns --namespace ${AM_NAMESPACE} || true
+	helm uninstall istiod --namespace ${AM_NAMESPACE} || true
+	helm uninstall istio-base --namespace ${AM_NAMESPACE} || true
 	kubectl delete ns ${AM_NAMESPACE} || true
+
 
 post-install: ## Extra installations after standard installation
 	kubectl apply -f ./udf/aspenmesh/post-install
