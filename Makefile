@@ -12,47 +12,50 @@ AM_NAMESPACE=istio-system
 AM_VALUES_1=./k3s/udf-values-cluster1.yaml
 AM_VALUES_2=./k3s/udf-values-cluster2.yaml
 
+CHART_DIR=./aspenmesh-1.6.12-am2/manifests/charts
+CERT_DIR=./aspenmesh-1.6.12-am2/samples/certs
+
 
 install-am-1: ## Install aspen mesh in cluster 1
 	kubectl create ns ${AM_NAMESPACE}
 	kubectl create secret generic cacerts -n ${AM_NAMESPACE} \
-		--from-file=./aspenmesh-1.6.12-am2/samples/certs/ca-cert.pem \
-		--from-file=./aspenmesh-1.6.12-am2/samples/certs/ca-key.pem \
-		--from-file=./aspenmesh-1.6.12-am2/samples/certs/root-cert.pem \
-		--from-file=./aspenmesh-1.6.12-am2/samples/certs/cert-chain.pem 
-	helm install istio-base manifests/charts/base --namespace ${AM_NAMESPACE}
-	helm install istiod manifests/charts/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
-	helm install istio-ingress manifests/charts/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
-	helm install istio-egress manifests/charts/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
-	helm install istio-telemetry manifests/charts/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
+		--from-file=${CERT_DIR}/ca-cert.pem \
+		--from-file=${CERT_DIR}/samples/certs/ca-key.pem \
+		--from-file=${CERT_DIR}/root-cert.pem \
+		--from-file=${CERT_DIR}/cert-chain.pem 
+	helm install istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE}
+	helm install istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
+	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
+	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
+	helm install istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
 
 install-am-2: ## Install aspen mesh in cluster 2
 	kubectl create ns ${AM_NAMESPACE}
 	kubectl create secret generic cacerts -n ${AM_NAMESPACE} \
-		--from-file=./aspenmesh-1.6.12-am2/samples/certs/ca-cert.pem \
-		--from-file=./aspenmesh-1.6.12-am2/samples/certs/ca-key.pem \
-		--from-file=./aspenmesh-1.6.12-am2/samples/certs/root-cert.pem \
-		--from-file=./aspenmesh-1.6.12-am2/samples/certs/cert-chain.pem 
-	helm install istio-base manifests/charts/base --namespace ${AM_NAMESPACE}
-	helm install istiod manifests/charts/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
-	helm install istio-ingress manifests/charts/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
-	helm install istio-egress manifests/charts/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
-	helm install istio-telemetry manifests/charts/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
+		--from-file=${CERT_DIR}/ca-cert.pem \
+		--from-file=${CERT_DIR}/ca-key.pem \
+		--from-file=${CERT_DIR}/root-cert.pem \
+		--from-file=${CERT_DIR}/cert-chain.pem 
+	helm install istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE}
+	helm install istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
+	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
+	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
+	helm install istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
 
 
 upgrade-am-1: ## Upgrade aspen mesh in cluster 1
-	helm upgrade istio-base manifests/charts/base --namespace ${AM_NAMESPACE}
-	helm upgrade istiod manifests/charts/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
-	helm upgrade istio-ingress manifests/charts/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
-	helm upgrade istio-egress manifests/charts/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
-	helm upgrade istio-telemetry manifests/charts/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
+	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE}
+	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
+	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
+	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
+	helm upgrade istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
 
 upgrade-am-2: ## Upgrade aspen mesh in cluster 2
-	helm upgrade istio-base manifests/charts/base --namespace ${AM_NAMESPACE}
-	helm upgrade istiod manifests/charts/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
-	helm upgrade istio-ingress manifests/charts/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
-	helm upgrade istio-egress manifests/charts/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
-	helm upgrade istio-telemetry manifests/charts/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
+	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE}
+	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
+	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
+	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
+	helm upgrade istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
 
 
 uninstall-am-1: ## Uninstall aspen mesh in cluster 1
