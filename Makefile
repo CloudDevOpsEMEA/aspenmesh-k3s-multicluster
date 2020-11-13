@@ -9,8 +9,8 @@ help: ## This help
 .DEFAULT_GOAL := help
 
 AM_NAMESPACE=istio-system
-AM_VALUES_1=./k3s/udf-values-cluster1.yaml
-AM_VALUES_2=./k3s/udf-values-cluster2.yaml
+AM_VALUES_1=./udf/k3s/udf-values-cluster1.yaml
+AM_VALUES_2=./udf/k3s/udf-values-cluster2.yaml
 
 CHART_DIR=./aspenmesh-1.6.12-am2/manifests/charts
 CERT_DIR=./aspenmesh-1.6.12-am2/samples/certs
