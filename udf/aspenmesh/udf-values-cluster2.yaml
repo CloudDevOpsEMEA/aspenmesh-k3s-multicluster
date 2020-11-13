@@ -25,9 +25,11 @@ aspen-mesh-secure-ingress:
   
 gateways:
   istio-ingressgateway:
+    enabled: true
     type: ClusterIP
 
   istio-egressgateway:
+    enabled: true
     env:
       # Needed to route traffic via egress gateway if desired.
       ISTIO_META_REQUESTED_NETWORK_VIEW: "external"

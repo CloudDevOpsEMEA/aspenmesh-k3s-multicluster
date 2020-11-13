@@ -15,6 +15,11 @@ AM_VALUES_2=./k3s/udf-values-cluster2.yaml
 
 install-am-1: ## Install aspen mesh in cluster 1
 	kubectl create ns ${AM_NAMESPACE}
+	kubectl create secret generic cacerts -n ${AM_NAMESPACE} \
+		--from-file=./aspenmesh-1.6.12-am2/samples/certs/ca-cert.pem \
+		--from-file=./aspenmesh-1.6.12-am2/samples/certs/ca-key.pem \
+		--from-file=./aspenmesh-1.6.12-am2/samples/certs/root-cert.pem \
+		--from-file=./aspenmesh-1.6.12-am2/samples/certs/cert-chain.pem 
 	helm install istio-base manifests/charts/base --namespace ${AM_NAMESPACE}
 	helm install istiod manifests/charts/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
 	helm install istio-ingress manifests/charts/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
@@ -23,6 +28,11 @@ install-am-1: ## Install aspen mesh in cluster 1
 
 install-am-2: ## Install aspen mesh in cluster 2
 	kubectl create ns ${AM_NAMESPACE}
+	kubectl create secret generic cacerts -n ${AM_NAMESPACE} \
+		--from-file=./aspenmesh-1.6.12-am2/samples/certs/ca-cert.pem \
+		--from-file=./aspenmesh-1.6.12-am2/samples/certs/ca-key.pem \
+		--from-file=./aspenmesh-1.6.12-am2/samples/certs/root-cert.pem \
+		--from-file=./aspenmesh-1.6.12-am2/samples/certs/cert-chain.pem 
 	helm install istio-base manifests/charts/base --namespace ${AM_NAMESPACE}
 	helm install istiod manifests/charts/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
 	helm install istio-ingress manifests/charts/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
