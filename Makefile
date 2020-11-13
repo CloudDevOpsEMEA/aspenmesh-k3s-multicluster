@@ -59,20 +59,20 @@ upgrade-am-2: ## Upgrade aspen mesh in cluster 2
 
 
 uninstall-am-1: ## Uninstall aspen mesh in cluster 1
-	helm uninstall istio-base --namespace ${AM_NAMESPACE}
-	helm uninstall istiod --namespace ${AM_NAMESPACE}
-	helm uninstall istio-ingress --namespace ${AM_NAMESPACE}
-	helm uninstall istio-egress --namespace ${AM_NAMESPACE}
-	helm uninstall istio-telemetry --namespace ${AM_NAMESPACE}
-	kubectl delete ns ${AM_NAMESPACE}
+	helm uninstall istio-base --namespace ${AM_NAMESPACE} || true
+	helm uninstall istiod --namespace ${AM_NAMESPACE} || true
+	helm uninstall istio-ingress --namespace ${AM_NAMESPACE} || true
+	helm uninstall istio-egress --namespace ${AM_NAMESPACE} || true
+	helm uninstall istio-telemetry --namespace ${AM_NAMESPACE} || true
+	kubectl delete ns ${AM_NAMESPACE} || true
 	
 uninstall-am-2: ## Uninstall aspen mesh in cluster 2
-	helm uninstall istio-base --namespace ${AM_NAMESPACE}
-	helm uninstall istiod --namespace ${AM_NAMESPACE}
-	helm uninstall istio-ingress --namespace ${AM_NAMESPACE}
-	helm uninstall istio-egress --namespace ${AM_NAMESPACE}
-	helm uninstall istio-telemetry --namespace ${AM_NAMESPACE}
-	kubectl delete ns ${AM_NAMESPACE}
+	helm uninstall istio-base --namespace ${AM_NAMESPACE} || true
+	helm uninstall istiod --namespace ${AM_NAMESPACE} || true
+	helm uninstall istio-ingress --namespace ${AM_NAMESPACE} || true
+	helm uninstall istio-egress --namespace ${AM_NAMESPACE} || true
+	helm uninstall istio-telemetry --namespace ${AM_NAMESPACE} || true
+	kubectl delete ns ${AM_NAMESPACE} || true
 
 post-install: ## Extra installations after standard installation
 	kubectl apply -f ./udf/aspenmesh/post-install
