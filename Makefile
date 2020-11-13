@@ -20,7 +20,7 @@ install-am-1: ## Install aspen mesh in cluster 1
 	kubectl create ns ${AM_NAMESPACE}
 	kubectl create secret generic cacerts -n ${AM_NAMESPACE} \
 		--from-file=${CERT_DIR}/ca-cert.pem \
-		--from-file=${CERT_DIR}/samples/certs/ca-key.pem \
+		--from-file=${CERT_DIR}/ca-key.pem \
 		--from-file=${CERT_DIR}/root-cert.pem \
 		--from-file=${CERT_DIR}/cert-chain.pem 
 	helm install istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE}
