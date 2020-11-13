@@ -12,7 +12,6 @@ AM_NAMESPACE=istio-system
 
 AM_VALUES_1=./udf/aspenmesh/udf-values-cluster1.yaml
 AM_VALUES_2=./udf/aspenmesh/udf-values-cluster2.yaml
-MULTICLUSTER_VALUES=./udf/aspenmesh/udf-values-multicluster-gateways.yaml
 
 CHART_DIR=./aspenmesh-1.6.12-am2/manifests/charts
 CERT_DIR=./aspenmesh-1.6.12-am2/samples/certs
@@ -76,4 +75,3 @@ uninstall-am: ## Uninstall aspen mesh in cluster
 
 post-install: ## Extra installations after standard installation
 	kubectl apply -f ./udf/aspenmesh/post-install
-	istioctl install -f ${MULTICLUSTER_VALUES}
