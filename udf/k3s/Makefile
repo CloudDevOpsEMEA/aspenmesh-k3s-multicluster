@@ -14,7 +14,7 @@ MASTER_DNS_2 = k3s-2-master
 CLUSTER_DOMAIN_1 = cluster1.local
 CLUSTER_DOMAIN_2 = cluster2.local
 
-MASTER_TOKEN_1 = NA
+MASTER_TOKEN_1 = K10f5d750aeedadf3fd9aa7d6c9742779da02e09cc619cd216e5fb0e951f5e1abd9::server:93c0d3cd3ba884c1edf843a7469374b9
 MASTER_TOKEN_2 = NA
 
 
