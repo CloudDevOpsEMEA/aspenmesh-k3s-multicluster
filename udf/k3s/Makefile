@@ -35,12 +35,12 @@ install-k3s-2-slave: ## Install k3s slave cluster 2
 	./config-kubectl.sh
 
 copy-kubectl-config-1: ## Copy the kubectl config file to slaves
-	scp /etc/rancher/k3s/k3s.yaml k3s-1-node1@/home/ubuntu/.kube/config
-	scp /etc/rancher/k3s/k3s.yaml k3s-1-node2@/home/ubuntu/.kube/config
+	sudo scp /etc/rancher/k3s/k3s.yaml k3s-1-node1@/home/ubuntu/.kube/config
+	sudo scp /etc/rancher/k3s/k3s.yaml k3s-1-node2@/home/ubuntu/.kube/config
 
 copy-kubectl-config-2: ## Copy the kubectl config file to slaves
-	scp /etc/rancher/k3s/k3s.yaml k3s-2-node1@/home/ubuntu/.kube/config
-	scp /etc/rancher/k3s/k3s.yaml k3s-2-node2@/home/ubuntu/.kube/config
+	sudo scp /etc/rancher/k3s/k3s.yaml k3s-2-node1@/home/ubuntu/.kube/config
+	sudo scp /etc/rancher/k3s/k3s.yaml k3s-2-node2@/home/ubuntu/.kube/config
 
 uninstall-k3s:
 	./uninstall-k3s.sh
