@@ -83,7 +83,7 @@ post-install: ## Extra installations after standard installation
 	kubectl apply -f ./udf/aspenmesh/post-install
 
 git-clone-all: ## Clone all git repos
-	ssh jumphost 		 	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
+	# ssh jumphost 		 	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
 	ssh k3s-1-master	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
 	ssh k3s-1-node1  	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
 	ssh k3s-1-node2  	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
