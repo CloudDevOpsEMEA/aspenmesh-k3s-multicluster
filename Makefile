@@ -8,13 +8,19 @@ help: ## This help
 
 .DEFAULT_GOAL := help
 
+GIT_REPO=https://github.com/CloudDevOpsEMEA/aspenmesh-k3s-multicluster
+
+HOME_DIR=/home/ubuntu
+REPO_DIR=${HOME_DIR}/aspenmesh-k3s-multicluster
+
 AM_NAMESPACE=istio-system
 
 AM_VALUES_1=./udf/aspenmesh/udf-values-cluster1.yaml
 AM_VALUES_2=./udf/aspenmesh/udf-values-cluster2.yaml
 
-CHART_DIR=./aspenmesh-1.6.12-am2/manifests/charts
-CERT_DIR=./aspenmesh-1.6.12-am2/samples/certs
+ASPEN_MESH_INSTALL=./aspenmesh-1.6.14-am2
+CHART_DIR=${ASPEN_MESH_INSTALL}/manifests/charts
+CERT_DIR=${ASPEN_MESH_INSTALL}/samples/certs
 
 
 install-am-1: ## Install aspen mesh in cluster 1
@@ -75,3 +81,21 @@ uninstall-am: ## Uninstall aspen mesh in cluster
 
 post-install: ## Extra installations after standard installation
 	kubectl apply -f ./udf/aspenmesh/post-install
+
+git-clone-all: ## Clone all git repos
+	ssh jumphost 		 	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
+	ssh k3s-1-master	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
+	ssh k3s-1-node1  	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
+	ssh k3s-1-node2  	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
+	ssh k3s-2-master 	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
+	ssh k3s-2-node1  	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
+	ssh k3s-2-node2  	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
+
+git-pull-all: ## Pull all git repos
+	ssh jumphost 			'cd ${REPO_DIR}; git pull ; sudo updatedb'
+	ssh k3s-1-master	'cd ${REPO_DIR}; git pull ; sudo updatedb'
+	ssh k3s-1-node1 	'cd ${REPO_DIR}; git pull ; sudo updatedb'
+	ssh k3s-1-node2   'cd ${REPO_DIR}; git pull ; sudo updatedb'
+	ssh k3s-2-master  'cd ${REPO_DIR}; git pull ; sudo updatedb'
+	ssh k3s-2-node1 	'cd ${REPO_DIR}; git pull ; sudo updatedb'
+	ssh k3s-2-node2   'cd ${REPO_DIR}; git pull ; sudo updatedb'
