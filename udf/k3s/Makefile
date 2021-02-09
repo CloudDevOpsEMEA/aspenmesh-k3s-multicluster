@@ -28,19 +28,9 @@ install-k3s-2-master: ## Install k3s master cluster 2
 
 install-k3s-1-slave: ## Install k3s slave cluster 1
 	./install-k3s-slave.sh ${MASTER_DNS_1} ${MASTER_TOKEN_1} ${CLUSTER_DOMAIN_1}
-	./config-kubectl.sh
 
 install-k3s-2-slave: ## Install k3s slave cluster 2
 	./install-k3s-slave.sh ${MASTER_DNS_2} ${MASTER_TOKEN_2} ${CLUSTER_DOMAIN_2}
-	./config-kubectl.sh
-
-copy-kubectl-config-1: ## Copy the kubectl config file to slaves
-	sudo scp /etc/rancher/k3s/k3s.yaml ubuntu@k3s-1-node1:/home/ubuntu/.kube/config
-	sudo scp /etc/rancher/k3s/k3s.yaml ubuntu@k3s-1-node2:/home/ubuntu/.kube/config
-
-copy-kubectl-config-2: ## Copy the kubectl config file to slaves
-	sudo scp /etc/rancher/k3s/k3s.yaml ubuntu@k3s-2-node1:/home/ubuntu/.kube/config
-	sudo scp /etc/rancher/k3s/k3s.yaml ubuntu@k3s-2-node2:/home/ubuntu/.kube/config
 
 uninstall-k3s:
 	./uninstall-k3s.sh

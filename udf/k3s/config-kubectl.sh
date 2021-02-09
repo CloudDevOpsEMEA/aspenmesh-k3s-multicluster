@@ -3,15 +3,8 @@
 echo "Make kubectl config available for user and enable auto-complete"
 sudo mkdir -p ~/.kube
 
-if [ -f "/etc/rancher/k3s/k3s.yaml" ]; then
-  echo "We are configuring a master node"
-  sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
-else
-  echo "We are configuring a slave node"
-  echo "Copy the content of /etc/rancher/k3s/k3s.yaml on the master node into ~/.kube/config to enable kubectl access"
-  sudo touch ~/.kube/config
-fi
-
+echo "We are configuring a master node"
+sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
 sudo chown ubuntu:ubuntu -R ~/.kube
 
 echo "Adding bashrc configuration"
