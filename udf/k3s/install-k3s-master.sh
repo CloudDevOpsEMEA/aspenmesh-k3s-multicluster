@@ -21,7 +21,7 @@ fi
 K3S_ARGS="--cluster-domain ${CLUSTER_DOMAIN}"
 
 echo "Install k3s server on ${MASTER_DNS} with cluster domain ${CLUSTER_DOMAIN}"
-curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=${K3S_VERSION} sh - ${K3S_ARGS}
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=${K3S_VERSION} INSTALL_K3S_EXEC=${K3S_ARGS} sh -
 K3S_TOKEN=$(sudo cat /var/lib/rancher/k3s/server/node-token)
 K3S_URL="https://${MASTER_DNS}:6443"
 
