@@ -21,7 +21,6 @@ else
 fi
 
 K3S_URL="https://${MASTER_DNS}:6443"
-K3S_ARGS="--kubelet-arg=\"cluster-domain=${CLUSTER_DOMAIN}\""
 
 echo "Install k3s agent with cluster domain ${CLUSTER_DOMAIN}"
-curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=${K3S_VERSION} K3S_URL=${K3S_URL} K3S_TOKEN=${K3S_TOKEN} INSTALL_K3S_EXEC="${K3S_ARGS}" sh -
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=${K3S_VERSION} K3S_URL=${K3S_URL} K3S_TOKEN=${K3S_TOKEN} sh -s - --kubelet-arg="cluster-domain=${CLUSTER_DOMAIN}"
