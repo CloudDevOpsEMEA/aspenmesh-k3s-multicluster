@@ -15,7 +15,7 @@ CLUSTER_DOMAIN_1 = cluster1.local
 CLUSTER_DOMAIN_2 = cluster2.local
 
 MASTER_TOKEN_1 = K10f5d750aeedadf3fd9aa7d6c9742779da02e09cc619cd216e5fb0e951f5e1abd9::server:93c0d3cd3ba884c1edf843a7469374b9
-MASTER_TOKEN_2 = NA
+MASTER_TOKEN_2 = K10a0f0c71dcf4db8abbaf89f835cbff4447eaffaf0f736e31f0acf6622d055a4c1::server:eec8016ff8616ddfcd53d17021baf28f
 
 
 install-k3s-1-master: ## Install k3s master cluster 1
