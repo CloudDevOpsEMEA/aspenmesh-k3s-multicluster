@@ -1,0 +1,38 @@
+# HELP
+# This will output the help for each task
+# thanks to https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
+.PHONY: help
+
+help: ## This help
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z0-9_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+
+.DEFAULT_GOAL := help
+
+MASTER_DNS_1 = k3s-1-master
+MASTER_DNS_2 = k3s-2-master
+
+CLUSTER_DOMAIN_1 = cluster1.local
+CLUSTER_DOMAIN_2 = cluster2.local
+
+MASTER_TOKEN_1 = NA
+MASTER_TOKEN_2 = NA
+
+
+install-k3s-1-master: ## Install k3s master cluster 1
+	./install-k3s-master.sh ${MASTER_DNS_1} ${CLUSTER_DOMAIN_1}
+	./config-kubectl.sh
+
+install-k3s-2-master: ## Install k3s master cluster 2
+	./install-k3s-master.sh ${MASTER_DNS_2} ${CLUSTER_DOMAIN_2}
+	./config-kubectl.sh
+
+install-k3s-1-slave: ## Install k3s slave cluster 1
+	./install-k3s-slave.sh ${MASTER_DNS_1} ${MASTER_TOKEN_1} ${CLUSTER_DOMAIN_1}
+	./config-kubectl.sh
+
+install-k3s-2-slave: ## Install k3s slave cluster 2
+	./install-k3s-slave.sh ${MASTER_DNS_2} ${MASTER_TOKEN_2} ${CLUSTER_DOMAIN_2}
+	./config-kubectl.sh
+
+uninstall-k3s:
+	./install-k3s.sh
