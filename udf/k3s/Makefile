@@ -35,4 +35,4 @@ install-k3s-2-slave: ## Install k3s slave cluster 2
 	./config-kubectl.sh
 
 uninstall-k3s:
-	./install-k3s.sh
+	./uninstall-k3s.sh
