@@ -45,11 +45,6 @@ gateways:
 prometheus:
   enabled: true
 
-proxy:
-  clusterDomain: "cluster2.local"
-
-trustDomain: "cluster2.local"
-
 jaeger:
   enabled: true
   cassandra:
@@ -90,6 +85,11 @@ global:
     includeEnvoyFilter: true
 
   controlPlaneSecurityEnabled: true
+
+  proxy:
+    clusterDomain: "cluster2.local"
+
+  trustDomain: "cluster2.local"
 
 # Enable istiocoredns for multicluster routing
 istiocoredns:
