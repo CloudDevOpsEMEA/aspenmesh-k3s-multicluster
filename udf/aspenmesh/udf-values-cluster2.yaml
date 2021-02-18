@@ -21,6 +21,7 @@ aspen-mesh-event-storage:
   config:
     cluster_size: 1
     seed_size: 1
+    cluster_domain: cluster2.local
 
 aspen-mesh-metrics-collector:
   server:
