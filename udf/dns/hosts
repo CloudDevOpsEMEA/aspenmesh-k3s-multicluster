@@ -1,5 +1,5 @@
-# DNSMasq entries
 
+# DNSMasq entries
 10.1.1.4 jumphost
 10.1.1.5 k3s-1-master
 10.1.1.6 k3s-1-node1
