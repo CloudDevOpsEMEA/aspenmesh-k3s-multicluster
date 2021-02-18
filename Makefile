@@ -18,18 +18,21 @@ AM_NAMESPACE=istio-system
 AM_VALUES_1=./udf/aspenmesh/udf-values-cluster1.yaml
 AM_VALUES_2=./udf/aspenmesh/udf-values-cluster2.yaml
 
-ASPEN_MESH_INSTALL=./aspenmesh-1.6.14-am2
+ASPEN_MESH_INSTALL=./aspenmesh/aspenmesh-1.6.14-am2
 CHART_DIR=${ASPEN_MESH_INSTALL}/manifests/charts
-CERT_DIR=${ASPEN_MESH_INSTALL}/samples/certs
+
+CERT_DIR=./udf/certs
+CERT_DIR_CLUSTER_1=${CERT_DIR}/cluster1
+CERT_DIR_CLUSTER_2=${CERT_DIR}/cluster2
 
 
 install-am-1: ## Install aspen mesh in cluster 1
 	kubectl create ns ${AM_NAMESPACE}
 	kubectl create secret generic cacerts -n ${AM_NAMESPACE} \
-		--from-file=${CERT_DIR}/ca-cert.pem \
-		--from-file=${CERT_DIR}/ca-key.pem \
-		--from-file=${CERT_DIR}/root-cert.pem \
-		--from-file=${CERT_DIR}/cert-chain.pem 
+		--from-file=${CERT_DIR_CLUSTER_1}/ca-cert.pem \
+		--from-file=${CERT_DIR_CLUSTER_1}/ca-key.pem \
+		--from-file=${CERT_DIR_CLUSTER_1}/root-cert.pem \
+		--from-file=${CERT_DIR_CLUSTER_1}/cert-chain.pem 
 	helm install istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE}
 	helm install istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
 	helm install istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
@@ -40,10 +43,10 @@ install-am-1: ## Install aspen mesh in cluster 1
 install-am-2: ## Install aspen mesh in cluster 2
 	kubectl create ns ${AM_NAMESPACE}
 	kubectl create secret generic cacerts -n ${AM_NAMESPACE} \
-		--from-file=${CERT_DIR}/ca-cert.pem \
-		--from-file=${CERT_DIR}/ca-key.pem \
-		--from-file=${CERT_DIR}/root-cert.pem \
-		--from-file=${CERT_DIR}/cert-chain.pem 
+		--from-file=${CERT_DIR_CLUSTER_2}/ca-cert.pem \
+		--from-file=${CERT_DIR_CLUSTER_2}/ca-key.pem \
+		--from-file=${CERT_DIR_CLUSTER_2}/root-cert.pem \
+		--from-file=${CERT_DIR_CLUSTER_2}/cert-chain.pem 
 	helm install istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE}
 	helm install istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
 	helm install istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
