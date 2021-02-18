@@ -1,102 +1,67 @@
-aspen-mesh-controlplane:
-  # The name of the cluster where Aspen Mesh is being installed.
+--- 
+aspen-mesh-controlplane: 
   clusterId: cluster2
-
-  userAuth:
-    # type can be set to `jwt` or `none`. JWT authentication is highly recommended.
+  prometheusUrl: "http://aspenmesh:2QxoVJLNG8Rhc7bmYqPmI171@aspen-mesh-metrics-collector.istio-system.svc.cluster2.local:19090"
+  userAuth: 
     type: none
-
-  prometheusUrl: http://aspenmesh:2QxoVJLNG8Rhc7bmYqPmI171@aspen-mesh-metrics-collector.istio-system.svc.cluster2.local:19090
-  
-aspen-mesh-secure-ingress:
-  # enabled by default, which is highly recommended.
-  enabled: true
-  # Email to use for Let's Encrypt registration (used for certificate expiry notices)
-  # Leave blank ("") if you wish to manage your own TLS certificates.
-  lets-encrypt-email: ""
-  # Enable external-dns management for Secure Ingress resources
-  externalDnsEnabled: false
-
-aspen-mesh-event-storage:
-  persistence:
-    size: 2Gi
-  config:
+aspen-mesh-event-storage: 
+  config: 
+    cluster_domain: cluster2.local
     cluster_size: 1
     seed_size: 1
-    cluster_domain: cluster2.local
-
-aspen-mesh-metrics-collector:
-  server:
-    persistentVolume:
+  persistence: 
+    size: 2Gi
+aspen-mesh-metrics-collector: 
+  server: 
+    persistentVolume: 
       size: 2Gi
-
-gateways:
-  istio-ingressgateway:
-    autoscaleMin: 1
+aspen-mesh-secure-ingress: 
+  enabled: true
+  externalDnsEnabled: false
+  lets-encrypt-email: ""
+external-dns: 
+  enabled: false
+gateways: 
+  istio-egressgateway: 
     autoscaleMax: 3
+    autoscaleMin: 1
+    enabled: true
+    env: 
+      ISTIO_META_REQUESTED_NETWORK_VIEW: external
+  istio-ingressgateway: 
+    autoscaleMax: 3
+    autoscaleMin: 1
     enabled: true
     type: ClusterIP
-
-  istio-egressgateway:
-    autoscaleMin: 1
-    autoscaleMax: 3
+global: 
+  controlPlaneSecurityEnabled: true
+  multiCluster: 
     enabled: true
-    env:
-      # Needed to route traffic via egress gateway if desired.
-      ISTIO_META_REQUESTED_NETWORK_VIEW: "external"
-
-prometheus:
+    globalDomainSuffix: aspendemo.org
+    includeEnvoyFilter: true
+  podDNSSearchNamespaces: 
+    - aspendemo.org
+  proxy: 
+    clusterDomain: cluster2.local
+  trustDomain: cluster2.local
+istiocoredns: 
   enabled: true
-
-jaeger:
-  enabled: true
-  cassandra:
-    persistence:
-      size: 2Gi
-    config:
+jaeger: 
+  cassandra: 
+    config: 
+      cluster_domain: cluster2.local
       cluster_size: 1
       seed_size: 1
-      cluster_domain: cluster2.local
-  ingester:
-    autoscaling:
-      minReplicas: 1
+    persistence: 
+      size: 2Gi
+  collector: 
+    autoscaling: 
       maxReplicas: 3
-  collector:
-    autoscaling:
       minReplicas: 1
-      maxReplicas: 3
-
-cassandra:
   enabled: true
-  fullnameOverride: aspen-mesh-cassandra
-  persistence:
-    size: 2Gi
-  config:
-    cluster_size: 1
-    seed_size: 1
-    cluster_domain: cluster2.local
-
-external-dns:
-  # enabled by default
-  enabled: false
-
-global:
-  # Provides dns resolution for global services
-  podDNSSearchNamespaces:
-    - aspendemo.org
-
-  multiCluster:
-    enabled: true
-    globalDomainSuffix: "aspendemo.org"
-    includeEnvoyFilter: true
-
-  controlPlaneSecurityEnabled: true
-
-  proxy:
-    clusterDomain: "cluster2.local"
-
-  trustDomain: "cluster2.local"
-
-# Enable istiocoredns for multicluster routing
-istiocoredns:
+  ingester: 
+    autoscaling: 
+      maxReplicas: 3
+      minReplicas: 1
+prometheus: 
   enabled: true
