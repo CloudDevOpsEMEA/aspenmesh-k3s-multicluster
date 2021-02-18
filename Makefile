@@ -39,7 +39,8 @@ install-am-1: ## Install aspen mesh in cluster 1
 	helm install istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE}
 	helm install istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
 	helm install istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
-	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
+	sleep 30
+	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
 	helm install istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
 
@@ -53,7 +54,8 @@ install-am-2: ## Install aspen mesh in cluster 2
 	helm install istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE}
 	helm install istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
 	helm install istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
-	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
+	sleep 30
+	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
 	helm install istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
 
