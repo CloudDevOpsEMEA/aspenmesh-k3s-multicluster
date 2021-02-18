@@ -19,6 +19,7 @@ configure-dns:  ## Change DNS server settings
 	sudo systemctl disable --now systemd-resolved
 	sudo rm -rf /etc/resolv.conf
 	sudo cp ./resolv.conf /etc/resolv.conf
+	sudo cp ./NetworkManager.conf /etc/NetworkManager/NetworkManager.conf
 
 update-hosts:  ## Update /etc/hosts file
 	cat ./hosts | sudo tee -a /etc/hosts
