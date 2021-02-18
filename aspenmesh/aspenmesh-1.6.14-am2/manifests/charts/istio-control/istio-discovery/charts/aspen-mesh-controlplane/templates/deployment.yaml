@@ -62,7 +62,7 @@ spec:
             {{ if .Values.prometheusUrl }}
             - "--prometheus-query={{ .Values.prometheusUrl }}"
             {{ else }}
-            - "--prometheus-query=http://aspenmesh:2QxoVJLNG8Rhc7bmYqPmI171@aspen-mesh-metrics-collector.{{ .Release.Namespace }}.svc.cluster.local:19090"
+            - "--prometheus-query=http://aspenmesh:2QxoVJLNG8Rhc7bmYqPmI171@aspen-mesh-metrics-collector.{{ .Release.Namespace }}.svc.{{ .Values.global.proxy.clusterDomain }}:19090"
             {{ end }}
             {{ if and .Values.userAuth (.Values.userAuth.type) }}
             - "--user-auth={{ template "aspen-mesh-controlplane.internalAuthType" . }}"
