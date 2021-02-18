@@ -45,6 +45,11 @@ gateways:
 prometheus:
   enabled: true
 
+proxy:
+  clusterDomain: "cluster1.local"
+
+trustDomain: "cluster1.local"
+
 jaeger:
   enabled: true
   cassandra:
