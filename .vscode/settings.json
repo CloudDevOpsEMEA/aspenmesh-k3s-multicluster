@@ -73,5 +73,6 @@
       "__tree": "cpp",
       "forward_list": "cpp",
       "map": "cpp"
-    }
+    },
+    "opensslutils.opensslPath": "/usr/bin/openssl"
 }
