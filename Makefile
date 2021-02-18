@@ -25,6 +25,9 @@ CERT_DIR=./udf/certs
 CERT_DIR_CLUSTER_1=${CERT_DIR}/cluster1
 CERT_DIR_CLUSTER_2=${CERT_DIR}/cluster2
 
+local-storage: ## Install Rancher local storage provisioning
+	kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/master/deploy/local-path-storage.yaml
+	kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 
 install-am-1: ## Install aspen mesh in cluster 1
 	kubectl create ns ${AM_NAMESPACE}
