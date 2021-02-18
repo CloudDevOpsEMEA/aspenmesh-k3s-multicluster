@@ -6,6 +6,8 @@ aspen-mesh-controlplane:
     # type can be set to `jwt` or `none`. JWT authentication is highly recommended.
     type: none
   
+  prometheusUrl: http://aspenmesh:2QxoVJLNG8Rhc7bmYqPmI171@aspen-mesh-metrics-collector.istio-system.svc.cluster1.local:19090
+  
 aspen-mesh-secure-ingress:
   # enabled by default, which is highly recommended.
   enabled: true
