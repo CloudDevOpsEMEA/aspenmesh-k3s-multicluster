@@ -14,13 +14,29 @@ aspen-mesh-secure-ingress:
   lets-encrypt-email: ""
   # Enable external-dns management for Secure Ingress resources
   externalDnsEnabled: false
-  
+
+aspen-mesh-event-storage:
+  persistence:
+    size: 2Gi
+  config:
+    cluster_size: 1
+    seed_size: 1
+
+aspen-mesh-metrics-collector:
+  server:
+    persistentVolume:
+      size: 2Gi
+
 gateways:
   istio-ingressgateway:
+    autoscaleMin: 1
+    autoscaleMax: 3
     enabled: true
     type: ClusterIP
 
   istio-egressgateway:
+    autoscaleMin: 1
+    autoscaleMax: 3
     enabled: true
     env:
       # Needed to route traffic via egress gateway if desired.
@@ -31,10 +47,28 @@ prometheus:
 
 jaeger:
   enabled: true
-  
+  cassandra:
+    persistence:
+      size: 2Gi
+    config:
+      cluster_size: 1
+  ingester:
+    autoscaling:
+      minReplicas: 1
+      maxReplicas: 3
+  collector:
+    autoscaling:
+      minReplicas: 1
+      maxReplicas: 3
+
 cassandra:
   enabled: true
   fullnameOverride: aspen-mesh-cassandra
+  persistence:
+    size: 2Gi
+  config:
+    cluster_size: 1
+    seed_size: 1
 
 external-dns:
   # enabled by default
