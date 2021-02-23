@@ -10,14 +10,7 @@ help: ## This help
 
 
 cluster1: ## Update coredns and istiocoredns configmaps for cluster1
-	kubectl apply -f ./00-coredns-configmap-cluster1.yaml
-	kubectl apply -f ./01-istiocoredns-configmap.yaml
-	kubectl delete -n kube-system `kubectl get pods -n kube-system --selector=k8s-app=kube-dns -o=name`
-	kubectl delete -n istio-system `kubectl get pods -n istio-system --selector=app=istiocoredns -o=name`
-
+	./update-dns.sh cluster1.local aspendemo.org
 
 cluster2: ## Update coredns and istiocoredns configmaps for cluster2
-	kubectl apply -f ./00-coredns-configmap-cluster2.yaml
-	kubectl apply -f ./01-istiocoredns-configmap.yaml
-	kubectl delete -n kube-system `kubectl get pods -n kube-system --selector=k8s-app=kube-dns -o=name`
-	kubectl delete -n istio-system `kubectl get pods -n istio-system --selector=app=istiocoredns -o=name`
+	./update-dns.sh cluster2.local aspendemo.org
