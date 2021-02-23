@@ -30,51 +30,51 @@ local-storage: ## Install Rancher local storage provisioning
 	kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 
 install-am-1: ## Install aspen mesh in cluster 1
-	kubectl create ns ${AM_NAMESPACE}
+	kubectl create ns ${AM_NAMESPACE} || true
 	kubectl create secret generic cacerts -n ${AM_NAMESPACE} \
 		--from-file=${CERT_DIR_CLUSTER_1}/ca-cert.pem \
 		--from-file=${CERT_DIR_CLUSTER_1}/ca-key.pem \
 		--from-file=${CERT_DIR_CLUSTER_1}/root-cert.pem \
-		--from-file=${CERT_DIR_CLUSTER_1}/cert-chain.pem 
-	helm install istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE}
-	helm install istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
-	helm install istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
+		--from-file=${CERT_DIR_CLUSTER_1}/cert-chain.pem  || true
+	helm install istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
+	helm install istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
+	helm install istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 	sleep 30
-	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
-	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
-	helm install istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
+	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
+	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
+	helm install istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 
 install-am-2: ## Install aspen mesh in cluster 2
-	kubectl create ns ${AM_NAMESPACE}
+	kubectl create ns ${AM_NAMESPACE} || true
 	kubectl create secret generic cacerts -n ${AM_NAMESPACE} \
 		--from-file=${CERT_DIR_CLUSTER_2}/ca-cert.pem \
 		--from-file=${CERT_DIR_CLUSTER_2}/ca-key.pem \
 		--from-file=${CERT_DIR_CLUSTER_2}/root-cert.pem \
-		--from-file=${CERT_DIR_CLUSTER_2}/cert-chain.pem 
-	helm install istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE}
-	helm install istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
-	helm install istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
+		--from-file=${CERT_DIR_CLUSTER_2}/cert-chain.pem  || true
+	helm install istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
+	helm install istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
+	helm install istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	sleep 30
-	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
-	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
-	helm install istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
+	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
+	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
+	helm install istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 
 
 upgrade-am-1: ## Upgrade aspen mesh in cluster 1
-	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE}
-	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
-	helm upgrade istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
-	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
-	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
-	helm upgrade istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1}
+	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
+	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
+	helm upgrade istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
+	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
+	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
+	helm upgrade istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 
 upgrade-am-2: ## Upgrade aspen mesh in cluster 2
-	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE}
-	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
-	helm upgrade istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
-	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
-	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
-	helm upgrade istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2}
+	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
+	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
+	helm upgrade istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
+	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
+	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
+	helm upgrade istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 
 
 uninstall-am: ## Uninstall aspen mesh in cluster
