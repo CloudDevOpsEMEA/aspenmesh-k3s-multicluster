@@ -12,7 +12,8 @@ data:
       errors
       health
       grpc
-      global 127.0.0.1:8053
+      # global 127.0.0.1:8053
+      aspendemo.org 127.0.0.1:8053
       forward . /etc/resolv.conf {
         # except global
         except aspendemo.org
