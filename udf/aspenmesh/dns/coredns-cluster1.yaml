@@ -77,6 +77,10 @@ data:
       cache 30
       forward . 10.43.217.245:53
     }
+  NodeHosts: |
+    10.1.1.5 k3s-1-master
+    10.1.1.6 k3s-1-node1
+    10.1.1.7 k3s-1-node2
 ---
 apiVersion: apps/v1
 kind: Deployment

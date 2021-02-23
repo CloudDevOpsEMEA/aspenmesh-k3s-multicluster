@@ -17,16 +17,13 @@ else
   CLUSTER_DOMAIN_GLOBAL=${2}
 fi
 
-ISTIO_COREDNS_IP=$(kubectl get svc -n istio-system istiocoredns -o jsonpath={.spec.clusterIP})
-
-echo "Generating configmaps for coredns and istiocoredns"
+echo "Generating configmaps for istiocoredns"
 sed -e "s/CLUSTER_DOMAIN_LOCAL/${CLUSTER_DOMAIN_LOCAL}/g" \
     -e "s/CLUSTER_DOMAIN_GLOBAL/${CLUSTER_DOMAIN_GLOBAL}/g" \
-    -e "s/ISTIO_COREDNS_IP/${ISTIO_COREDNS_IP}/g" \
-    ./00-configmap.yaml > ./generated/00-configmap.yaml
+    ./istiocoredns-configmap.yaml > ./generated/istiocoredns-configmap.yaml
 
-echo "Appying configmaps for coredns and istiocoredns"
-kubectl apply -f ./generated/00-configmap.yaml
+echo "Appying configmaps for istiocoredns"
+kubectl apply -f ./generated/istiocoredns-configmap.yaml
 
 echo "Restarting coredns and istiocoredns pods"
 kubectl delete -n kube-system $(kubectl get pods -n kube-system --selector=k8s-app=kube-dns -o=name)
