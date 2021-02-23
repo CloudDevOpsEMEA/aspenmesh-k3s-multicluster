@@ -11,6 +11,8 @@ help: ## This help
 
 cluster1: ## Update coredns and istiocoredns configmaps for cluster1
 	./update-dns.sh cluster1.local aspendemo.org
+	kubectl apply -f ./coredns-cluster1.yaml
 
 cluster2: ## Update coredns and istiocoredns configmaps for cluster2
 	./update-dns.sh cluster2.local aspendemo.org
+	kubectl apply -f ./coredns-cluster2.yaml

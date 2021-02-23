@@ -21,10 +21,12 @@ MASTER_TOKEN_2 = K10a0f0c71dcf4db8abbaf89f835cbff4447eaffaf0f736e31f0acf6622d055
 install-k3s-1-master: ## Install k3s master cluster 1
 	./install-k3s-master.sh ${MASTER_DNS_1} ${CLUSTER_DOMAIN_1}
 	./config-kubectl.sh
+	sudo cp ./k3s.service /etc/systemd/system/k3s.service
 
 install-k3s-2-master: ## Install k3s master cluster 2
 	./install-k3s-master.sh ${MASTER_DNS_2} ${CLUSTER_DOMAIN_2}
 	./config-kubectl.sh
+	sudo cp ./k3s.service /etc/systemd/system/k3s.service
 
 install-k3s-1-slave: ## Install k3s slave cluster 1
 	./install-k3s-slave.sh ${MASTER_DNS_1} ${MASTER_TOKEN_1} ${CLUSTER_DOMAIN_1}
