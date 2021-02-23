@@ -8,11 +8,19 @@ help: ## This help
 
 .DEFAULT_GOAL := help
 
-
-cluster1: ## Update coredns and istiocoredns configmaps for cluster1
-	./update-dns.sh cluster1.local aspendemo.org
+coredns-cluster1: ## Update coredns configmap for cluster1
 	kubectl apply -f ./coredns-cluster1.yaml
 
-cluster2: ## Update coredns and istiocoredns configmaps for cluster2
-	./update-dns.sh cluster2.local aspendemo.org
+istiocoredns-cluster1: ## Update coredns configmap for cluster1
+	./update-dns.sh cluster1.local aspendemo.org
+
+coredns-cluster2: ## Update coredns configmap for cluster2
 	kubectl apply -f ./coredns-cluster2.yaml
+
+istiocoredns-cluster2: ## Update coredns configmap for cluster2
+	./update-dns.sh cluster2.local aspendemo.org
+
+
+cluster1: istiocoredns-cluster1 coredns-cluster1 ## Update coredns and istiocoredns configmaps for cluster1
+
+cluster2: istiocoredns-cluster2 coredns-cluster2 ## Update coredns and istiocoredns configmaps for cluster2
