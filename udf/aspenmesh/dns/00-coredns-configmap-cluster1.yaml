@@ -25,7 +25,7 @@ data:
       reload
       loadbalance
     }
-    global:53 {
+    aspendemo.org:53 {
       errors
       cache 30
       forward . $(kubectl get svc -n istio-system istiocoredns -o jsonpath={.spec.clusterIP}):53

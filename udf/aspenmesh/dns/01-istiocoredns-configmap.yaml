@@ -11,10 +11,9 @@ data:
     .:53 {
       errors
       health
-      grpc
-      global 127.0.0.1:8053
+      grpc aspendemo.org 127.0.0.1:8053
       forward . /etc/resolv.conf {
-        except global
+        except aspendemo.org
       }
       prometheus :9153
       cache 30

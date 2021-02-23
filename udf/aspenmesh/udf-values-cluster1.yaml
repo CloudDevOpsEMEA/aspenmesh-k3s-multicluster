@@ -54,10 +54,10 @@ global:
   controlPlaneSecurityEnabled: true
   multiCluster: 
     enabled: true
-    globalDomainSuffix: global
+    globalDomainSuffix: aspendemo.org
     includeEnvoyFilter: true
   podDNSSearchNamespaces: 
-    - global
+    - aspendemo.org
   proxy: 
     clusterDomain: cluster1.local
   trustDomain: cluster1.local
