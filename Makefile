@@ -25,9 +25,29 @@ CERT_DIR=./udf/certs
 CERT_DIR_CLUSTER_1=${CERT_DIR}/cluster1
 CERT_DIR_CLUSTER_2=${CERT_DIR}/cluster2
 
-local-storage: ## Install Rancher local storage provisioning
-	kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/master/deploy/local-path-storage.yaml
-	kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+
+##################
+### Kubernetes ###
+##################
+
+install-k8s-cluster1: ## Install k8s cluster1 using kubespray
+	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
+	cd kubespray && git checkout release-2.14 && \
+	cp -R ${REPO_DIR}/udf/kubespray/cluster1 /tmp/kubespray/inventory && \
+	sudo pip3 install -r requirements.txt && \
+	ansible-playbook -i inventory/cluster1/hosts.yaml  --become --become-user=root cluster.yml
+
+install-k8s-cluster2: ## Install k8s cluster2 using kubespray
+	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
+	cd kubespray && git checkout release-2.14 && \
+	cp -R ${REPO_DIR}/udf/kubespray/cluster2 /tmp/kubespray/inventory && \
+	sudo pip3 install -r requirements.txt && \
+	ansible-playbook -i inventory/cluster2/hosts.yaml  --become --become-user=root cluster.yml
+
+
+#################
+### AspenMesh ###
+#################
 
 install-am-1: ## Install aspen mesh in cluster 1
 	kubectl create ns ${AM_NAMESPACE} || true
@@ -59,7 +79,6 @@ install-am-2: ## Install aspen mesh in cluster 2
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	helm install istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 
-
 upgrade-am-1: ## Upgrade aspen mesh in cluster 1
 	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
 	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
@@ -76,7 +95,6 @@ upgrade-am-2: ## Upgrade aspen mesh in cluster 2
 	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	helm upgrade istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 
-
 uninstall-am: ## Uninstall aspen mesh in cluster
 	helm uninstall istio-telemetry --namespace ${AM_NAMESPACE} || true
 	helm uninstall istio-egress --namespace ${AM_NAMESPACE} || true
@@ -86,9 +104,13 @@ uninstall-am: ## Uninstall aspen mesh in cluster
 	helm uninstall istio-base --namespace ${AM_NAMESPACE} || true
 	kubectl delete ns ${AM_NAMESPACE} || true
 
-
 post-install: ## Extra installations after standard installation
 	kubectl apply -f ./udf/aspenmesh/post-install
+
+
+###############
+### Helpers ###
+###############
 
 git-clone-all: ## Clone all git repos
 	# ssh jumphost 		 	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
@@ -107,3 +129,15 @@ git-pull-all: ## Pull all git repos
 	ssh k3s-2-master  'cd ${REPO_DIR}; git pull ; sudo updatedb'
 	ssh k3s-2-node1 	'cd ${REPO_DIR}; git pull ; sudo updatedb'
 	ssh k3s-2-node2   'cd ${REPO_DIR}; git pull ; sudo updatedb'
+
+reboot-k8s: reboot-k8s-cluster1 reboot-k8s-cluster2 ## Reboot all k8s hosts
+
+reboot-k8s-cluster1: ## Reboot k8s cluster1 hosts
+	ssh k3s-1-master	sudo reboot || true
+	ssh k3s-1-node1  	sudo reboot || true
+	ssh k3s-1-node2  	sudo reboot || true
+
+reboot-k8s-cluster2: ## Reboot k8s cluster2 hosts
+	ssh k3s-2-master 	sudo reboot || true
+	ssh k3s-2-node1  	sudo reboot || true
+	ssh k3s-2-node2  	sudo reboot || true
