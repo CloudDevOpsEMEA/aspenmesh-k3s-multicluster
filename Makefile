@@ -49,7 +49,7 @@ install-k8s-cluster2: ## Install k8s cluster2 using kubespray
 ### AspenMesh ###
 #################
 
-install-am-1: ## Install aspen mesh in cluster 1
+install-am-1: ## Install aspen mesh in cluster1
 	kubectl create ns ${AM_NAMESPACE} || true
 	kubectl create secret generic cacerts -n ${AM_NAMESPACE} \
 		--from-file=${CERT_DIR_CLUSTER_1}/ca-cert.pem \
@@ -64,7 +64,7 @@ install-am-1: ## Install aspen mesh in cluster 1
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 	helm install istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 
-install-am-2: ## Install aspen mesh in cluster 2
+install-am-2: ## Install aspen mesh in cluster2
 	kubectl create ns ${AM_NAMESPACE} || true
 	kubectl create secret generic cacerts -n ${AM_NAMESPACE} \
 		--from-file=${CERT_DIR_CLUSTER_2}/ca-cert.pem \
@@ -79,7 +79,7 @@ install-am-2: ## Install aspen mesh in cluster 2
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	helm install istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 
-upgrade-am-1: ## Upgrade aspen mesh in cluster 1
+upgrade-am-1: ## Upgrade aspen mesh in cluster1
 	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
 	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 	helm upgrade istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
@@ -87,7 +87,7 @@ upgrade-am-1: ## Upgrade aspen mesh in cluster 1
 	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 	helm upgrade istio-telemetry ${CHART_DIR}/istio-telemetry/grafana --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 
-upgrade-am-2: ## Upgrade aspen mesh in cluster 2
+upgrade-am-2: ## Upgrade aspen mesh in cluster2
 	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
 	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	helm upgrade istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
@@ -113,7 +113,6 @@ post-install: ## Extra installations after standard installation
 ###############
 
 git-clone-all: ## Clone all git repos
-	# ssh jumphost 		 	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
 	ssh k3s-1-master	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
 	ssh k3s-1-node1  	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
 	ssh k3s-1-node2  	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
@@ -141,3 +140,12 @@ reboot-k8s-cluster2: ## Reboot k8s cluster2 hosts
 	ssh k3s-2-master 	sudo reboot || true
 	ssh k3s-2-node1  	sudo reboot || true
 	ssh k3s-2-node2  	sudo reboot || true
+
+upgrade-apt-packages: ## Upgrade apt packages
+	ssh jumphost 			'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
+	ssh k3s-1-master	'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
+	ssh k3s-1-node1 	'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
+	ssh k3s-1-node2   'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
+	ssh k3s-2-master  'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
+	ssh k3s-2-node1 	'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
+	ssh k3s-2-node2   'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
