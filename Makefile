@@ -113,39 +113,39 @@ post-install: ## Extra installations after standard installation
 ###############
 
 git-clone-all: ## Clone all git repos
-	ssh k8s-1-master	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
-	ssh k8s-1-node1  	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
-	ssh k8s-1-node2  	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
-	ssh k8s-2-master 	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
-	ssh k8s-2-node1  	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
-	ssh k8s-2-node2  	'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
+	ssh k8s-1-master 'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
+	ssh k8s-1-node1  'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
+	ssh k8s-1-node2  'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
+	ssh k8s-2-master 'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
+	ssh k8s-2-node1  'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
+	ssh k8s-2-node2  'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
 
 git-pull-all: ## Pull all git repos
-	ssh jumphost 			'cd ${REPO_DIR}; git pull ; sudo updatedb'
-	ssh k8s-1-master	'cd ${REPO_DIR}; git pull ; sudo updatedb'
-	ssh k8s-1-node1 	'cd ${REPO_DIR}; git pull ; sudo updatedb'
-	ssh k8s-1-node2   'cd ${REPO_DIR}; git pull ; sudo updatedb'
-	ssh k8s-2-master  'cd ${REPO_DIR}; git pull ; sudo updatedb'
-	ssh k8s-2-node1 	'cd ${REPO_DIR}; git pull ; sudo updatedb'
-	ssh k8s-2-node2   'cd ${REPO_DIR}; git pull ; sudo updatedb'
+	ssh jumphost     'cd ${REPO_DIR}; git pull ; sudo updatedb'
+	ssh k8s-1-master 'cd ${REPO_DIR}; git pull ; sudo updatedb'
+	ssh k8s-1-node1  'cd ${REPO_DIR}; git pull ; sudo updatedb'
+	ssh k8s-1-node2  'cd ${REPO_DIR}; git pull ; sudo updatedb'
+	ssh k8s-2-master 'cd ${REPO_DIR}; git pull ; sudo updatedb'
+	ssh k8s-2-node1  'cd ${REPO_DIR}; git pull ; sudo updatedb'
+	ssh k8s-2-node2  'cd ${REPO_DIR}; git pull ; sudo updatedb'
 
 reboot-k8s: reboot-k8s-cluster1 reboot-k8s-cluster2 ## Reboot all k8s hosts
 
 reboot-k8s-cluster1: ## Reboot k8s cluster1 hosts
-	ssh k8s-1-master	sudo reboot || true
-	ssh k8s-1-node1  	sudo reboot || true
-	ssh k8s-1-node2  	sudo reboot || true
+	ssh k8s-1-master sudo reboot || true
+	ssh k8s-1-node1  sudo reboot || true
+	ssh k8s-1-node2  sudo reboot || true
 
 reboot-k8s-cluster2: ## Reboot k8s cluster2 hosts
-	ssh k8s-2-master 	sudo reboot || true
-	ssh k8s-2-node1  	sudo reboot || true
-	ssh k8s-2-node2  	sudo reboot || true
+	ssh k8s-2-master sudo reboot || true
+	ssh k8s-2-node1  sudo reboot || true
+	ssh k8s-2-node2  sudo reboot || true
 
 upgrade-apt-packages: ## Upgrade apt packages
-	ssh jumphost 			'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
-	ssh k8s-1-master	'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
-	ssh k8s-1-node1 	'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
-	ssh k8s-1-node2   'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
-	ssh k8s-2-master  'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
-	ssh k8s-2-node1 	'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
-	ssh k8s-2-node2   'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
+	ssh jumphost     'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
+	ssh k8s-1-master 'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
+	ssh k8s-1-node1  'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
+	ssh k8s-1-node2  'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
+	ssh k8s-2-master 'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
+	ssh k8s-2-node1  'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
+	ssh k8s-2-node2  'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
