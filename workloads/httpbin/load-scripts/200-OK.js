@@ -8,5 +8,5 @@ export let options = {
 };
 
 export default function() {
-    let response = http.get("http://httpbin.aspendemo.org/status/500");
+    let response = http.get("http://httpbin.aspendemo.org/status/200");
 };
