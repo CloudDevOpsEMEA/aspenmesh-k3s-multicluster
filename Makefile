@@ -18,7 +18,7 @@ AM_NAMESPACE=istio-system
 AM_VALUES_1=./udf/aspenmesh/udf-values-cluster1.yaml
 AM_VALUES_2=./udf/aspenmesh/udf-values-cluster2.yaml
 
-ASPEN_MESH_INSTALL=./aspenmesh/aspenmesh-1.6.14-am2
+ASPEN_MESH_INSTALL=./aspenmesh/aspenmesh-1.6.14-am3
 CHART_DIR=${ASPEN_MESH_INSTALL}/manifests/charts
 
 CERT_DIR=./udf/certs
