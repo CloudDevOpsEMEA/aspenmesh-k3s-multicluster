@@ -10,8 +10,7 @@ help: ## This help
 
 
 deploy: ## Deploy httpbin
-	kubectl apply -f 00-namespace.yaml
-	sleep 5
+	kubectl apply -f 00-namespace.yaml && sleep 5
 	kubectl apply -f 01-httpbin.yaml
 	kubectl apply -f 02-ingress.yaml
 
@@ -19,4 +18,3 @@ undeploy: ## Undeploy httpbin
 	kubectl delete -f 02-ingress.yaml
 	kubectl delete -f 01-httpbin.yaml
 	kubectl delete -f 00-namespace.yaml
-
