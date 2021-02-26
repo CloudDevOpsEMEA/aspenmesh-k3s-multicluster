@@ -23,3 +23,4 @@ configure-dns:  ## Change DNS server settings
 
 update-hosts:  ## Update /etc/hosts file
 	cat ./hosts | sudo tee /etc/hosts
+	sudo systemctl restart dnsmasq
