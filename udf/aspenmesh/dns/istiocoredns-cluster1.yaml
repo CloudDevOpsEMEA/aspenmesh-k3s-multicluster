@@ -11,9 +11,9 @@ data:
     .:53 {
       errors
       health
-      grpc CLUSTER_DOMAIN_GLOBAL 127.0.0.1:8053
+      grpc cluster1.local 127.0.0.1:8053
       forward . /etc/resolv.conf {
-        except CLUSTER_DOMAIN_GLOBAL
+        except cluster1.local
       }
       prometheus :9153
       cache 30

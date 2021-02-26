@@ -22,4 +22,4 @@ configure-dns:  ## Change DNS server settings
 	sudo cp ./NetworkManager.conf /etc/NetworkManager/NetworkManager.conf
 
 update-hosts:  ## Update /etc/hosts file
-	cat ./hosts | sudo tee -a /etc/hosts
+	cat ./hosts | sudo tee /etc/hosts
