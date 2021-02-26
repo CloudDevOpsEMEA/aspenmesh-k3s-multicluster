@@ -14,7 +14,7 @@ spec:
     port: 80
     protocol: TCP
     targetPort: query
-    nodePort: 30004
+    nodePort: 30003
   selector:
     app.kubernetes.io/component: query
     app.kubernetes.io/instance: istiod
