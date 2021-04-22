@@ -1,12 +1,10 @@
 --- 
 aspen-mesh-controlplane: 
   clusterId: cluster1
-  prometheusUrl: "http://aspenmesh:2QxoVJLNG8Rhc7bmYqPmI171@aspen-mesh-metrics-collector.istio-system.svc.cluster1.local:19090"
   userAuth: 
     type: none
 aspen-mesh-event-storage: 
   config: 
-    cluster_domain: cluster1.local
     cluster_size: 1
     seed_size: 1
   persistence: 
@@ -58,15 +56,11 @@ global:
     includeEnvoyFilter: true
   podDNSSearchNamespaces: 
     - aspendemo.org
-  proxy: 
-    clusterDomain: cluster1.local
-  trustDomain: cluster1.local
 istiocoredns: 
   enabled: true
 jaeger: 
   cassandra: 
     config: 
-      cluster_domain: cluster1.local
       cluster_size: 1
       seed_size: 1
     persistence: 

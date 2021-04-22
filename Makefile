@@ -14,11 +14,13 @@ HOME_DIR=/home/ubuntu
 REPO_DIR=${HOME_DIR}/aspenmesh-k8s-multicluster
 
 AM_NAMESPACE=istio-system
+AM_VERSION=1.9.1-am1
+ISTIO_VERSION=1.9.1
 
 AM_VALUES_1=./udf/aspenmesh/udf-values-cluster1.yaml
 AM_VALUES_2=./udf/aspenmesh/udf-values-cluster2.yaml
 
-ASPEN_MESH_INSTALL=./aspenmesh/aspenmesh-1.6.14-am3
+ASPEN_MESH_INSTALL=./aspenmesh/aspenmesh-${AM_VERSION}
 CHART_DIR=${ASPEN_MESH_INSTALL}/manifests/charts
 
 CERT_DIR=./udf/certs
@@ -32,17 +34,31 @@ CERT_DIR_CLUSTER_2=${CERT_DIR}/cluster2
 
 install-k8s-cluster1: ## Install k8s cluster1 using kubespray
 	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
-	cd kubespray && git checkout release-2.14 && \
+	cd kubespray && git checkout release-2.15 && \
 	cp -R ${REPO_DIR}/udf/kubespray/cluster1 /tmp/kubespray/inventory && \
 	sudo pip3 install -r requirements.txt && \
 	ansible-playbook -i inventory/cluster1/hosts.yaml  --become --become-user=root cluster.yml
 
 install-k8s-cluster2: ## Install k8s cluster2 using kubespray
 	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
-	cd kubespray && git checkout release-2.14 && \
+	cd kubespray && git checkout release-2.15 && \
 	cp -R ${REPO_DIR}/udf/kubespray/cluster2 /tmp/kubespray/inventory && \
 	sudo pip3 install -r requirements.txt && \
 	ansible-playbook -i inventory/cluster2/hosts.yaml  --become --become-user=root cluster.yml
+
+upgrade-k8s-cluster1: ## Upgrade k8s cluster1 using kubespray
+	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
+	cd kubespray && git checkout release-2.15 && \
+	cp -R ${REPO_DIR}/udf/kubespray/cluster1 /tmp/kubespray/inventory && \
+	sudo pip3 install -r requirements.txt && \
+	ansible-playbook -i inventory/cluster1/hosts.yaml  --become --become-user=root -e kube_version=v1.20.5 -e upgrade_cluster_setup=true cluster.yml
+
+upgrade-k8s-cluster2: ## Upgrade k8s cluster2 using kubespray
+	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
+	cd kubespray && git checkout release-2.15 && \
+	cp -R ${REPO_DIR}/udf/kubespray/cluster2 /tmp/kubespray/inventory && \
+	sudo pip3 install -r requirements.txt && \
+	ansible-playbook -i inventory/cluster2/hosts.yaml  --become --become-user=root -e kube_version=v1.20.5 -e upgrade_cluster_setup=true cluster.yml
 
 
 #################
@@ -104,9 +120,18 @@ uninstall-am: ## Uninstall aspen mesh in cluster
 	helm uninstall istio-base --namespace ${AM_NAMESPACE} || true
 	kubectl delete ns ${AM_NAMESPACE} || true
 
-post-install: ## Extra installations after standard installation
+post-install: ## Post installation steps
 	kubectl apply -f ./udf/aspenmesh/post-install
 
+post-uninstall:  ## Post uninstallation steps
+	kubectl delete -f ./udf/aspenmesh/post-install
+
+reinstall-am1: post-uninstall uninstall-am install-am-1 post-install ## Reinstall aspenmesh in cluster1
+reinstall-am2: post-uninstall uninstall-am install-am-2 post-install ## Reinstall aspenmesh in cluster2
+
+istioctl:  ## Install istioctl
+	curl -sL https://istio.io/downloadIstioctl | ISTIO_VERSION=${ISTIO_VERSION} sh - && \
+	sudo cp ~/.istioctl/bin/istioctl /usr/local/bin
 
 ###############
 ### Helpers ###
