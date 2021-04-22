@@ -51,15 +51,28 @@ upgrade-k8s-cluster1: ## Upgrade k8s cluster1 using kubespray
 	cd kubespray && git checkout release-2.15 && \
 	cp -R ${REPO_DIR}/udf/kubespray/cluster1 /tmp/kubespray/inventory && \
 	sudo pip3 install -r requirements.txt && \
-	ansible-playbook -i inventory/cluster1/hosts.yaml  --become --become-user=root -e kube_version=v1.20.5 -e upgrade_cluster_setup=true cluster.yml
+	ansible-playbook -i inventory/cluster1/hosts.yaml  --become --become-user=root -e kube_version=v1.20.6 -e upgrade_cluster_setup=true cluster.yml
 
 upgrade-k8s-cluster2: ## Upgrade k8s cluster2 using kubespray
 	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
 	cd kubespray && git checkout release-2.15 && \
 	cp -R ${REPO_DIR}/udf/kubespray/cluster2 /tmp/kubespray/inventory && \
 	sudo pip3 install -r requirements.txt && \
-	ansible-playbook -i inventory/cluster2/hosts.yaml  --become --become-user=root -e kube_version=v1.20.5 -e upgrade_cluster_setup=true cluster.yml
+	ansible-playbook -i inventory/cluster2/hosts.yaml  --become --become-user=root -e kube_version=v1.20.6 -e upgrade_cluster_setup=true cluster.yml
 
+reset-k8s-cluster1: ## Reset k8s cluster1 using kubespray
+	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
+	cd kubespray && git checkout release-2.15 && \
+	cp -R ${REPO_DIR}/udf/kubespray/cluster2 /tmp/kubespray/inventory && \
+	sudo pip3 install -r requirements.txt && \
+ 	ansible-playbook -i inventory/cluster1/hosts.yaml reset.yml --become --become-user=root 
+
+reset-k8s-cluster2: ## Reset k8s cluster2 using kubespray
+	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
+	cd kubespray && git checkout release-2.15 && \
+	cp -R ${REPO_DIR}/udf/kubespray/cluster2 /tmp/kubespray/inventory && \
+	sudo pip3 install -r requirements.txt && \
+ 	ansible-playbook -i inventory/cluster2/hosts.yaml reset.yml --become --become-user=root 
 
 #################
 ### AspenMesh ###
