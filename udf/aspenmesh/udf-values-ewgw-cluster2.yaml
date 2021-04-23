@@ -47,3 +47,7 @@ global:
       gateways:
       - address: 10.1.1.8
         port: 31008
+meshConfig:
+  defaultConfig:
+    proxyMetadata:
+      ISTIO_META_DNS_CAPTURE: "true"

@@ -50,19 +50,6 @@ gateways:
       nodePort: 31003
       name: tls
     type: NodePort
-global: 
-  meshID: mesh1
-  multiCluster:
-    enabled: true
-    clusterName: cluster1
-  network: network1
-  meshNetworks:
-    network1:
-      endpoints:
-      - fromRegistry: cluster1
-      gateways:
-      - address: 10.1.1.5
-        port: 31008
 jaeger: 
   cassandra: 
     config: 
