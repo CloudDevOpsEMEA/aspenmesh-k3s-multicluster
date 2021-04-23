@@ -20,14 +20,16 @@ aspen-mesh-secure-ingress:
 external-dns: 
   enabled: false
 gateways: 
-  istio-egressgateway: 
-    autoscaleMax: 3
+  istio-egressgateway:
+    name: istio-egressgateway
+    autoscaleMax: 2
     autoscaleMin: 1
     enabled: true
     env: 
       ISTIO_META_REQUESTED_NETWORK_VIEW: external
   istio-ingressgateway: 
-    autoscaleMax: 3
+    name: istio-ingressgateway
+    autoscaleMax: 2
     autoscaleMin: 1
     enabled: true
     ports:
@@ -48,6 +50,41 @@ gateways:
       nodePort: 31003
       name: tls
     type: NodePort
+  istio-ingressgateway:
+    name: istio-eastwestgateway
+    labels:
+      app: istio-eastwestgateway
+      istio: eastwestgateway
+      topology.istio.io/network: network1
+    ports:
+    - port: 15021
+      targetPort: 15021
+      name: status-port
+      nodePort: 31004
+    - port: 80
+      targetPort: 8080
+      name: http2
+      nodePort: 31005
+    - port: 443
+      targetPort: 8443
+      name: https
+      nodePort: 31006
+    - port: 15012
+      targetPort: 15012
+      name: tcp-istiod
+      nodePort: 31007
+    - port: 15443
+      targetPort: 15443
+      name: tls
+      nodePort: 31008
+    - name: tls-webhook
+      port: 15017
+      targetPort: 15017
+      nodePort: 31009
+    env:
+      ISTIO_META_ROUTER_MODE: "sni-dnat"
+      ISTIO_META_REQUESTED_NETWORK_VIEW: "network1"
+    type: NodePort
 global: 
   meshID: mesh1
   multiCluster:
@@ -60,7 +97,7 @@ global:
       - fromRegistry: cluster1
       gateways:
       - address: 10.1.1.5
-        port: 31003
+        port: 31008
 jaeger: 
   cassandra: 
     config: 
@@ -77,5 +114,9 @@ jaeger:
     autoscaling: 
       maxReplicas: 3
       minReplicas: 1
+meshConfig:
+  defaultConfig:
+    proxyMetadata:
+      ISTIO_META_DNS_CAPTURE: "true"
 prometheus: 
   enabled: true
