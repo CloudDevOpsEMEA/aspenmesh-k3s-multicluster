@@ -19,11 +19,12 @@ ISTIO_VERSION=1.9.1
 
 AM_VALUES_1=./udf/aspenmesh/udf-values-cluster1.yaml
 AM_VALUES_2=./udf/aspenmesh/udf-values-cluster2.yaml
+AM_EWGW_VALUES_1=./udf/aspenmesh/udf-values-ewgw-cluster1.yaml
+AM_EWGW_VALUES_2=./udf/aspenmesh/udf-values-ewgw-cluster2.yaml
 
 ASPEN_MESH_INSTALL=./aspenmesh/aspenmesh-${AM_VERSION}
 CHART_DIR=${ASPEN_MESH_INSTALL}/manifests/charts
 MULTI_SETUP_DIR=${ASPEN_MESH_INSTALL}/samples/multicluster
-PATCH_DIR=./udf/aspenmesh/patches
 MULTI_SECRET_DIR=./udf/aspenmesh/multi-secrets
 
 CERT_DIR=./udf/certs
@@ -108,8 +109,7 @@ install-am1: ## Install aspen mesh in cluster1
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 
 install-am1-multi: ## Enable multi-cluster in cluster1
-	${MULTI_SETUP_DIR}/gen-eastwest-gateway.sh --mesh mesh1 --cluster cluster1 --network network1 | istioctl install -y -f -
-	kubectl patch -n ${AM_NAMESPACE} service istio-eastwestgateway --patch "`cat ${PATCH_DIR}/patch-istio-eastwestgateway-svc.yaml`"
+	helm install istio-ewgw ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_EWGW_VALUES_1} || true
 	kubectl apply -n ${AM_NAMESPACE} -f ${MULTI_SETUP_DIR}/expose-services.yaml
 	echo "EXECUTE THE FOLLOWING COMMAND AND SAVE THE OUTPUT FOR SOURCE CONTROL"
 	echo "istioctl x create-remote-secret --name=cluster1 > /tmp/cluster1.yaml"
@@ -122,6 +122,7 @@ upgrade-am1: ## Upgrade aspen mesh in cluster1
 	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
+	helm upgrade istio-ewgw ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_EWGW_VALUES_1} || true
 
 
 ############################## CLUSTER2 ##############################
@@ -141,8 +142,7 @@ install-am2: ## Install aspen mesh in cluster2
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 
 install-am2-multi: ## Enable multi-cluster in cluster2
-	${MULTI_SETUP_DIR}/gen-eastwest-gateway.sh --mesh mesh2 --cluster cluster2 --network network2 | istioctl install -y -f -
-	kubectl patch -n ${AM_NAMESPACE} service istio-eastwestgateway --patch "`cat ${PATCH_DIR}/patch-istio-eastwestgateway-svc.yaml`"
+	helm install istio-ewgw ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_EWGW_VALUES_2} || true
 	kubectl apply -n ${AM_NAMESPACE} -f ${MULTI_SETUP_DIR}/expose-services.yaml
 	echo "EXECUTE THE FOLLOWING COMMAND AND SAVE THE OUTPUT FOR SOURCE CONTROL"
 	echo "istioctl x create-remote-secret --name=cluster2 > /tmp/cluster2.yaml"
@@ -155,8 +155,10 @@ upgrade-am2: ## Upgrade aspen mesh in cluster2
 	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
+	helm upgrade istio-ewgw ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_EWGW_VALUES_2} || true
 
 uninstall-am: ## Uninstall aspen mesh in cluster
+	helm uninstall istio-ewgw --namespace ${AM_NAMESPACE} || true
 	helm uninstall istio-egress --namespace ${AM_NAMESPACE} || true
 	helm uninstall istio-ingress --namespace ${AM_NAMESPACE} || true
 	helm uninstall istiod --namespace ${AM_NAMESPACE} || true
