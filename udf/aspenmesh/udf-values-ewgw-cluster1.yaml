@@ -38,6 +38,7 @@ gateways:
 global: 
   meshID: mesh1
   multiCluster:
+    # enabled: true
     clusterName: cluster1
   network: network1
   meshNetworks:
