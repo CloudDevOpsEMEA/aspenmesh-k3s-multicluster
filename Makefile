@@ -38,7 +38,8 @@ KUBESPRAY_BRANCH=master
 ### Kubernetes ###
 ##################
 
-###### CLUSTER1 ######
+############################## CLUSTER1 ##############################
+
 install-k8s-cluster1: ## Install k8s cluster1 using kubespray
 	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
 	cd kubespray && git checkout ${KUBESPRAY_BRANCH} && \
@@ -61,7 +62,9 @@ reset-k8s-cluster1: ## Reset k8s cluster1 using kubespray
 	sudo pip3 install -r requirements.txt && \
  	ansible-playbook -i inventory/cluster1/hosts.yaml --become --become-user=root reset.yml 
 
-###### CLUSTER2 ######
+
+############################## CLUSTER2 ##############################
+
 install-k8s-cluster2: ## Install k8s cluster2 using kubespray
 	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
 	cd kubespray && git checkout ${KUBESPRAY_BRANCH} && \
@@ -88,7 +91,9 @@ reset-k8s-cluster2: ## Reset k8s cluster2 using kubespray
 ### AspenMesh ###
 #################
 
-install-am-1: ## Install aspen mesh in cluster1
+############################## CLUSTER1 ##############################
+
+install-am1: ## Install aspen mesh in cluster1
 	kubectl create ns ${AM_NAMESPACE} || true
 	kubectl label namespace istio-system topology.istio.io/network=network1 || true
 	kubectl create secret generic cacerts -n ${AM_NAMESPACE} \
@@ -102,14 +107,25 @@ install-am-1: ## Install aspen mesh in cluster1
 	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 
-install-am-1-multi: ## Enable multi-cluster in cluster1
+install-am1-multi: ## Enable multi-cluster in cluster1
 	${MULTI_SETUP_DIR}/gen-eastwest-gateway.sh --mesh mesh1 --cluster cluster1 --network network1 | istioctl install -y -f -
 	kubectl patch -n ${AM_NAMESPACE} service istio-eastwestgateway --patch "`cat ${PATCH_DIR}/patch-istio-eastwestgateway-svc.yaml`"
 	kubectl apply -n ${AM_NAMESPACE} -f ${MULTI_SETUP_DIR}/expose-services.yaml
-	# istioctl x create-remote-secret --name=cluster1
+	istioctl x create-remote-secret --name=cluster1 > ${MULTI_SECRET_DIR}/cluster1.yaml
+
+install-am1-multi-remote-secret: ## Install multi-cluster remote secret of cluster 2 in cluster1
 	kubectl apply -f ${MULTI_SECRET_DIR}/cluster2.yaml
 
-install-am-2: ## Install aspen mesh in cluster2
+upgrade-am1: ## Upgrade aspen mesh in cluster1
+	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
+	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
+	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
+	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
+
+
+############################## CLUSTER2 ##############################
+
+install-am2: ## Install aspen mesh in cluster2
 	kubectl create ns ${AM_NAMESPACE} || true
 	kubectl label namespace istio-system topology.istio.io/network=network2 || true
 	kubectl create secret generic cacerts -n ${AM_NAMESPACE} \
@@ -123,20 +139,16 @@ install-am-2: ## Install aspen mesh in cluster2
 	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 
-install-am-2-multi: ## Enable multi-cluster in cluster2
+install-am2-multi: ## Enable multi-cluster in cluster2
 	${MULTI_SETUP_DIR}/gen-eastwest-gateway.sh --mesh mesh2 --cluster cluster2 --network network2 | istioctl install -y -f -
 	kubectl patch -n ${AM_NAMESPACE} service istio-eastwestgateway --patch "`cat ${PATCH_DIR}/patch-istio-eastwestgateway-svc.yaml`"
 	kubectl apply -n ${AM_NAMESPACE} -f ${MULTI_SETUP_DIR}/expose-services.yaml
-	# istioctl x create-remote-secret --name=cluster2
+	istioctl x create-remote-secret --name=cluster2 > ${MULTI_SECRET_DIR}/cluster2.yaml
+
+install-am2-multi-remote-secret: ## Install multi-cluster remote secret of cluster 1 in cluster2
 	kubectl apply -f ${MULTI_SECRET_DIR}/cluster1.yaml
 
-upgrade-am-1: ## Upgrade aspen mesh in cluster1
-	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
-	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
-	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
-	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
-
-upgrade-am-2: ## Upgrade aspen mesh in cluster2
+upgrade-am2: ## Upgrade aspen mesh in cluster2
 	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
 	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
@@ -155,8 +167,8 @@ post-install: ## Post installation steps
 post-uninstall:  ## Post uninstallation steps
 	kubectl delete -f ./udf/aspenmesh/services || true
 
-reinstall-am1: post-uninstall uninstall-am install-am-1 post-install ## Reinstall aspenmesh in cluster1
-reinstall-am2: post-uninstall uninstall-am install-am-2 post-install ## Reinstall aspenmesh in cluster2
+reinstall-am1: post-uninstall uninstall-am install-am1 post-install ## Reinstall aspenmesh in cluster1
+reinstall-am2: post-uninstall uninstall-am install-am2 post-install ## Reinstall aspenmesh in cluster2
 
 istioctl:  ## Install istioctl
 	curl -sL https://istio.io/downloadIstioctl | ISTIO_VERSION=${ISTIO_VERSION} sh - && \
