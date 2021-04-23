@@ -23,6 +23,7 @@ AM_VALUES_2=./udf/aspenmesh/udf-values-cluster2.yaml
 ASPEN_MESH_INSTALL=./aspenmesh/aspenmesh-${AM_VERSION}
 CHART_DIR=${ASPEN_MESH_INSTALL}/manifests/charts
 MULTI_SETUP_DIR=${ASPEN_MESH_INSTALL}/samples/multicluster
+PATCH_DIR=./udf/aspenmesh/patches
 
 CERT_DIR=./udf/certs
 CERT_DIR_CLUSTER_1=${CERT_DIR}/cluster1
@@ -98,6 +99,7 @@ install-am-1: ## Install aspen mesh in cluster1
 
 install-am-1-multi: ## Enable multi-cluster in cluster1
 	${MULTI_SETUP_DIR}/gen-eastwest-gateway.sh --mesh mesh1 --cluster cluster1 --network network1 | istioctl install -y -f -
+	kubectl patch -n ${AM_NAMESPACE} service istio-eastwestgateway --patch "`cat ${PATCH_DIR}/patch-istio-eastwestgateway-svc.yaml`"
 	# kubectl apply -n ${AM_NAMESPACE} -f ${MULTI_SETUP_DIR}/expose-services.yaml
 	# istioctl x create-remote-secret --name=cluster1
 
@@ -117,6 +119,7 @@ install-am-2: ## Install aspen mesh in cluster2
 
 install-am-2-multi: ## Enable multi-cluster in cluster2
 	${MULTI_SETUP_DIR}/gen-eastwest-gateway.sh --mesh mesh2 --cluster cluster2 --network network2 | istioctl install -y -f -
+	kubectl patch -n ${AM_NAMESPACE} service istio-eastwestgateway --patch "`cat ${PATCH_DIR}/patch-istio-eastwestgateway-svc.yaml`"
 	# kubectl apply -n ${AM_NAMESPACE} -f ${MULTI_SETUP_DIR}/expose-services.yaml
 	# istioctl x create-remote-secret --name=cluster2
 
