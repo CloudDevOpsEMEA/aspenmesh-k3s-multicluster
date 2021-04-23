@@ -27,6 +27,9 @@ CERT_DIR=./udf/certs
 CERT_DIR_CLUSTER_1=${CERT_DIR}/cluster1
 CERT_DIR_CLUSTER_2=${CERT_DIR}/cluster2
 
+# KUBESPRAY_BRANCH=release-2.15
+KUBESPRAY_BRANCH=master
+
 
 ##################
 ### Kubernetes ###
@@ -34,48 +37,42 @@ CERT_DIR_CLUSTER_2=${CERT_DIR}/cluster2
 
 install-k8s-cluster1: ## Install k8s cluster1 using kubespray
 	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
-	cd kubespray && git checkout master && \
-	# cd kubespray && git checkout release-2.15 && \
+	cd kubespray && git checkout ${KUBESPRAY_BRANCH} && \
 	cp -R ${REPO_DIR}/udf/kubespray/cluster1 /tmp/kubespray/inventory && \
 	sudo pip3 install -r requirements.txt && \
 	ansible-playbook -i inventory/cluster1/hosts.yaml  --become --become-user=root cluster.yml
 
 install-k8s-cluster2: ## Install k8s cluster2 using kubespray
 	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
-	cd kubespray && git checkout master && \
-	# cd kubespray && git checkout release-2.15 && \
+	cd kubespray && git checkout ${KUBESPRAY_BRANCH} && \
 	cp -R ${REPO_DIR}/udf/kubespray/cluster2 /tmp/kubespray/inventory && \
 	sudo pip3 install -r requirements.txt && \
 	ansible-playbook -i inventory/cluster2/hosts.yaml  --become --become-user=root cluster.yml
 
 upgrade-k8s-cluster1: ## Upgrade k8s cluster1 using kubespray
 	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
-	cd kubespray && git checkout master && \
-	# cd kubespray && git checkout release-2.15 && \
+	cd kubespray && git checkout ${KUBESPRAY_BRANCH} && \
 	cp -R ${REPO_DIR}/udf/kubespray/cluster1 /tmp/kubespray/inventory && \
 	sudo pip3 install -r requirements.txt && \
 	ansible-playbook -i inventory/cluster1/hosts.yaml  --become --become-user=root -e kube_version=v1.20.6 -e upgrade_cluster_setup=true cluster.yml
 
 upgrade-k8s-cluster2: ## Upgrade k8s cluster2 using kubespray
 	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
-	cd kubespray && git checkout master && \
-	# cd kubespray && git checkout release-2.15 && \
+	cd kubespray && git checkout ${KUBESPRAY_BRANCH} && \
 	cp -R ${REPO_DIR}/udf/kubespray/cluster2 /tmp/kubespray/inventory && \
 	sudo pip3 install -r requirements.txt && \
 	ansible-playbook -i inventory/cluster2/hosts.yaml  --become --become-user=root -e kube_version=v1.20.6 -e upgrade_cluster_setup=true cluster.yml
 
 reset-k8s-cluster1: ## Reset k8s cluster1 using kubespray
 	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
-	cd kubespray && git checkout master && \
-	# cd kubespray && git checkout release-2.15 && \
+	cd kubespray && git checkout ${KUBESPRAY_BRANCH} && \
 	cp -R ${REPO_DIR}/udf/kubespray/cluster2 /tmp/kubespray/inventory && \
 	sudo pip3 install -r requirements.txt && \
  	ansible-playbook -i inventory/cluster1/hosts.yaml reset.yml --become --become-user=root 
 
 reset-k8s-cluster2: ## Reset k8s cluster2 using kubespray
 	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
-	cd kubespray && git checkout master && \
-	# cd kubespray && git checkout release-2.15 && \
+	cd kubespray && git checkout ${KUBESPRAY_BRANCH} && \
 	cp -R ${REPO_DIR}/udf/kubespray/cluster2 /tmp/kubespray/inventory && \
 	sudo pip3 install -r requirements.txt && \
  	ansible-playbook -i inventory/cluster2/hosts.yaml reset.yml --become --become-user=root 
