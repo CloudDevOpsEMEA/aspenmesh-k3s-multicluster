@@ -111,7 +111,8 @@ install-am1-multi: ## Enable multi-cluster in cluster1
 	${MULTI_SETUP_DIR}/gen-eastwest-gateway.sh --mesh mesh1 --cluster cluster1 --network network1 | istioctl install -y -f -
 	kubectl patch -n ${AM_NAMESPACE} service istio-eastwestgateway --patch "`cat ${PATCH_DIR}/patch-istio-eastwestgateway-svc.yaml`"
 	kubectl apply -n ${AM_NAMESPACE} -f ${MULTI_SETUP_DIR}/expose-services.yaml
-	istioctl x create-remote-secret --name=cluster1 > ${MULTI_SECRET_DIR}/cluster1.yaml
+	echo "EXECUTE THE FOLLOWING COMMAND AND SAVE THE OUTPUT FOR SOURCE CONTROL"
+	echo "istioctl x create-remote-secret --name=cluster1 > /tmp/cluster1.yaml"
 
 install-am1-multi-remote-secret: ## Install multi-cluster remote secret of cluster 2 in cluster1
 	kubectl apply -f ${MULTI_SECRET_DIR}/cluster2.yaml
@@ -143,7 +144,8 @@ install-am2-multi: ## Enable multi-cluster in cluster2
 	${MULTI_SETUP_DIR}/gen-eastwest-gateway.sh --mesh mesh2 --cluster cluster2 --network network2 | istioctl install -y -f -
 	kubectl patch -n ${AM_NAMESPACE} service istio-eastwestgateway --patch "`cat ${PATCH_DIR}/patch-istio-eastwestgateway-svc.yaml`"
 	kubectl apply -n ${AM_NAMESPACE} -f ${MULTI_SETUP_DIR}/expose-services.yaml
-	istioctl x create-remote-secret --name=cluster2 > ${MULTI_SECRET_DIR}/cluster2.yaml
+	echo "EXECUTE THE FOLLOWING COMMAND AND SAVE THE OUTPUT FOR SOURCE CONTROL"
+	echo "istioctl x create-remote-secret --name=cluster2 > /tmp/cluster2.yaml"
 
 install-am2-multi-remote-secret: ## Install multi-cluster remote secret of cluster 1 in cluster2
 	kubectl apply -f ${MULTI_SECRET_DIR}/cluster1.yaml
