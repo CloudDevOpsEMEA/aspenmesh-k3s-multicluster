@@ -22,6 +22,7 @@ AM_VALUES_2=./udf/aspenmesh/udf-values-cluster2.yaml
 
 ASPEN_MESH_INSTALL=./aspenmesh/aspenmesh-${AM_VERSION}
 CHART_DIR=${ASPEN_MESH_INSTALL}/manifests/charts
+MULTI_SETUP_DIR=${ASPEN_MESH_INSTALL}/samples/multicluster
 
 CERT_DIR=./udf/certs
 CERT_DIR_CLUSTER_1=${CERT_DIR}/cluster1
@@ -83,6 +84,7 @@ reset-k8s-cluster2: ## Reset k8s cluster2 using kubespray
 
 install-am-1: ## Install aspen mesh in cluster1
 	kubectl create ns ${AM_NAMESPACE} || true
+	kubectl label namespace istio-system topology.istio.io/network=network1 || true
 	kubectl create secret generic cacerts -n ${AM_NAMESPACE} \
 		--from-file=${CERT_DIR_CLUSTER_1}/ca-cert.pem \
 		--from-file=${CERT_DIR_CLUSTER_1}/ca-key.pem \
@@ -90,13 +92,18 @@ install-am-1: ## Install aspen mesh in cluster1
 		--from-file=${CERT_DIR_CLUSTER_1}/cert-chain.pem  || true
 	helm install istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
 	helm install istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
-	helm install istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 	sleep 30
 	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 
+install-am-1-multi: ## Enable multi-cluster in cluster1
+	${MULTI_SETUP_DIR}/gen-eastwest-gateway.sh --mesh mesh1 --cluster cluster1 --network network1 | istioctl install -y -f -
+	# kubectl apply -n ${AM_NAMESPACE} -f ${MULTI_SETUP_DIR}/expose-services.yaml
+	# istioctl x create-remote-secret --name=cluster1
+
 install-am-2: ## Install aspen mesh in cluster2
 	kubectl create ns ${AM_NAMESPACE} || true
+	kubectl label namespace istio-system topology.istio.io/network=network2 || true
 	kubectl create secret generic cacerts -n ${AM_NAMESPACE} \
 		--from-file=${CERT_DIR_CLUSTER_2}/ca-cert.pem \
 		--from-file=${CERT_DIR_CLUSTER_2}/ca-key.pem \
@@ -104,30 +111,30 @@ install-am-2: ## Install aspen mesh in cluster2
 		--from-file=${CERT_DIR_CLUSTER_2}/cert-chain.pem  || true
 	helm install istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
 	helm install istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
-	helm install istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	sleep 30
 	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 
+install-am-2-multi: ## Enable multi-cluster in cluster2
+	${MULTI_SETUP_DIR}/gen-eastwest-gateway.sh --mesh mesh2 --cluster cluster2 --network network2 | istioctl install -y -f -
+	# kubectl apply -n ${AM_NAMESPACE} -f ${MULTI_SETUP_DIR}/expose-services.yaml
+	# istioctl x create-remote-secret --name=cluster2
+
 upgrade-am-1: ## Upgrade aspen mesh in cluster1
 	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
 	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
-	helm upgrade istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 
 upgrade-am-2: ## Upgrade aspen mesh in cluster2
 	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
 	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
-	helm upgrade istiocoredns ${CHART_DIR}/istiocoredns --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 
 uninstall-am: ## Uninstall aspen mesh in cluster
-	helm uninstall istio-telemetry --namespace ${AM_NAMESPACE} || true
 	helm uninstall istio-egress --namespace ${AM_NAMESPACE} || true
 	helm uninstall istio-ingress --namespace ${AM_NAMESPACE} || true
-	helm uninstall istiocoredns --namespace ${AM_NAMESPACE} || true
 	helm uninstall istiod --namespace ${AM_NAMESPACE} || true
 	helm uninstall istio-base --namespace ${AM_NAMESPACE} || true
 	kubectl delete ns ${AM_NAMESPACE} || true

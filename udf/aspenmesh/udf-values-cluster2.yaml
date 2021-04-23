@@ -48,14 +48,18 @@ gateways:
       nodePort: 31003
       name: tls
     type: NodePort
-global: 
-  controlPlaneSecurityEnabled: true
-  multiCluster: 
-    enabled: true
-    globalDomainSuffix: aspendemo.org
-    includeEnvoyFilter: true
-  podDNSSearchNamespaces: 
-    - aspendemo.org
+global:
+  meshID: mesh1
+  multiCluster:
+    clusterName: cluster2
+  network: network2
+  meshNetworks:
+    network1:
+      endpoints:
+      - fromRegistry: cluster1
+      gateways:
+      - address: 10.1.1.5
+        port: 15443
 istiocoredns: 
   enabled: true
 jaeger: 
