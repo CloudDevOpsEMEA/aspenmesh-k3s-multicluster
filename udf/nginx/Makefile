@@ -22,3 +22,11 @@ install-nginxconf-cluster2: ## Install nginx configuration for cluster 2
 	sudo cp ./cluster2/nginx.conf /etc/nginx/nginx.conf
 	sudo systemctl enable nginx.service
 	sudo systemctl restart nginx.service
+
+install-nginxconf-jumphost: ## Install nginx configuration for jumphost
+	sudo rm -rf /etc/nginx/conf.d/*.conf
+	sudo cp ./jumphost/0*.conf /etc/nginx/conf.d/
+	sudo cp ./jumphost/nginx.conf /etc/nginx/nginx.conf
+	sudo systemctl enable nginx.service
+	sudo systemctl restart nginx.service
+
