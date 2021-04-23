@@ -33,7 +33,7 @@ gateways:
       nodePort: 31009
     env:
       ISTIO_META_ROUTER_MODE: "sni-dnat"
-      ISTIO_META_REQUESTED_NETWORK_VIEW: "network1"
+      ISTIO_META_REQUESTED_NETWORK_VIEW: "network2"
     type: NodePort
 global:
   meshID: mesh2
