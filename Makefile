@@ -146,10 +146,10 @@ uninstall-am: ## Uninstall aspen mesh in cluster
 	kubectl delete ns ${AM_NAMESPACE} || true
 
 post-install: ## Post installation steps
-	kubectl apply -f ./udf/aspenmesh/services
+	kubectl apply -f ./udf/aspenmesh/services || true
 
 post-uninstall:  ## Post uninstallation steps
-	kubectl delete -f ./udf/aspenmesh/services
+	kubectl delete -f ./udf/aspenmesh/services || true
 
 reinstall-am1: post-uninstall uninstall-am install-am-1 post-install ## Reinstall aspenmesh in cluster1
 reinstall-am2: post-uninstall uninstall-am install-am-2 post-install ## Reinstall aspenmesh in cluster2
