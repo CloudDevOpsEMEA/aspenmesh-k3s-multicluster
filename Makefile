@@ -107,7 +107,7 @@ install-am1: ## Install aspen mesh in cluster1
 	sleep 30
 	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
-	kubectl wait --for=condition=Ready pods --all -n ${AM_NAMESPACE}
+	kubectl wait --timeout=5m --for=condition=Ready pods --all -n ${AM_NAMESPACE}
 
 install-am1-multi: ## Enable multi-cluster in cluster1
 	helm install istio-ewgw ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_EWGW_VALUES_1} || true
@@ -141,7 +141,7 @@ install-am2: ## Install aspen mesh in cluster2
 	sleep 30
 	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
-	kubectl wait --for=condition=Ready pods --all -n ${AM_NAMESPACE}
+	kubectl wait --timeout=5m --for=condition=Ready pods --all -n ${AM_NAMESPACE}
 
 install-am2-multi: ## Enable multi-cluster in cluster2
 	helm install istio-ewgw ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_EWGW_VALUES_2} || true
