@@ -167,21 +167,21 @@ istioctl:  ## Install istioctl
 ###############
 
 git-clone-all: ## Clone all git repos
-	ssh k8s-1-master 'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
-	ssh k8s-1-node1  'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
-	ssh k8s-1-node2  'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
-	ssh k8s-2-master 'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
-	ssh k8s-2-node1  'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
-	ssh k8s-2-node2  'cd ${HOME_DIR} ; git clone ${GIT_REPO}'
+	ssh k8s-1-master 'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null'
+	ssh k8s-1-node1  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null'
+	ssh k8s-1-node2  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null'
+	ssh k8s-2-master 'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null'
+	ssh k8s-2-node1  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null'
+	ssh k8s-2-node2  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null'
 
 git-pull-all: ## Pull all git repos
-	ssh jumphost     'cd ${REPO_DIR}; git pull ; sudo updatedb'
-	ssh k8s-1-master 'cd ${REPO_DIR}; git pull ; sudo updatedb'
-	ssh k8s-1-node1  'cd ${REPO_DIR}; git pull ; sudo updatedb'
-	ssh k8s-1-node2  'cd ${REPO_DIR}; git pull ; sudo updatedb'
-	ssh k8s-2-master 'cd ${REPO_DIR}; git pull ; sudo updatedb'
-	ssh k8s-2-node1  'cd ${REPO_DIR}; git pull ; sudo updatedb'
-	ssh k8s-2-node2  'cd ${REPO_DIR}; git pull ; sudo updatedb'
+	ssh jumphost     'cd ${REPO_DIR}; git pull > /dev/null ; sudo updatedb'
+	ssh k8s-1-master 'cd ${REPO_DIR}; git pull > /dev/null ; sudo updatedb'
+	ssh k8s-1-node1  'cd ${REPO_DIR}; git pull > /dev/null ; sudo updatedb'
+	ssh k8s-1-node2  'cd ${REPO_DIR}; git pull > /dev/null ; sudo updatedb'
+	ssh k8s-2-master 'cd ${REPO_DIR}; git pull > /dev/null ; sudo updatedb'
+	ssh k8s-2-node1  'cd ${REPO_DIR}; git pull > /dev/null ; sudo updatedb'
+	ssh k8s-2-node2  'cd ${REPO_DIR}; git pull > /dev/null ; sudo updatedb'
 
 reboot-k8s: reboot-k8s-cluster1 reboot-k8s-cluster2 ## Reboot all k8s hosts
 
