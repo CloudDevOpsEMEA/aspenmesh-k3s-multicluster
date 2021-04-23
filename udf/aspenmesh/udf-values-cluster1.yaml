@@ -55,11 +55,11 @@ global:
     clusterName: cluster1
   network: network1
   meshNetworks:
-    network2:
+    network1:
       endpoints:
-      - fromRegistry: cluster2
+      - fromRegistry: cluster1
       gateways:
-      - address: 10.1.1.8
+      - address: 10.1.1.5
         port: 31003
 istiocoredns: 
   enabled: true
