@@ -45,6 +45,7 @@ install-k8s-cluster1: ## Install k8s cluster1 using kubespray
 	cp -R ${REPO_DIR}/udf/kubespray/cluster1 /tmp/kubespray/inventory && \
 	sudo pip3 install -r requirements.txt && \
 	ansible-playbook -i inventory/cluster1/hosts.yaml  --become --become-user=root cluster.yml
+	sudo cp /etc/kubernetes/admin.conf ~/.kube/config
 
 upgrade-k8s-cluster1: ## Upgrade k8s cluster1 using kubespray
 	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
@@ -67,6 +68,7 @@ install-k8s-cluster2: ## Install k8s cluster2 using kubespray
 	cp -R ${REPO_DIR}/udf/kubespray/cluster2 /tmp/kubespray/inventory && \
 	sudo pip3 install -r requirements.txt && \
 	ansible-playbook -i inventory/cluster2/hosts.yaml  --become --become-user=root cluster.yml
+	sudo cp /etc/kubernetes/admin.conf ~/.kube/config
 
 upgrade-k8s-cluster2: ## Upgrade k8s cluster2 using kubespray
 	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
@@ -201,3 +203,6 @@ upgrade-apt-packages: ## Upgrade apt packages
 	ssh k8s-2-master 'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
 	ssh k8s-2-node1  'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
 	ssh k8s-2-node2  'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
+
+update-kubeconfig: ## Copy k8s kubeconfig to ~/.kube/config
+	sudo cp /etc/kubernetes/admin.conf ~/.kube/config
