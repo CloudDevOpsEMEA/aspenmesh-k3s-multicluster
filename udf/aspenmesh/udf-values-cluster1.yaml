@@ -61,8 +61,6 @@ global:
       gateways:
       - address: 10.1.1.5
         port: 31003
-istiocoredns: 
-  enabled: true
 jaeger: 
   cassandra: 
     config: 
