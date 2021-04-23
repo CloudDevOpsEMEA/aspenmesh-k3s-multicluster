@@ -27,7 +27,7 @@ gateways:
     enabled: true
     env: 
       ISTIO_META_REQUESTED_NETWORK_VIEW: external
-  istio-ingressgateway: 
+  istio-ingressgateway:
     name: istio-ingressgateway
     autoscaleMax: 2
     autoscaleMin: 1
