@@ -96,7 +96,7 @@ reset-k8s-cluster2: ## Reset k8s cluster2 using kubespray
 
 install-am1: ## Install aspen mesh in cluster1
 	kubectl create ns ${AM_NAMESPACE} || true
-	kubectl label namespace istio-system topology.istio.io/network=network1 || true
+	kubectl label namespace ${AM_NAMESPACE} topology.istio.io/network=network1 || true
 	kubectl create secret generic cacerts -n ${AM_NAMESPACE} \
 		--from-file=${CERT_DIR_CLUSTER_1}/ca-cert.pem \
 		--from-file=${CERT_DIR_CLUSTER_1}/ca-key.pem \
@@ -130,7 +130,7 @@ upgrade-am1: ## Upgrade aspen mesh in cluster1
 
 install-am2: ## Install aspen mesh in cluster2
 	kubectl create ns ${AM_NAMESPACE} || true
-	kubectl label namespace istio-system topology.istio.io/network=network2 || true
+	kubectl label namespace ${AM_NAMESPACE} topology.istio.io/network=network2 || true
 	kubectl create secret generic cacerts -n ${AM_NAMESPACE} \
 		--from-file=${CERT_DIR_CLUSTER_2}/ca-cert.pem \
 		--from-file=${CERT_DIR_CLUSTER_2}/ca-key.pem \
