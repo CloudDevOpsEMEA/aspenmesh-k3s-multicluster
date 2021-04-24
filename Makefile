@@ -188,16 +188,16 @@ istioctl:  ## Install istioctl
 ###############
 
 git-clone-all: ## Clone all git repos
-	ssh k8s-1-master 'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null'
-	ssh k8s-1-node1  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null'
-	ssh k8s-1-node2  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null'
-	ssh k8s-1-node3  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null'
-	ssh k8s-1-node4  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null'
-	ssh k8s-2-master 'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null'
-	ssh k8s-2-node1  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null'
-	ssh k8s-2-node2  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null'
-	ssh k8s-2-node3  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null'
-	ssh k8s-2-node4  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null'
+	ssh k8s-1-master 'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null' || true
+	ssh k8s-1-node1  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null' || true
+	ssh k8s-1-node2  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null' || true
+	ssh k8s-1-node3  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null' || true
+	ssh k8s-1-node4  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null' || true
+	ssh k8s-2-master 'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null' || true
+	ssh k8s-2-node1  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null' || true
+	ssh k8s-2-node2  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null' || true
+	ssh k8s-2-node3  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null' || true
+	ssh k8s-2-node4  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null' || true
 
 git-pull-all: ## Pull all git repos
 	ssh jumphost     'cd ${REPO_DIR}; git pull > /dev/null ; sudo updatedb'

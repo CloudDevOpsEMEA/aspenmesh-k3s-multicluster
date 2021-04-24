@@ -11,12 +11,20 @@ ff02::3 ip6-allhosts
 
 # DNSMasq entries for UDF nodes
 10.1.1.4 jumphost
+
 10.1.1.5 k8s-1-master
 10.1.1.6 k8s-1-node1
 10.1.1.7 k8s-1-node2
+
 10.1.1.8 k8s-2-master
 10.1.1.9 k8s-2-node1
 10.1.1.10 k8s-2-node2
+
+10.1.1.11 k8s-1-node3
+10.1.1.12 k8s-1-node4
+
+10.1.1.13 k8s-2-node3
+10.1.1.14 k8s-2-node4
 
 # DNSMasq entries for Istio workloads
 10.1.1.5 httpbin
