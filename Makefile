@@ -26,7 +26,7 @@ ASPEN_MESH_INSTALL=./aspenmesh/aspenmesh-${AM_VERSION}
 CHART_DIR=${ASPEN_MESH_INSTALL}/manifests/charts
 MULTI_SETUP_DIR=${ASPEN_MESH_INSTALL}/samples/multicluster
 MULTI_SECRET_DIR=./udf/aspenmesh/multi-secrets
-PATCH_DIR=./usf/aspenmesh/patches
+PATCH_DIR=./udf/aspenmesh/patches
 
 CERT_DIR=./udf/certs
 CERT_DIR_CLUSTER_1=${CERT_DIR}/cluster1
