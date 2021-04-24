@@ -36,7 +36,7 @@ gateways:
       ISTIO_META_REQUESTED_NETWORK_VIEW: "network2"
     type: NodePort
 global:
-  meshID: mesh2
+  meshID: mesh1
   multiCluster:
     # enabled: true
     clusterName: cluster2
