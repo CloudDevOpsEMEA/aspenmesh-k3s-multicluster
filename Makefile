@@ -113,7 +113,7 @@ install-am1-multi: ## Enable multi-cluster in cluster1
 	helm install istio-ewgw ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_EWGW_VALUES_1} || true
 	kubectl apply -n ${AM_NAMESPACE} -f ${MULTI_SETUP_DIR}/expose-services.yaml
 	echo "EXECUTE THE FOLLOWING COMMAND AND SAVE THE OUTPUT FOR SOURCE CONTROL"
-	echo "istioctl x create-remote-secret --name=cluster1 > /tmp/cluster1.yaml"
+	echo "istioctl x create-remote-secret --name=cluster1"
 
 install-am1-multi-remote-secret: ## Install multi-cluster remote secret of cluster2 in cluster1
 	kubectl apply -f ${MULTI_SECRET_DIR}/cluster2.yaml
@@ -147,7 +147,7 @@ install-am2-multi: ## Enable multi-cluster in cluster2
 	helm install istio-ewgw ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_EWGW_VALUES_2} || true
 	kubectl apply -n ${AM_NAMESPACE} -f ${MULTI_SETUP_DIR}/expose-services.yaml
 	echo "EXECUTE THE FOLLOWING COMMAND AND SAVE THE OUTPUT FOR SOURCE CONTROL"
-	echo "istioctl x create-remote-secret --name=cluster2 > /tmp/cluster2.yaml"
+	echo "istioctl x create-remote-secret --name=cluster2"
 
 install-am2-multi-remote-secret: ## Install multi-cluster remote secret of cluster1 in cluster2
 	kubectl apply -f ${MULTI_SECRET_DIR}/cluster1.yaml
