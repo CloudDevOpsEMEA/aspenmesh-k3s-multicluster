@@ -12,6 +12,14 @@ all:
       ansible_host: 10.1.1.10
       ip: 10.1.1.10
       access_ip: 10.1.1.10
+    k8s-2-node3:
+      ansible_host: 10.1.1.13
+      ip: 10.1.1.13
+      access_ip: 10.1.1.13
+    k8s-2-node4:
+      ansible_host: 10.1.1.14
+      ip: 10.1.1.14
+      access_ip: 10.1.1.14
   children:
     kube-master:
       hosts:
@@ -20,6 +28,8 @@ all:
       hosts:
         k8s-2-node1:
         k8s-2-node2:
+        k8s-2-node3:
+        k8s-2-node4:
     etcd:
       hosts:
         k8s-2-master:
