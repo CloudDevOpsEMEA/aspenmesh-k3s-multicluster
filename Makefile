@@ -250,3 +250,6 @@ upgrade-apt-packages: ## Upgrade apt packages
 
 update-kubeconfig: ## Copy k8s kubeconfig to ~/.kube/config
 	sudo cp /etc/kubernetes/admin.conf ~/.kube/config
+
+force-apt-packages:
+	sudo apt-get -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install 'containerd.io=1.3.9-1' 'docker-ce-cli=5:19.03.14~3-0~ubuntu-focal' 'docker-ce=5:19.03.14~3-0~ubuntu-focal' --allow-downgrades
