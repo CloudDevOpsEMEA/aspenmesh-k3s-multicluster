@@ -60,6 +60,8 @@ gateways:
     env:
       ISTIO_META_ROUTER_MODE: "sni-dnat"
       ISTIO_META_REQUESTED_NETWORK_VIEW: "network2"
+    externalIPs:
+    - 10.1.1.8
     type: NodePort
 global: 
   meshID: mesh1
