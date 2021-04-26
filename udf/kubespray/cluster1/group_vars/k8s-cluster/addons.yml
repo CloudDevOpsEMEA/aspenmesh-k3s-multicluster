@@ -14,7 +14,7 @@ registry_enabled: false
 
 # Metrics Server deployment
 metrics_server_enabled: true
-metrics_server_kubelet_insecure_tls: false
+metrics_server_kubelet_insecure_tls: true
 metrics_server_metric_resolution: 60s
 metrics_server_kubelet_preferred_address_types: "InternalIP"
 
