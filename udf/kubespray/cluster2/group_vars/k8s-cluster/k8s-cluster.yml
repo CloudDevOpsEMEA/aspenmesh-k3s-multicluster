@@ -53,14 +53,14 @@ credentials_dir: "{{ inventory_dir }}/credentials"
 # kube_oidc_groups_prefix: oidc:
 
 ## Variables to control webhook authn/authz
-kube_webhook_token_auth: false
+# kube_webhook_token_auth: false
 # kube_webhook_token_auth_url: https://...
-kube_webhook_token_auth_url_skip_tls_verify: true
+# kube_webhook_token_auth_url_skip_tls_verify: true
 
 ## For webhook authorization, authorization_modes must include Webhook
-kube_webhook_authorization: false
+# kube_webhook_authorization: false
 # kube_webhook_authorization_url: https://...
-kube_webhook_authorization_url_skip_tls_verify: true
+# kube_webhook_authorization_url_skip_tls_verify: true
 
 # Choose network plugin (cilium, calico, weave or flannel. Use cni for generic cni plugin)
 # Can also be set to 'cloud', which lets the cloud provider setup appropriate routing
@@ -97,9 +97,9 @@ kube_network_node_prefix: 24
 # The port the API Server will be listening on.
 kube_apiserver_ip: "{{ kube_service_addresses|ipaddr('net')|ipaddr(1)|ipaddr('address') }}"
 kube_apiserver_port: 6443  # (https)
-# kube_apiserver_insecure_port: 8080  # (http)
+kube_apiserver_insecure_port: 8080  # (http)
 # Set to 0 to disable insecure port - Requires RBAC in authorization_modes and kube_api_anonymous_auth: true
-kube_apiserver_insecure_port: 8080  # (disabled)
+# kube_apiserver_insecure_port: 0  # (disabled)
 
 # Kube-proxy proxyMode configuration.
 # Can be ipvs, iptables
