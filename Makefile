@@ -31,8 +31,8 @@ CERT_DIR=./udf/certs
 CERT_DIR_CLUSTER_1=${CERT_DIR}/cluster1
 CERT_DIR_CLUSTER_2=${CERT_DIR}/cluster2
 
-# KUBESPRAY_BRANCH=release-2.15
-KUBESPRAY_BRANCH=master
+KUBESPRAY_BRANCH=release-2.15
+# KUBESPRAY_BRANCH=master
 
 
 ##################
