@@ -24,7 +24,6 @@ AM_EWGW_VALUES_2=./udf/aspenmesh/udf-values-ewgw-cluster2.yaml
 
 ASPEN_MESH_INSTALL=./aspenmesh/aspenmesh-${AM_VERSION}
 CHART_DIR=${ASPEN_MESH_INSTALL}/manifests/charts
-MULTI_SETUP_DIR=${ASPEN_MESH_INSTALL}/samples/multicluster
 MULTI_SECRET_DIR=./udf/aspenmesh/multi-secrets
 PATCH_DIR=./udf/aspenmesh/patches
 
@@ -111,9 +110,7 @@ install-am1: ## Install aspen mesh in cluster1
 	kubectl wait --timeout=5m --for=condition=Ready pods --all -n ${AM_NAMESPACE}
 
 install-am1-multi: ## Enable multi-cluster in cluster1
-	helm install istio-ewgw ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_EWGW_VALUES_1} || true
-	kubectl patch -n ${AM_NAMESPACE} service istio-eastwestgateway --patch "`cat ${PATCH_DIR}/path-ewgw-svc-cluster1.yaml`" 
-	kubectl apply -n ${AM_NAMESPACE} -f ${MULTI_SETUP_DIR}/expose-services.yaml
+	kubectl patch -n ${AM_NAMESPACE} service istio-ingressgateway --patch "`cat ${PATCH_DIR}/path-gateway-svc-cluster1.yaml`" 
 	echo "EXECUTE THE FOLLOWING COMMAND AND SAVE THE OUTPUT FOR SOURCE CONTROL"
 	echo "istioctl x create-remote-secret --name=cluster1"
 
@@ -125,7 +122,6 @@ upgrade-am1: ## Upgrade aspen mesh in cluster1
 	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
-	helm upgrade istio-ewgw ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_EWGW_VALUES_1} || true
 
 
 ############################## CLUSTER2 ##############################
@@ -146,9 +142,7 @@ install-am2: ## Install aspen mesh in cluster2
 	kubectl wait --timeout=5m --for=condition=Ready pods --all -n ${AM_NAMESPACE}
 
 install-am2-multi: ## Enable multi-cluster in cluster2
-	helm install istio-ewgw ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_EWGW_VALUES_2} || true
-	kubectl apply -n ${AM_NAMESPACE} -f ${MULTI_SETUP_DIR}/expose-services.yaml
-	kubectl patch -n ${AM_NAMESPACE} service istio-eastwestgateway --patch "`cat ${PATCH_DIR}/path-ewgw-svc-cluster2.yaml`" 
+	kubectl patch -n ${AM_NAMESPACE} service istio-ingressgateway --patch "`cat ${PATCH_DIR}/path-gateway-svc-cluster2.yaml`" 
 	echo "EXECUTE THE FOLLOWING COMMAND AND SAVE THE OUTPUT FOR SOURCE CONTROL"
 	echo "istioctl x create-remote-secret --name=cluster2"
 
@@ -160,7 +154,6 @@ upgrade-am2: ## Upgrade aspen mesh in cluster2
 	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
-	helm upgrade istio-ewgw ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_EWGW_VALUES_2} || true
 
 uninstall-am: ## Uninstall aspen mesh in cluster
 	helm uninstall istio-ewgw --namespace ${AM_NAMESPACE} || true

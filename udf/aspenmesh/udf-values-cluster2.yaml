@@ -45,16 +45,28 @@ gateways:
       targetPort: 8443
       nodePort: 31002
       name: https
+    - port: 15012
+      targetPort: 15012
+      name: tcp-istiod
+      nodePort: 31003
     - port: 15443
       targetPort: 15443
-      nodePort: 31003
+      nodePort: 31004
       name: tls
+    - port: 15017
+      targetPort: 15017
+      nodePort: 31005
+      name: tls-webhook
+    env:
+      ISTIO_META_ROUTER_MODE: "sni-dnat"
+      ISTIO_META_REQUESTED_NETWORK_VIEW: "network2"
     type: NodePort
 global: 
   meshID: mesh1
   multiCluster:
     enabled: true
     clusterName: cluster2
+    globalDomainSuffix: local
   network: network2
   meshNetworks:
     network2:
@@ -62,7 +74,7 @@ global:
       - fromRegistry: cluster2
       gateways:
       - address: 10.1.1.8
-        port: 31008
+        port: 31004
 jaeger: 
   cassandra: 
     config: 
