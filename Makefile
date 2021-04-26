@@ -73,7 +73,10 @@ install-k8s-cluster2: ## Install k8s cluster2 using kubespray
 	sudo pip3 install -r requirements.txt && \
 	ansible-playbook -i inventory/cluster2/hosts.yaml  --become --become-user=root cluster.yml
 	sudo cp /etc/kubernetes/admin.conf ~/.kube/config
-	kubectl patch -n kube-system daemonset calico-node --patch "`cat ${PATCH_DIR}/patch-calico-node-daemonset.yaml`"
+	kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/livenessProbe/failureThreshold", "value":10}]'
+	kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/livenessProbe/timeoutSeconds", "value":10}]'
+	kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/readinessProbe/failureThreshold", "value":10}]'
+	kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/readinessProbe/timeoutSeconds", "value":10}]'
 
 upgrade-k8s-cluster2: ## Upgrade k8s cluster2 using kubespray
 	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
@@ -81,7 +84,10 @@ upgrade-k8s-cluster2: ## Upgrade k8s cluster2 using kubespray
 	cp -R ${REPO_DIR}/udf/kubespray/cluster2 /tmp/kubespray/inventory && \
 	sudo pip3 install -r requirements.txt && \
 	ansible-playbook -i inventory/cluster2/hosts.yaml  --become --become-user=root -e kube_version=v1.20.6 -e upgrade_cluster_setup=true cluster.yml
-	kubectl patch -n kube-system daemonset calico-node --patch "`cat ${PATCH_DIR}/patch-calico-node-daemonset.yaml`"
+	kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/livenessProbe/failureThreshold", "value":10}]'
+	kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/livenessProbe/timeoutSeconds", "value":10}]'
+	kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/readinessProbe/failureThreshold", "value":10}]'
+	kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/readinessProbe/timeoutSeconds", "value":10}]'
 
 reset-k8s-cluster2: ## Reset k8s cluster2 using kubespray
 	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
