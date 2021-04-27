@@ -68,7 +68,7 @@ global:
     globalDomainSuffix: local
   network: network2
   meshNetworks:
-    network1:
+    network2:
       endpoints:
       - fromRegistry: cluster2
       gateways:
