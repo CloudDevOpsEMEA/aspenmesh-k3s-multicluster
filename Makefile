@@ -128,9 +128,6 @@ install-am1-multi: ## Enable multi-cluster in cluster1
 	echo "EXECUTE THE FOLLOWING COMMAND AND SAVE THE OUTPUT FOR SOURCE CONTROL"
 	echo "istioctl x create-remote-secret --name=cluster1"
 
-install-am1-multi-remote-secret: ## Install multi-cluster remote secret of cluster2 in cluster1
-	kubectl apply -f ${MULTI_SECRET_DIR}/cluster2.yaml
-
 upgrade-am1: ## Upgrade aspen mesh in cluster1
 	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
 	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
@@ -160,9 +157,6 @@ install-am2-multi: ## Enable multi-cluster in cluster2
 	echo "EXECUTE THE FOLLOWING COMMAND AND SAVE THE OUTPUT FOR SOURCE CONTROL"
 	echo "istioctl x create-remote-secret --name=cluster2"
 
-install-am2-multi-remote-secret: ## Install multi-cluster remote secret of cluster1 in cluster2
-	kubectl apply -f ${MULTI_SECRET_DIR}/cluster1.yaml
-
 upgrade-am2: ## Upgrade aspen mesh in cluster2
 	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
 	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
@@ -176,6 +170,11 @@ uninstall-am: ## Uninstall aspen mesh in cluster
 	helm uninstall istiod --namespace ${AM_NAMESPACE} || true
 	helm uninstall istio-base --namespace ${AM_NAMESPACE} || true
 	kubectl delete ns ${AM_NAMESPACE} || true
+
+install-multi-remote-secret: ## Install multi-cluster remote secrets
+	if [ hostname != "jumphost" ] ; then exit ; fi
+	istioctl x create-remote-secret --context="cluster1" --name=cluster1 | kubectl apply -f - --context="cluster2"
+	istioctl x create-remote-secret --context="cluster2" --name=cluster2 | kubectl apply -f - --context="cluster1"
 
 post-install: ## Post installation steps
 	kubectl apply -f ./udf/aspenmesh/services || true
