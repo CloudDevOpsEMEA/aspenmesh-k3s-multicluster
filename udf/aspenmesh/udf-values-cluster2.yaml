@@ -22,7 +22,7 @@ external-dns:
 gateways: 
   istio-egressgateway:
     name: istio-egressgateway
-    autoscaleMax: 2
+    autoscaleMax: 1
     autoscaleMin: 1
     enabled: true
     env: 
