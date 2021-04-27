@@ -25,3 +25,6 @@ check-endpoints: ## Check envoy sidecar endpoints
 
 info: ## Get deployment info of this workload
 	kubectl -n sample get all
+
+restart: ## Restart all pods in this sample namespace
+	kubectl -n sample rollout restart deployments
