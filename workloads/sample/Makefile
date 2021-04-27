@@ -22,3 +22,6 @@ test-traffic: ## Test traffic from local to remote cluster
 
 check-endpoints: ## Check envoy sidecar endpoints
 	istioctl proxy-config endpoint `kubectl get pod -n sample -l app=sleep -o jsonpath='{.items[0].metadata.name}'`.sample | grep hello
+
+info: ## Get deployment info of this workload
+	kubectl -n sample get all
