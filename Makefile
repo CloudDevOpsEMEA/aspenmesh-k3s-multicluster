@@ -137,7 +137,7 @@ upgrade-am1: ## Upgrade aspen mesh in cluster1
 
 install-am2: ## Install aspen mesh in cluster2
 	kubectl create ns ${AM_NAMESPACE} || true
-	kubectl label namespace ${AM_NAMESPACE} topology.istio.io/network=network2 || true
+	kubectl label namespace ${AM_NAMESPACE} topology.istio.io/network=network1 || true
 	kubectl create secret generic cacerts -n ${AM_NAMESPACE} \
 		--from-file=${CERT_DIR_CLUSTER_2}/ca-cert.pem \
 		--from-file=${CERT_DIR_CLUSTER_2}/ca-key.pem \
