@@ -73,7 +73,7 @@ global:
       - fromRegistry: cluster1
       gateways:
       - address: 10.1.10.50
-        port: 31005
+        port: 15443
 jaeger: 
   cassandra: 
     config: 
