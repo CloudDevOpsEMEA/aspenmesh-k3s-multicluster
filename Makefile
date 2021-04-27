@@ -125,8 +125,6 @@ install-am1: ## Install aspen mesh in cluster1
 
 install-am1-multi: ## Enable multi-cluster in cluster1
 	kubectl patch -n ${AM_NAMESPACE} service istio-ingressgateway --patch "`cat ${PATCH_DIR}/path-ingressgateway-svc-cluster1.yaml`" 
-	echo "EXECUTE THE FOLLOWING COMMAND AND SAVE THE OUTPUT FOR SOURCE CONTROL"
-	echo "istioctl x create-remote-secret --name=cluster1"
 
 upgrade-am1: ## Upgrade aspen mesh in cluster1
 	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
@@ -154,8 +152,6 @@ install-am2: ## Install aspen mesh in cluster2
 
 install-am2-multi: ## Enable multi-cluster in cluster2
 	kubectl patch -n ${AM_NAMESPACE} service istio-ingressgateway --patch "`cat ${PATCH_DIR}/path-ingressgateway-svc-cluster2.yaml`" 
-	echo "EXECUTE THE FOLLOWING COMMAND AND SAVE THE OUTPUT FOR SOURCE CONTROL"
-	echo "istioctl x create-remote-secret --name=cluster2"
 
 upgrade-am2: ## Upgrade aspen mesh in cluster2
 	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
