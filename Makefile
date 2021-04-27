@@ -257,6 +257,9 @@ enable-multi-nic: ## Enable multiple nics
 	ssh k8s-2-node4  "sudo apt-get -y install net-tools ; sudo ${REPO_DIR}/udf/common/network-2nic.sh" || true
 
 enable-multi-routing: ## Enable multiple network routing
+	ssh jumphost     "sudo iptables -A FORWARD -i lo -j ACCEPT ; sudo iptables -A FORWARD -i ens6 -j ACCEPT ; sudo iptables -A FORWARD -i ens7 -j ACCEPT"
+	ssh jumphost     "sudo iptables -t nat -A POSTROUTING -o ens6 -j MASQUERADE ; sudo iptables -t nat -A POSTROUTING -o ens7 -j MASQUERADE"
+	ssh jumphost     "sudo iptables-save"
 	ssh k8s-1-master "sudo ip route add 10.1.20.0/24 via 10.1.10.4" || true
 	ssh k8s-1-node1  "sudo ip route add 10.1.20.0/24 via 10.1.10.4" || true
 	ssh k8s-1-node2  "sudo ip route add 10.1.20.0/24 via 10.1.10.4" || true
