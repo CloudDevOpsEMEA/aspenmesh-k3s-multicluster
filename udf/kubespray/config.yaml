@@ -16,11 +16,11 @@ contexts:
 - context:
     cluster: cluster1.local
     user: kubernetes1-admin
-  name: cluster1
+  name: kubernetes1-admin.cluster1.cluster.local
 - context:
     cluster: cluster2.local
     user: kubernetes2-admin
-  name: cluster2
+  name: kubernetes2-admin.cluster2.cluster.local
 
 current-context: cluster1
 
