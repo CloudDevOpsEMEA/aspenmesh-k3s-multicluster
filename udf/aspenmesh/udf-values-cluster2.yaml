@@ -59,7 +59,7 @@ gateways:
       name: tls-webhook
     env:
       ISTIO_META_ROUTER_MODE: "sni-dnat"
-      ISTIO_META_REQUESTED_NETWORK_VIEW: "network2"
+      ISTIO_META_REQUESTED_NETWORK_VIEW: "network1"
     externalIPs:
     - 10.1.1.8
     type: NodePort
@@ -69,9 +69,9 @@ global:
     enabled: true
     clusterName: cluster2
     globalDomainSuffix: local
-  network: network2
+  network: network1
   meshNetworks:
-    network2:
+    network1:
       endpoints:
       - fromRegistry: cluster2
       gateways:
