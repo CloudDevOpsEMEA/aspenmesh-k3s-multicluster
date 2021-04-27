@@ -1,25 +1,25 @@
 all:
   hosts:
     k8s-1-master:
-      ansible_host: 10.1.1.5
-      ip: 10.1.1.5
-      access_ip: 10.1.1.5
+      ansible_host: 10.1.10.5
+      ip: 10.1.10.5
+      access_ip: 10.1.10.5
     k8s-1-node1:
-      ansible_host: 10.1.1.6
-      ip: 10.1.1.6
-      access_ip: 10.1.1.6
+      ansible_host: 10.1.10.6
+      ip: 10.1.10.6
+      access_ip: 10.1.10.6
     k8s-1-node2:
-      ansible_host: 10.1.1.7
-      ip: 10.1.1.7
-      access_ip: 10.1.1.7
+      ansible_host: 10.1.10.7
+      ip: 10.1.10.7
+      access_ip: 10.1.10.7
     k8s-1-node3:
-      ansible_host: 10.1.1.11
-      ip: 10.1.1.11
-      access_ip: 10.1.1.11
+      ansible_host: 10.1.10.11
+      ip: 10.1.10.11
+      access_ip: 10.1.10.11
     k8s-1-node4:
-      ansible_host: 10.1.1.12
-      ip: 10.1.1.12
-      access_ip: 10.1.1.12
+      ansible_host: 10.1.10.12
+      ip: 10.1.10.12
+      access_ip: 10.1.10.12
   children:
     kube-master:
       hosts:
