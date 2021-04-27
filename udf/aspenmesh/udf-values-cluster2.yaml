@@ -68,6 +68,12 @@ global:
     globalDomainSuffix: local
   network: network2
   meshNetworks:
+    network1:
+      endpoints:
+      - fromRegistry: cluster1
+      gateways:
+      - address: 10.1.10.50
+        port: 31005
     network2:
       endpoints:
       - fromRegistry: cluster2

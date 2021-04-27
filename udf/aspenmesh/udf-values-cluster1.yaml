@@ -74,6 +74,12 @@ global:
       gateways:
       - address: 10.1.10.50
         port: 31005
+    network2:
+      endpoints:
+      - fromRegistry: cluster2
+      gateways:
+      - address: 10.1.20.50
+        port: 31005
 jaeger: 
   cassandra: 
     config: 
