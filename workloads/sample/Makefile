@@ -28,3 +28,5 @@ info: ## Get deployment info of this workload
 
 restart: ## Restart all pods in this sample namespace
 	kubectl -n sample rollout restart deployments
+	kubectl wait --timeout=2m --for=condition=Ready pods --all -n sample
+
