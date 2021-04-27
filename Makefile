@@ -25,7 +25,6 @@ AM_EWGW_VALUES_2=./udf/aspenmesh/udf-values-ewgw-cluster2.yaml
 ASPEN_MESH_INSTALL=./aspenmesh/aspenmesh-${AM_VERSION}
 CHART_DIR=${ASPEN_MESH_INSTALL}/manifests/charts
 MULTI_SECRET_DIR=./udf/aspenmesh/multi-secrets
-PATCH_DIR=./udf/aspenmesh/patches
 
 CERT_DIR=./udf/certs
 CERT_DIR_CLUSTER_1=${CERT_DIR}/cluster1
@@ -123,9 +122,6 @@ install-am1: ## Install aspen mesh in cluster1
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 	kubectl wait --timeout=5m --for=condition=Ready pods --all -n ${AM_NAMESPACE}
 
-install-am1-multi: ## Enable multi-cluster in cluster1
-	kubectl patch -n ${AM_NAMESPACE} service istio-ingressgateway --patch "`cat ${PATCH_DIR}/path-ingressgateway-svc-cluster1.yaml`" 
-
 upgrade-am1: ## Upgrade aspen mesh in cluster1
 	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
 	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
@@ -149,9 +145,6 @@ install-am2: ## Install aspen mesh in cluster2
 	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	kubectl wait --timeout=5m --for=condition=Ready pods --all -n ${AM_NAMESPACE}
-
-install-am2-multi: ## Enable multi-cluster in cluster2
-	kubectl patch -n ${AM_NAMESPACE} service istio-ingressgateway --patch "`cat ${PATCH_DIR}/path-ingressgateway-svc-cluster2.yaml`" 
 
 upgrade-am2: ## Upgrade aspen mesh in cluster2
 	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
