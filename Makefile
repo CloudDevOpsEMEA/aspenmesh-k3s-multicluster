@@ -26,8 +26,6 @@ ASPEN_MESH_INSTALL=./aspenmesh/aspenmesh-${AM_VERSION}
 CHART_DIR=${ASPEN_MESH_INSTALL}/manifests/charts
 MULTI_SECRET_DIR=./udf/aspenmesh/multi-secrets
 
-PATCH_DIR=./udf/aspenmesh/patches
-
 CERT_DIR=./udf/certs
 CERT_DIR_CLUSTER_1=${CERT_DIR}/cluster1
 CERT_DIR_CLUSTER_2=${CERT_DIR}/cluster2
@@ -56,7 +54,7 @@ install-k8s-cluster1: ## Install k8s cluster1 using kubespray
 	# kubectl patch -n kube-system deployment calico-kube-controllers --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/readinessProbe/failureThreshold", "value":10}]'
 	# kubectl patch -n kube-system deployment calico-kube-controllers --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/readinessProbe/timeoutSeconds", "value":10}]'
 	# kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/resources/limits/cpu", "value":"500m"}]'
-	kubectl patch -n ${AM_NAMESPACE} service istio-ingressgateway --patch "`cat ${PATCH_DIR}/path-ingressgateway-svc-cluster1.yaml`" 
+	kubectl patch svc -n istio-system istio-eastwestgateway -p '{"spec":{"externalIPs": ["10.1.10.50"]}}'
 
 upgrade-k8s-cluster1: ## Upgrade k8s cluster1 using kubespray
 	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
@@ -89,7 +87,7 @@ install-k8s-cluster2: ## Install k8s cluster2 using kubespray
 	# kubectl patch -n kube-system deployment calico-kube-controllers --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/readinessProbe/failureThreshold", "value":10}]'
 	# kubectl patch -n kube-system deployment calico-kube-controllers --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/readinessProbe/timeoutSeconds", "value":10}]'
 	# kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/resources/limits/cpu", "value":"500m"}]'
-	kubectl patch -n ${AM_NAMESPACE} service istio-ingressgateway --patch "`cat ${PATCH_DIR}/path-ingressgateway-svc-cluster2.yaml`" 
+	kubectl patch svc -n istio-system istio-eastwestgateway -p '{"spec":{"externalIPs": ["10.1.20.50"]}}'
 
 upgrade-k8s-cluster2: ## Upgrade k8s cluster2 using kubespray
 	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
