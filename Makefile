@@ -162,8 +162,8 @@ uninstall-am: ## Uninstall aspen mesh in cluster
 
 install-multi-remote-secret: ## Install multi-cluster remote secrets
 	if [ hostname != "jumphost" ] ; then exit ; fi
-	istioctl x create-remote-secret --context="cluster1" --name=cluster1 | kubectl apply -f - --context="cluster2"
-	istioctl x create-remote-secret --context="cluster2" --name=cluster2 | kubectl apply -f - --context="cluster1"
+	istioctl x create-remote-secret --context="kubernetes1-admin.cluster1.cluster.local" --name=cluster1 | kubectl apply -f - --context="kubernetes2-admin.cluster2.cluster.local"
+	istioctl x create-remote-secret --context="kubernetes2-admin.cluster2.cluster.local" --name=cluster2 | kubectl apply -f - --context="kubernetes1-admin.cluster1.cluster.local"
 
 post-install: ## Post installation steps
 	kubectl apply -f ./udf/aspenmesh/services || true
