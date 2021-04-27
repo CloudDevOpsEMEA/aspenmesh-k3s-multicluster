@@ -18,7 +18,7 @@ install-cluster2: ## Install sample app in cluster2
 	kubectl apply -f cluster2
 
 test-traffic: ## Test traffic from local to remote cluster
-	kubectl exec -n sample -c sleep "`kubectl get pod -n sample -l app=sleep -o jsonpath='{.items[0].metadata.name}'`" -- /bin/sh -c 'for i in `seq 1 10`; do curl -sS helloworld.sample:5000/hello; done'
+	while true ; do kubectl exec -n sample -c sleep "`kubectl get pod -n sample -l app=sleep -o jsonpath='{.items[0].metadata.name}'`" -- curl -sS helloworld.sample:5000/hello ; done
 
 check-endpoints: ## Check envoy sidecar endpoints
 	istioctl proxy-config endpoint `kubectl get pod -n sample -l app=sleep -o jsonpath='{.items[0].metadata.name}'`.sample | grep hello
