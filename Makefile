@@ -257,16 +257,16 @@ enable-multi-nic: ## Enable multiple nics
 	ssh k8s-2-node4  "sudo apt-get -y install net-tools ; sudo ${REPO_DIR}/udf/common/network-2nic.sh" || true
 
 enable-multi-routing: ## Enable multiple network routing
-	ssh k8s-1-master "sudo ip route add 10.1.20.0/24 via 10.1.20.4" || true
-	ssh k8s-1-node1  "sudo ip route add 10.1.20.0/24 via 10.1.20.4" || true
-	ssh k8s-1-node2  "sudo ip route add 10.1.20.0/24 via 10.1.20.4" || true
-	ssh k8s-1-node3  "sudo ip route add 10.1.20.0/24 via 10.1.20.4" || true
-	ssh k8s-1-node4  "sudo ip route add 10.1.20.0/24 via 10.1.20.4" || true
-	ssh k8s-2-master "sudo ip route add 10.1.10.0/24 via 10.1.10.4" || true
-	ssh k8s-2-node1  "sudo ip route add 10.1.10.0/24 via 10.1.10.4" || true
-	ssh k8s-2-node2  "sudo ip route add 10.1.10.0/24 via 10.1.10.4" || true
-	ssh k8s-2-node3  "sudo ip route add 10.1.10.0/24 via 10.1.10.4" || true
-	ssh k8s-2-node4  "sudo ip route add 10.1.10.0/24 via 10.1.10.4" || true
+	ssh k8s-1-master "sudo ip route add 10.1.20.0/24 via 10.1.10.4" || true
+	ssh k8s-1-node1  "sudo ip route add 10.1.20.0/24 via 10.1.10.4" || true
+	ssh k8s-1-node2  "sudo ip route add 10.1.20.0/24 via 10.1.10.4" || true
+	ssh k8s-1-node3  "sudo ip route add 10.1.20.0/24 via 10.1.10.4" || true
+	ssh k8s-1-node4  "sudo ip route add 10.1.20.0/24 via 10.1.10.4" || true
+	ssh k8s-2-master "sudo ip route add 10.1.10.0/24 via 10.1.20.4" || true
+	ssh k8s-2-node1  "sudo ip route add 10.1.10.0/24 via 10.1.20.4" || true
+	ssh k8s-2-node2  "sudo ip route add 10.1.10.0/24 via 10.1.20.4" || true
+	ssh k8s-2-node3  "sudo ip route add 10.1.10.0/24 via 10.1.20.4" || true
+	ssh k8s-2-node4  "sudo ip route add 10.1.10.0/24 via 10.1.20.4" || true
 
 update-kubeconfig: ## Copy k8s kubeconfig to ~/.kube/config
 	sudo cp /etc/kubernetes/admin.conf ~/.kube/config
