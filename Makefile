@@ -283,3 +283,4 @@ force-apt-packages:
 
 restart-istiod:
 	kubectl -n ${AM_NAMESPACE} rollout restart deployments/istiod
+	kubectl wait --timeout=2m --for=condition=Ready pods --all -n ${AM_NAMESPACE}
