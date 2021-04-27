@@ -125,7 +125,7 @@ cert_manager_enabled: false
 # cert_manager_namespace: "cert-manager"
 
 # MetalLB deployment
-metallb_enabled: false
+metallb_enabled: true
 # metallb_ip_range:
 #   - "10.5.0.50-10.5.0.99"
 # metallb_version: v0.9.3

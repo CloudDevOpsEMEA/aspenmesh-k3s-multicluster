@@ -243,6 +243,19 @@ upgrade-apt-packages: ## Upgrade apt packages
 	ssh k8s-2-node3  'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
 	ssh k8s-2-node4  'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
 
+update-multi-nic: ## Enable multiple nics
+	ssh jumphost     'sudo ${REPO_DIR}/udf/common/network-3nic.sh'
+	ssh k8s-1-master 'sudo ${REPO_DIR}/udf/common/network-2nic.sh'
+	ssh k8s-1-node1  'sudo ${REPO_DIR}/udf/common/network-2nic.sh'
+	ssh k8s-1-node2  'sudo ${REPO_DIR}/udf/common/network-2nic.sh'
+	ssh k8s-1-node3  'sudo ${REPO_DIR}/udf/common/network-2nic.sh'
+	ssh k8s-1-node4  'sudo ${REPO_DIR}/udf/common/network-2nic.sh'
+	ssh k8s-2-master 'sudo ${REPO_DIR}/udf/common/network-2nic.sh'
+	ssh k8s-2-node1  'sudo ${REPO_DIR}/udf/common/network-2nic.sh'
+	ssh k8s-2-node2  'sudo ${REPO_DIR}/udf/common/network-2nic.sh'
+	ssh k8s-2-node3  'sudo ${REPO_DIR}/udf/common/network-2nic.sh'
+	ssh k8s-2-node4  'sudo ${REPO_DIR}/udf/common/network-2nic.sh'
+
 update-kubeconfig: ## Copy k8s kubeconfig to ~/.kube/config
 	sudo cp /etc/kubernetes/admin.conf ~/.kube/config
 
