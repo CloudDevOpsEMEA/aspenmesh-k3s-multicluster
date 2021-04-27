@@ -266,6 +266,8 @@ enable-multi-routing: ## Enable multiple network routing
 
 update-multi-kubeconfig: ## Copy k8s multi-cluster kubeconfig to ~/.kube/config
 	sudo cp ./udf/kubespray/config.yaml ~/.kube/config
+	kubectl get nodes -o wide --context=cluster1
+	kubectl get nodes -o wide --context=cluster2
 
 force-apt-packages:
 	ssh k8s-1-master 'sudo apt-get -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install containerd.io=1.3.9-1 docker-ce-cli=5:19.03.14~3-0~ubuntu-focal docker-ce=5:19.03.14~3-0~ubuntu-focal --allow-downgrades --allow-change-held-packages'
