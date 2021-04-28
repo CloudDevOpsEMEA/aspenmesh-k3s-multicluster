@@ -54,7 +54,6 @@ install-k8s-cluster1: ## Install k8s cluster1 using kubespray
 	# kubectl patch -n kube-system deployment calico-kube-controllers --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/readinessProbe/failureThreshold", "value":10}]'
 	# kubectl patch -n kube-system deployment calico-kube-controllers --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/readinessProbe/timeoutSeconds", "value":10}]'
 	# kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/resources/limits/cpu", "value":"500m"}]'
-	kubectl patch svc -n istio-system istio-ingressgateway -p '{"spec":{"externalIPs": ["10.1.10.50"]}}'
 
 upgrade-k8s-cluster1: ## Upgrade k8s cluster1 using kubespray
 	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
@@ -87,7 +86,6 @@ install-k8s-cluster2: ## Install k8s cluster2 using kubespray
 	# kubectl patch -n kube-system deployment calico-kube-controllers --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/readinessProbe/failureThreshold", "value":10}]'
 	# kubectl patch -n kube-system deployment calico-kube-controllers --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/readinessProbe/timeoutSeconds", "value":10}]'
 	# kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/resources/limits/cpu", "value":"500m"}]'
-	kubectl patch svc -n istio-system istio-ingressgateway -p '{"spec":{"externalIPs": ["10.1.20.50"]}}'
 
 upgrade-k8s-cluster2: ## Upgrade k8s cluster2 using kubespray
 	cd /tmp && rm -rf /tmp/kubespray && git clone https://github.com/kubernetes-sigs/kubespray.git && \
@@ -122,6 +120,7 @@ install-am1: ## Install aspen mesh in cluster1
 	sleep 30
 	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
+	kubectl patch svc -n istio-system istio-ingressgateway -p '{"spec":{"externalIPs": ["10.1.10.50"]}}'
 	kubectl wait --timeout=5m --for=condition=Ready pods --all -n ${AM_NAMESPACE}
 
 upgrade-am1: ## Upgrade aspen mesh in cluster1
@@ -146,6 +145,7 @@ install-am2: ## Install aspen mesh in cluster2
 	sleep 30
 	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
+	kubectl patch svc -n istio-system istio-ingressgateway -p '{"spec":{"externalIPs": ["10.1.20.50"]}}'
 	kubectl wait --timeout=5m --for=condition=Ready pods --all -n ${AM_NAMESPACE}
 
 upgrade-am2: ## Upgrade aspen mesh in cluster2
