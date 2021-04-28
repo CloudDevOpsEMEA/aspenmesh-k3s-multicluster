@@ -65,7 +65,8 @@ global:
   multiCluster:
     enabled: true
     clusterName: cluster2
-    globalDomainSuffix: local
+    includeEnvoyFilter: false
+    # globalDomainSuffix: svc.cluster.local
   network: network2
   meshNetworks:
     network1:
