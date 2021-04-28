@@ -12,10 +12,12 @@ help: ## This help
 install-cluster1: ## Install sample app in cluster1 
 	kubectl apply -f 00-namespace.yaml || true
 	kubectl apply -f cluster1
+	kubectl wait --timeout=2m --for=condition=Ready pods --all -n sample
 
 install-cluster2: ## Install sample app in cluster2 
 	kubectl apply -f 00-namespace.yaml || true
 	kubectl apply -f cluster2
+	kubectl wait --timeout=2m --for=condition=Ready pods --all -n sample
 
 test-traffic: ## Test traffic from local to remote cluster
 	while true ; do kubectl exec -n sample -c sleep "`kubectl get pod -n sample -l app=sleep -o jsonpath='{.items[0].metadata.name}'`" -- curl -sS helloworld.sample:5000/hello ; done
