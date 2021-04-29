@@ -62,13 +62,13 @@ global:
     includeEnvoyFilter: false
     globalDomainSuffix: svc.cluster.local
   network: network2
-  meshNetworks:
-    network1:
-      endpoints:
-      - fromRegistry: cluster1
-      gateways:
-      - address: 10.1.10.50
-        port: 15443
+  # meshNetworks:
+  #   network1:
+  #     endpoints:
+  #     - fromRegistry: cluster1
+  #     gateways:
+  #     - address: 10.1.10.50
+  #       port: 15443
 jaeger: 
   cassandra: 
     config: 
