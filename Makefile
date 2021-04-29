@@ -147,6 +147,7 @@ install-am2: ## Install aspen mesh in cluster2
 	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	kubectl patch svc -n istio-system istio-ingressgateway -p '{"spec":{"externalIPs": ["10.1.20.50"]}}'
+	kubectl patch svc -n istio-system istio-ingressgateway -p '{"spec":{"loadBalancer.ingress.ip": ["10.1.20.50"]}}'
 	kubectl wait --timeout=5m --for=condition=Ready pods --all -n ${AM_NAMESPACE}
 
 upgrade-am2: ## Upgrade aspen mesh in cluster2
@@ -154,6 +155,7 @@ upgrade-am2: ## Upgrade aspen mesh in cluster2
 	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
+	kubectl patch svc -n istio-system istio-ingressgateway -p '{"spec":{"externalIPs": ["10.1.20.50"]}}'
 	kubectl patch svc -n istio-system istio-ingressgateway -p '{"spec":{"externalIPs": ["10.1.20.50"]}}'
 
 uninstall-am: ## Uninstall aspen mesh in cluster
@@ -284,6 +286,18 @@ force-apt-packages:
 	ssh k8s-2-node2  'sudo apt-get -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install containerd.io=1.3.9-1 docker-ce-cli=5:19.03.14~3-0~ubuntu-focal docker-ce=5:19.03.14~3-0~ubuntu-focal --allow-downgrades --allow-change-held-packages'
 	ssh k8s-2-node3  'sudo apt-get -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install containerd.io=1.3.9-1 docker-ce-cli=5:19.03.14~3-0~ubuntu-focal docker-ce=5:19.03.14~3-0~ubuntu-focal --allow-downgrades --allow-change-held-packages'
 	ssh k8s-2-node4  'sudo apt-get -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install containerd.io=1.3.9-1 docker-ce-cli=5:19.03.14~3-0~ubuntu-focal docker-ce=5:19.03.14~3-0~ubuntu-focal --allow-downgrades --allow-change-held-packages'
+
+update-dns-resolv: ## Update DNS on all nodes to include jumphost DNS server
+	ssh k8s-1-master 'cd ${REPO_DIR}/udf/dns ; make configure-dns'
+	ssh k8s-1-node1  'cd ${REPO_DIR}/udf/dns ; make configure-dns'
+	ssh k8s-1-node2  'cd ${REPO_DIR}/udf/dns ; make configure-dns'
+	ssh k8s-1-node3  'cd ${REPO_DIR}/udf/dns ; make configure-dns'
+	ssh k8s-1-node4  'cd ${REPO_DIR}/udf/dns ; make configure-dns'
+	ssh k8s-2-master 'cd ${REPO_DIR}/udf/dns ; make configure-dns'
+	ssh k8s-2-node1  'cd ${REPO_DIR}/udf/dns ; make configure-dns'
+	ssh k8s-2-node2  'cd ${REPO_DIR}/udf/dns ; make configure-dns'
+	ssh k8s-2-node3  'cd ${REPO_DIR}/udf/dns ; make configure-dns'
+	ssh k8s-2-node3  'cd ${REPO_DIR}/udf/dns ; make configure-dns'
 
 restart-istiod:
 	kubectl -n ${AM_NAMESPACE} rollout restart deployments/istiod
