@@ -53,7 +53,9 @@ gateways:
       name: tls-webhook
     env:
       ISTIO_META_ROUTER_MODE: "sni-dnat"
-      ISTIO_META_REQUESTED_NETWORK_VIEW: "network1"  
+      ISTIO_META_REQUESTED_NETWORK_VIEW: "network1"
+    labels:
+      topology.istio.io/network: network1
 global: 
   meshID: mesh1
   multiCluster:
