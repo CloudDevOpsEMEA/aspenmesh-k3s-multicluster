@@ -297,7 +297,7 @@ update-dns-resolv: ## Update DNS on all nodes to include jumphost DNS server
 	ssh k8s-2-node1  'cd ${REPO_DIR}/udf/dns ; make configure-dns'
 	ssh k8s-2-node2  'cd ${REPO_DIR}/udf/dns ; make configure-dns'
 	ssh k8s-2-node3  'cd ${REPO_DIR}/udf/dns ; make configure-dns'
-	ssh k8s-2-node3  'cd ${REPO_DIR}/udf/dns ; make configure-dns'
+	ssh k8s-2-node4  'cd ${REPO_DIR}/udf/dns ; make configure-dns'
 
 restart-istiod:
 	kubectl -n ${AM_NAMESPACE} rollout restart deployments/istiod
