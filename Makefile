@@ -121,7 +121,6 @@ install-am1: ## Install aspen mesh in cluster1
 	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 	kubectl patch svc -n istio-system istio-ingressgateway -p '{"spec":{"externalIPs": ["10.1.10.50"]}}'
-	kubectl patch svc -n istio-system istio-ingressgateway -p '{"spec":{"loadBalancer.ingress.hostname": ["istio-ingress-cluster1.aspendemo.org"]}}'
 	kubectl wait --timeout=5m --for=condition=Ready pods --all -n ${AM_NAMESPACE}
 
 upgrade-am1: ## Upgrade aspen mesh in cluster1
@@ -130,7 +129,6 @@ upgrade-am1: ## Upgrade aspen mesh in cluster1
 	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
 	kubectl patch svc -n istio-system istio-ingressgateway -p '{"spec":{"externalIPs": ["10.1.10.50"]}}'
-	kubectl patch svc -n istio-system istio-ingressgateway -p '{"spec":{"loadBalancer.ingress.hostname": ["istio-ingress-cluster1.aspendemo.org"]}}'
 
 
 ############################## CLUSTER2 ##############################
@@ -149,7 +147,6 @@ install-am2: ## Install aspen mesh in cluster2
 	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	kubectl patch svc -n istio-system istio-ingressgateway -p '{"spec":{"externalIPs": ["10.1.20.50"]}}'
-	kubectl patch svc -n istio-system istio-ingressgateway -p '{"spec":{"loadBalancer.ingress.hostname": ["istio-ingress-cluster2.aspendemo.org"]}}'
 	kubectl wait --timeout=5m --for=condition=Ready pods --all -n ${AM_NAMESPACE}
 
 upgrade-am2: ## Upgrade aspen mesh in cluster2
@@ -158,7 +155,6 @@ upgrade-am2: ## Upgrade aspen mesh in cluster2
 	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
 	kubectl patch svc -n istio-system istio-ingressgateway -p '{"spec":{"externalIPs": ["10.1.20.50"]}}'
-	kubectl patch svc -n istio-system istio-ingressgateway -p '{"spec":{"loadBalancer.ingress.hostname": ["istio-ingress-cluster2.aspendemo.org"]}}'
 
 uninstall-am: ## Uninstall aspen mesh in cluster
 	helm uninstall istio-ewgw --namespace ${AM_NAMESPACE} || true
