@@ -70,7 +70,7 @@ kubelet_config_extra_args: {}
 kubelet_node_config_extra_args: {}
 
 # Maximum number of container log files that can be present for a container.
-kubelet_ s_max_nr: 5
+kubelet_logfiles_max_nr: 5
 
 # Maximum size of the container log file before it is rotated
 kubelet_logfiles_max_size: 10Mi
