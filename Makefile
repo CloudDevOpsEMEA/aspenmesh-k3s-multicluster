@@ -8,14 +8,15 @@ help: ## This help
 
 .DEFAULT_GOAL := help
 
-GIT_REPO=https://github.com/CloudDevOpsEMEA/aspenmesh-k8s-multicluster
-
-HOME_DIR=/home/ubuntu
-REPO_DIR=${HOME_DIR}/aspenmesh-k8s-multicluster
-
 AM_NAMESPACE=istio-system
 AM_VERSION=1.9.1-am1
 ISTIO_VERSION=1.9.1
+KUBESPRAY_VERSION=release-2.15
+
+GIT_REPO=https://github.com/CloudDevOpsEMEA/aspenmesh-k8s-multicluster
+HOME_DIR=/home/ubuntu
+REPO_DIR=${HOME_DIR}/aspenmesh-k8s-multicluster
+KUBESPRAY_DIR=${KUBESPRAY_DIR}/${KUBESPRAY_VERSION}
 
 AM_VALUES_1=./udf/aspenmesh/udf-values-cluster1.yaml
 AM_VALUES_2=./udf/aspenmesh/udf-values-cluster2.yaml
@@ -41,7 +42,7 @@ KUBESPRAY_BRANCH=release-2.15
 ############################## CLUSTER1 ##############################
 
 install-k8s-cluster1: ## Install k8s cluster1 using kubespray
-	cd ${REPO_DIR}/kubespray && \
+	cd ${KUBESPRAY_DIR} && \
 	sudo pip3 install -r requirements.txt && \
 	ansible-playbook -i ${REPO_DIR}/udf/kubespray/cluster1/hosts.yaml  --become --become-user=root cluster.yml
 	sudo cp /etc/kubernetes/admin.conf ~/.kube/config
@@ -54,12 +55,12 @@ install-k8s-cluster1: ## Install k8s cluster1 using kubespray
 	# kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/resources/limits/cpu", "value":"500m"}]'
 
 upgrade-k8s-cluster1: ## Upgrade k8s cluster1 using kubespray
-	cd ${REPO_DIR}/kubespray && \
+	cd ${KUBESPRAY_DIR} && \
 	sudo pip3 install -r requirements.txt && \
 	ansible-playbook -i ${REPO_DIR}/udf/kubespray/cluster1/hosts.yaml  --become --become-user=root -e kube_version=v1.20.6 -e upgrade_cluster_setup=true cluster.yml
 
 reset-k8s-cluster1: ## Reset k8s cluster1 using kubespray
-	cd ${REPO_DIR}/kubespray && \
+	cd ${KUBESPRAY_DIR} && \
 	sudo pip3 install -r requirements.txt && \
 	ansible-playbook -i ${REPO_DIR}/udf/kubespray/cluster1/hosts.yaml --become --become-user=root reset.yml
 
@@ -67,7 +68,7 @@ reset-k8s-cluster1: ## Reset k8s cluster1 using kubespray
 ############################## CLUSTER2 ##############################
 
 install-k8s-cluster2: ## Install k8s cluster2 using kubespray
-	cd ${REPO_DIR}/kubespray && \
+	cd ${KUBESPRAY_DIR} && \
 	sudo pip3 install -r requirements.txt && \
 	ansible-playbook -i ${REPO_DIR}/udf/kubespray/cluster2/hosts.yaml  --become --become-user=root cluster.yml
 	sudo cp /etc/kubernetes/admin.conf ~/.kube/config
@@ -80,12 +81,12 @@ install-k8s-cluster2: ## Install k8s cluster2 using kubespray
 	# kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/resources/limits/cpu", "value":"500m"}]'
 
 upgrade-k8s-cluster2: ## Upgrade k8s cluster2 using kubespray
-	cd ${REPO_DIR}/kubespray && \
+	cd ${KUBESPRAY_DIR} && \
 	sudo pip3 install -r requirements.txt && \
 	ansible-playbook -i ${REPO_DIR}/udf/kubespray/cluster2/hosts.yaml  --become --become-user=root -e kube_version=v1.20.6 -e upgrade_cluster_setup=true cluster.yml
 
 reset-k8s-cluster2: ## Reset k8s cluster2 using kubespray
-	cd ${REPO_DIR}/kubespray && \
+	cd ${KUBESPRAY_DIR} && \
 	sudo pip3 install -r requirements.txt && \
 	ansible-playbook -i ${REPO_DIR}/udf/kubespray/cluster2/hosts.yaml --become --become-user=root reset.yml
 
