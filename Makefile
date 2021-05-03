@@ -16,7 +16,7 @@ KUBESPRAY_VERSION=release-2.15
 GIT_REPO=https://github.com/CloudDevOpsEMEA/aspenmesh-k8s-multicluster
 HOME_DIR=/home/ubuntu
 REPO_DIR=${HOME_DIR}/aspenmesh-k8s-multicluster
-KUBESPRAY_DIR=${KUBESPRAY_DIR}/${KUBESPRAY_VERSION}
+KUBESPRAY_DIR=${REPO_DIR}/kubespray/${KUBESPRAY_VERSION}
 
 AM_VALUES_1=./udf/aspenmesh/udf-values-cluster1.yaml
 AM_VALUES_2=./udf/aspenmesh/udf-values-cluster2.yaml
