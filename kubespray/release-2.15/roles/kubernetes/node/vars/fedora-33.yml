@@ -1,0 +1,2 @@
+---
+kube_resolv_conf: "/etc/resolv.conf"

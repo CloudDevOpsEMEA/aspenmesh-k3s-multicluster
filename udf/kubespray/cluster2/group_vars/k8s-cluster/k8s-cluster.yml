@@ -323,3 +323,5 @@ kube_kubeadm_apiserver_extra_args:
  api-audiences: api,istio-ca
  service-account-key-file: /etc/kubernetes/ssl/sa.key
  service-account-signing-key-file: /etc/kubernetes/ssl/sa.key
+
+kube_resolv_conf: "/etc/resolv.conf"
