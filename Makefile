@@ -257,7 +257,7 @@ enable-multi-routing: ## Enable multiple network routing
 	ssh k8s-2-node3  "sudo ip route add 10.1.10.0/24 via 10.1.20.4" || true
 	ssh k8s-2-node4  "sudo ip route add 10.1.10.0/24 via 10.1.20.4" || true
 
-update-multi-kubeconfig: ## Copy k8s multi-cluster kubeconfig to ~/.kube/config
+update-kubeconfig: ## Update kubeconfig in all hosts
 	if [ hostname != "jumphost" ] ; then exit ; fi
 	cp ${REPO_DIR}/udf/kubespray/kubeconfig.yaml ~/.kube/config
 	kubectl get nodes -o wide --context=kubernetes1-admin.cluster1.cluster.local
