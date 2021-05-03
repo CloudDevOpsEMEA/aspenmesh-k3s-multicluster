@@ -262,14 +262,14 @@ update-kubeconfig: ## Update kubeconfig in all hosts
 	cp ${REPO_DIR}/udf/kubespray/kubeconfig.yaml ~/.kube/config
 	kubectl get nodes -o wide --context=kubernetes1-admin.cluster1.cluster.local
 	kubectl get nodes -o wide --context=kubernetes2-admin.cluster2.cluster.local
-	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster1.yaml k8s-1-node1:/${HOME_DIR}/.kube/config|| true
-	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster1.yaml k8s-1-node2:/${HOME_DIR}/.kube/config|| true
-	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster1.yaml k8s-1-node3:/${HOME_DIR}/.kube/config|| true
-	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster1.yaml k8s-1-node4:/${HOME_DIR}/.kube/config|| true
-	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster2.yaml k8s-2-node1:/${HOME_DIR}/.kube/config|| true
-	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster2.yaml k8s-2-node2:/${HOME_DIR}/.kube/config|| true
-	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster2.yaml k8s-2-node3:/${HOME_DIR}/.kube/config|| true
-	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster2.yaml k8s-2-node4:/${HOME_DIR}/.kube/config|| true
+	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster1.yaml k8s-1-node1:${HOME_DIR}/.kube/config|| true
+	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster1.yaml k8s-1-node2:${HOME_DIR}/.kube/config|| true
+	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster1.yaml k8s-1-node3:${HOME_DIR}/.kube/config|| true
+	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster1.yaml k8s-1-node4:${HOME_DIR}/.kube/config|| true
+	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster2.yaml k8s-2-node1:${HOME_DIR}/.kube/config|| true
+	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster2.yaml k8s-2-node2:${HOME_DIR}/.kube/config|| true
+	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster2.yaml k8s-2-node3:${HOME_DIR}/.kube/config|| true
+	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster2.yaml k8s-2-node4:${HOME_DIR}/.kube/config|| true
 
 force-apt-packages:
 	ssh k8s-1-master 'sudo apt-get -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install containerd.io=1.3.9-1 docker-ce-cli=5:19.03.14~3-0~ubuntu-focal docker-ce=5:19.03.14~3-0~ubuntu-focal --allow-downgrades --allow-change-held-packages'
