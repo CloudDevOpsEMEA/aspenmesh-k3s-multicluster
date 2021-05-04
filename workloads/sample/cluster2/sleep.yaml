@@ -49,3 +49,7 @@ spec:
         secret:
           secretName: sleep-secret
           optional: true
+      nodeSelector:
+        topology.kubernetes.io/region: region2
+        topology.kubernetes.io/zone: zone1
+        topology.istio.io/subzone: sub1

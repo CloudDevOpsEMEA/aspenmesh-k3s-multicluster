@@ -43,10 +43,7 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - topologyKey: kubernetes.io/hostname
-            labelSelector:
-              matchLabels:
-                app: helloworld
+      nodeSelector:
+        topology.kubernetes.io/region: region1
+        topology.kubernetes.io/zone: zone1
+        topology.istio.io/subzone: sub2
