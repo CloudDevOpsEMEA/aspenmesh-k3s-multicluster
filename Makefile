@@ -317,33 +317,33 @@ node-region-labels: ## Add region node labels for locality load balancing
 
 node-zone-labels: ## Add zone node labels for locality load balancing
 	@if [ `hostname` = "k8s-1-master" ] ; then \
-		kubectl label node k8s-1-master topology.kubernetes.io/zone=region1-zone1 --overwrite=true ; \
-		kubectl label node k8s-1-node1 topology.kubernetes.io/zone=region1-zone1 --overwrite=true ; \
-		kubectl label node k8s-1-node2 topology.kubernetes.io/zone=region1-zone1 --overwrite=true ; \
-		kubectl label node k8s-1-node3 topology.kubernetes.io/zone=region1-zone2 --overwrite=true ; \
-		kubectl label node k8s-1-node4 topology.kubernetes.io/zone=region1-zone2 --overwrite=true ; \
+		kubectl label node k8s-1-master topology.kubernetes.io/zone=zone1 --overwrite=true ; \
+		kubectl label node k8s-1-node1 topology.kubernetes.io/zone=zone1 --overwrite=true ; \
+		kubectl label node k8s-1-node2 topology.kubernetes.io/zone=zone1 --overwrite=true ; \
+		kubectl label node k8s-1-node3 topology.kubernetes.io/zone=zone2 --overwrite=true ; \
+		kubectl label node k8s-1-node4 topology.kubernetes.io/zone=zone2 --overwrite=true ; \
 	fi
 	@if [ `hostname` = "k8s-2-master" ] ; then \
-		kubectl label node k8s-2-master topology.kubernetes.io/zone=region2-zone1 --overwrite=true ; \
-		kubectl label node k8s-2-node1 topology.kubernetes.io/zone=region2-zone1 --overwrite=true ; \
-		kubectl label node k8s-2-node2 topology.kubernetes.io/zone=region2-zone1 --overwrite=true ; \
-		kubectl label node k8s-2-node3 topology.kubernetes.io/zone=region2-zone2 --overwrite=true ; \
-		kubectl label node k8s-2-node4 topology.kubernetes.io/zone=region2-zone2 --overwrite=true ; \
+		kubectl label node k8s-2-master topology.kubernetes.io/zone=zone3 --overwrite=true ; \
+		kubectl label node k8s-2-node1 topology.kubernetes.io/zone=zone3 --overwrite=true ; \
+		kubectl label node k8s-2-node2 topology.kubernetes.io/zone=zone3 --overwrite=true ; \
+		kubectl label node k8s-2-node3 topology.kubernetes.io/zone=zone4 --overwrite=true ; \
+		kubectl label node k8s-2-node4 topology.kubernetes.io/zone=zone4 --overwrite=true ; \
 	fi
 
 node-subzone-labels: ## Add subzone node labels for locality load balancing
 	@if [ `hostname` = "k8s-1-master" ] ; then \
-		kubectl label node k8s-1-master topology.kubernetes.io/subzone=region1-zone1-sub1 --overwrite=true ; \
-		kubectl label node k8s-1-node1 topology.kubernetes.io/subzone=region1-zone1-sub1 --overwrite=true ; \
-		kubectl label node k8s-1-node2 topology.kubernetes.io/subzone=region1-zone1-sub2 --overwrite=true ; \
-		kubectl label node k8s-1-node3 topology.kubernetes.io/subzone=region1-zone2-sub1 --overwrite=true ; \
-		kubectl label node k8s-1-node4 topology.kubernetes.io/subzone=region1-zone2-sub2 --overwrite=true ; \
+		kubectl label node k8s-1-master topology.kubernetes.io/subzone=sub1 --overwrite=true ; \
+		kubectl label node k8s-1-node1 topology.kubernetes.io/subzone=sub1 --overwrite=true ; \
+		kubectl label node k8s-1-node2 topology.kubernetes.io/subzone=sub2 --overwrite=true ; \
+		kubectl label node k8s-1-node3 topology.kubernetes.io/subzone=sub1 --overwrite=true ; \
+		kubectl label node k8s-1-node4 topology.kubernetes.io/subzone=sub2 --overwrite=true ; \
 	fi
 	@if [ `hostname` = "k8s-2-master" ] ; then \
-		kubectl label node k8s-2-master topology.kubernetes.io/subzone=region2-zone1-sub1 --overwrite=true ; \
-		kubectl label node k8s-2-node1 topology.kubernetes.io/subzone=region2-zone1-sub1 --overwrite=true ; \
-		kubectl label node k8s-2-node2 topology.kubernetes.io/subzone=region2-zone1-sub2 --overwrite=true ; \
-		kubectl label node k8s-2-node3 topology.kubernetes.io/subzone=region2-zone2-sub1 --overwrite=true ; \
-		kubectl label node k8s-2-node4 topology.kubernetes.io/subzone=region2-zone2-sub2 --overwrite=true ; \
+		kubectl label node k8s-2-master topology.kubernetes.io/subzone=sub3 --overwrite=true ; \
+		kubectl label node k8s-2-node1 topology.kubernetes.io/subzone=sub3 --overwrite=true ; \
+		kubectl label node k8s-2-node2 topology.kubernetes.io/subzone=sub4 --overwrite=true ; \
+		kubectl label node k8s-2-node3 topology.kubernetes.io/subzone=sub3 --overwrite=true ; \
+		kubectl label node k8s-2-node4 topology.kubernetes.io/subzone=sub4 --overwrite=true ; \
 	fi
 

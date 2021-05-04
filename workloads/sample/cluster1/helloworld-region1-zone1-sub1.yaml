@@ -50,3 +50,4 @@ spec:
             labelSelector:
               matchLabels:
                 app: helloworld
+:pod
