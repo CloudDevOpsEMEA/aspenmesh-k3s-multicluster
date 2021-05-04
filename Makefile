@@ -299,6 +299,10 @@ restart-istiod:
 	kubectl -n ${AM_NAMESPACE} rollout restart deployments/istiod
 	kubectl wait --timeout=2m --for=condition=Ready pods --all -n ${AM_NAMESPACE}
 
+restart-aspenmesh:
+	kubectl -n ${AM_NAMESPACE} rollout restart deployments
+	kubectl wait --timeout=5m --for=condition=Ready pods --all -n ${AM_NAMESPACE}
+
 node-region-labels: ## Add region node labels for locality load balancing
 	if [ `hostname` = "k8s-1-master" ] ; then \
 		kubectl label node k8s-1-master topology.kubernetes.io/region=region1 --overwrite=true ; \
