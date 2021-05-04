@@ -51,5 +51,5 @@ spec:
           optional: true
       nodeSelector:
         topology.kubernetes.io/region: region2
-        topology.kubernetes.io/zone: zone1
-        topology.istio.io/subzone: sub1
+        topology.kubernetes.io/zone: zone3
+        topology.istio.io/subzone: sub5
