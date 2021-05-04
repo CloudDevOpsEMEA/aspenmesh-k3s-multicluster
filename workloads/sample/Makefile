@@ -42,5 +42,4 @@ restart: ## Restart all pods in this sample namespace
 
 check-priorities: ## Check envoy sidecar priorities
 	kubectl get pods -n sample -o wide -L version
-	kubectl exec `kubectl get pod -n sample -l app=sleep -o jsonpath='{.items[0].metadata.name}'` -c sleep -- \
-		curl -s localhost:15000/clusters | grep -E 'hello.*::priority|priority.*hello'
+	kubectl exec `kubectl get pod -n sample -l app=sleep -o jsonpath='{.items[0].metadata.name}'` -c sleep -- curl -s localhost:15000/clusters | grep -E 'hello.*::priority|priority.*hello'
