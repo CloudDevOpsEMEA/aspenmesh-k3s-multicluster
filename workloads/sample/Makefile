@@ -45,16 +45,16 @@ check-priorities: ## Check envoy sidecar priorities
 	kubectl exec `kubectl get pod -n sample -l app=sleep -o jsonpath='{.items[0].metadata.name}'` -c sleep -- curl -s localhost:15000/clusters | grep -E 'hello.*::priority|priority.*hello'
 
 drain-helloworld-node1: ## Drain helloworld on node1
-	kubectl exec "`kubectl get pod -n sample -l app=helloworld -l node=node1 -o jsonpath='{.items[0].metadata.name}'`" -n sample -c istio-proxy -- curl -sSL -X POST 127.0.0.1:15000/drain_listeners
+	kubectl exec "`kubectl get pod -n sample -l app=helloworld -l node=node1 -o jsonpath='{.items[0].metadata.name}'`" -n sample -c helloworld -- curl -sSL -X POST 127.0.0.1:15000/drain_listeners
 
 drain-helloworld-node2: ## Drain helloworld on node2
-	kubectl exec "`kubectl get pod -n sample -l app=helloworld -l node=node2 -o jsonpath='{.items[0].metadata.name}'`" -n sample -c istio-proxy -- curl -sSL -X POST 127.0.0.1:15000/drain_listeners
+	kubectl exec "`kubectl get pod -n sample -l app=helloworld -l node=node2 -o jsonpath='{.items[0].metadata.name}'`" -n sample -c helloworld -- curl -sSL -X POST 127.0.0.1:15000/drain_listeners
 
 drain-helloworld-node3: ## Drain helloworld on node3
-	kubectl exec "`kubectl get pod -n sample -l app=helloworld -l node=node3 -o jsonpath='{.items[0].metadata.name}'`" -n sample -c istio-proxy -- curl -sSL -X POST 127.0.0.1:15000/drain_listeners
+	kubectl exec "`kubectl get pod -n sample -l app=helloworld -l node=node3 -o jsonpath='{.items[0].metadata.name}'`" -n sample -c helloworld -- curl -sSL -X POST 127.0.0.1:15000/drain_listeners
 
 drain-helloworld-node4: ## Drain helloworld on node4
-	kubectl exec "`kubectl get pod -n sample -l app=helloworld -l node=node4 -o jsonpath='{.items[0].metadata.name}'`" -n sample -c istio-proxy -- curl -sSL -X POST 127.0.0.1:15000/drain_listeners
+	kubectl exec "`kubectl get pod -n sample -l app=helloworld -l node=node4 -o jsonpath='{.items[0].metadata.name}'`" -n sample -c helloworld -- curl -sSL -X POST 127.0.0.1:15000/drain_listeners
 
 delete-helloworld-node1: ## Delete helloworld on node1
 	kubectl delete pod "`kubectl get pod -n sample -l app=helloworld -l node=node1 -o jsonpath='{.items[0].metadata.name}'`"
