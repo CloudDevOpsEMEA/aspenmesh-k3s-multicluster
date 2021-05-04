@@ -154,7 +154,7 @@ uninstall-am: ## Uninstall aspen mesh in cluster
 	kubectl delete ns ${AM_NAMESPACE} || true
 
 install-multi-remote-secret: ## Install multi-cluster remote secrets
-	ifeq ( $(shell hostname) != "jumphost" ] ; then exit ; fi
+	ifeq ($(shell hostname) != "jumphost" ] ; then exit ; fi
 	istioctl x create-remote-secret --context="kubernetes1-admin.cluster1.cluster.local" --name=cluster1 | kubectl apply -f - --context="kubernetes2-admin.cluster2.cluster.local"
 	istioctl x create-remote-secret --context="kubernetes2-admin.cluster2.cluster.local" --name=cluster2 | kubectl apply -f - --context="kubernetes1-admin.cluster1.cluster.local"
 
@@ -258,7 +258,7 @@ enable-multi-routing: ## Enable multiple network routing
 	ssh k8s-2-node4  "sudo ip route add 10.1.10.0/24 via 10.1.20.4" || true
 
 update-kubeconfig: ## Update kubeconfig in all hosts
-	ifeq ( $(shell hostname), "jumphost")
+	ifeq ($(shell hostname), jumphost)
 		cp ${REPO_DIR}/udf/kubespray/kubeconfig.yaml ~/.kube/config
 		kubectl get nodes -o wide --context=kubernetes1-admin.cluster1.cluster.local
 		kubectl get nodes -o wide --context=kubernetes2-admin.cluster2.cluster.local
@@ -301,14 +301,14 @@ restart-istiod:
 	kubectl wait --timeout=2m --for=condition=Ready pods --all -n ${AM_NAMESPACE}
 
 node-region-labels: ## Add region node labels for locality load balancing
-	ifeq ( $(shell hostname), "k8s-1-master" )
+	ifeq ($(shell hostname), k8s-1-master)
 		kubectl label node k8s-1-master topology.kubernetes.io/region=region1
 		kubectl label node k8s-1-node1 topology.kubernetes.io/region=region1
 		kubectl label node k8s-1-node2 topology.kubernetes.io/region=region1
 		kubectl label node k8s-1-node3 topology.kubernetes.io/region=region1
 		kubectl label node k8s-1-node4 topology.kubernetes.io/region=region1
 	endif
-	ifeq ( $(shell hostname), "k8s-2-master" )
+	ifeq ($(shell hostname), k8s-2-master)
 		kubectl label node k8s-2-master topology.kubernetes.io/region=region2
 		kubectl label node k8s-2-node1 topology.kubernetes.io/region=region2
 		kubectl label node k8s-2-node2 topology.kubernetes.io/region=region2
@@ -317,14 +317,14 @@ node-region-labels: ## Add region node labels for locality load balancing
 	endif
 
 node-zone-labels: ## Add zone node labels for locality load balancing
-	ifeq ( $(shell hostname), "k8s-1-master" )
+	ifeq ($(shell hostname), k8s-1-master)
 		kubectl label node k8s-1-master topology.kubernetes.io/zone=region1-zone1
 		kubectl label node k8s-1-node1 topology.kubernetes.io/zone=region1-zone1
 		kubectl label node k8s-1-node2 topology.kubernetes.io/zone=region1-zone1
 		kubectl label node k8s-1-node3 topology.kubernetes.io/zone=region1-zone2
 		kubectl label node k8s-1-node4 topology.kubernetes.io/zone=region1-zone2
 	endif
-	ifeq ( $(shell hostname), "k8s-2-master" )
+	ifeq ($(shell hostname), k8s-2-master)
 		kubectl label node k8s-2-master topology.kubernetes.io/zone=region2-zone1
 		kubectl label node k8s-2-node1 topology.kubernetes.io/zone=region2-zone1
 		kubectl label node k8s-2-node2 topology.kubernetes.io/zone=region2-zone1
@@ -333,14 +333,14 @@ node-zone-labels: ## Add zone node labels for locality load balancing
 	endif
 
 node-subzone-labels: ## Add subzone node labels for locality load balancing
-	ifeq ( $(shell hostname), "k8s-1-master" )
+	ifeq ($(shell hostname), k8s-1-master)
 		kubectl label node k8s-1-master topology.kubernetes.io/subzone=region1-zone1-sub1
 		kubectl label node k8s-1-node1 topology.kubernetes.io/subzone=region1-zone1-sub1
 		kubectl label node k8s-1-node2 topology.kubernetes.io/subzone=region1-zone1-sub2
 		kubectl label node k8s-1-node3 topology.kubernetes.io/subzone=region1-zone2-sub1
 		kubectl label node k8s-1-node4 topology.kubernetes.io/subzone=region1-zone2-sub2
 	endif
-	ifeq ( $(shell hostname), "k8s-2-master" )
+	ifeq ($(shell hostname), k8s-2-master)
 		kubectl label node k8s-2-master topology.kubernetes.io/subzone=region2-zone1-sub1
 		kubectl label node k8s-2-node1 topology.kubernetes.io/subzone=region2-zone1-sub1
 		kubectl label node k8s-2-node2 topology.kubernetes.io/subzone=region2-zone1-sub2
