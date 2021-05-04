@@ -19,4 +19,3 @@ spec:
       consecutive5xxErrors: 1
       interval: 1s
       baseEjectionTime: 1m
----
