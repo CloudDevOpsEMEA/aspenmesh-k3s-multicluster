@@ -13,8 +13,8 @@ spec:
       localityLbSetting:
         enabled: true
         failover:
-          - from: region2
-            to: region1
+          - from: region1
+            to: region2
     outlierDetection:
       consecutive5xxErrors: 1
       interval: 1s
