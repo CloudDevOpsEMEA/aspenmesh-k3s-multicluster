@@ -28,7 +28,7 @@ metadata:
     app: helloworld
     version: v2
 spec:
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
       app: helloworld
@@ -49,4 +49,12 @@ spec:
         imagePullPolicy: IfNotPresent #Always
         ports:
         - containerPort: 5000
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: kubernetes.io/hostname
+            labelSelector:
+              matchLabels:
+                app: helloworld
+                version: v2
 ---
