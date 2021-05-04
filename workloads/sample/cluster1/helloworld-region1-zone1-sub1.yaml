@@ -30,6 +30,7 @@ spec:
       labels:
         app: helloworld
         version: region1-zone1-sub1
+        node: node1
     spec:
       containers:
       - name: helloworld

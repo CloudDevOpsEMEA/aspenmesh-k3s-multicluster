@@ -33,6 +33,7 @@ spec:
     metadata:
       labels:
         app: sleep
+        node: node1
     spec:
       terminationGracePeriodSeconds: 0
       serviceAccountName: sleep
