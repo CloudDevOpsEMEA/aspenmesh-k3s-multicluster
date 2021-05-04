@@ -32,3 +32,6 @@ restart: ## Restart all pods in this sample namespace
 	kubectl -n sample rollout restart deployments
 	kubectl wait --timeout=2m --for=condition=Ready pods --all -n sample
 
+check-priorities: ## Check envoy sidecar priorities
+	istioctl proxy-config endpoints `kubectl get pod -n sample -l app=sleep -o jsonpath='{.items[0].metadata.name}'` \
+		-n sample --cluster "outbound|5000||helloworld.sample.svc.cluster.local" --output json
