@@ -19,6 +19,14 @@ install-cluster2: ## Install sample app in cluster2
 	kubectl apply -f cluster2
 	kubectl wait --timeout=2m --for=condition=Ready pods --all -n sample
 
+uninstall-cluster1: ## Uninstall sample app from cluster 1
+	kubectl delete -f cluster1
+	kubectl delete namespace sample
+
+uninstall-cluster2: ## Uninstall sample app from cluster 2
+	kubectl delete -f cluster2
+	kubectl delete namespace sample
+
 test-traffic: ## Test traffic from local to remote cluster
 	while true ; do kubectl exec -n sample -c sleep "`kubectl get pod -n sample -l app=sleep -o jsonpath='{.items[0].metadata.name}'`" -- curl -sS helloworld.sample:5000/hello ; done
 
