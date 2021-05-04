@@ -154,7 +154,7 @@ uninstall-am: ## Uninstall aspen mesh in cluster
 	kubectl delete ns ${AM_NAMESPACE} || true
 
 install-multi-remote-secret: ## Install multi-cluster remote secrets
-	@if [ `hostname` != "jumphost" ] ; then exit ; fi
+	if [ `hostname` != "jumphost" ] ; then exit ; fi
 	istioctl x create-remote-secret --context="kubernetes1-admin.cluster1.cluster.local" --name=cluster1 | kubectl apply -f - --context="kubernetes2-admin.cluster2.cluster.local"
 	istioctl x create-remote-secret --context="kubernetes2-admin.cluster2.cluster.local" --name=cluster2 | kubectl apply -f - --context="kubernetes1-admin.cluster1.cluster.local"
 
@@ -258,7 +258,7 @@ enable-multi-routing: ## Enable multiple network routing
 	ssh k8s-2-node4  "sudo ip route add 10.1.10.0/24 via 10.1.20.4" || true
 
 update-kubeconfig: ## Update kubeconfig in all hosts
-	@if [ `hostname` != "jumphost" ] ; then exit ; fi
+	if [ `hostname` != "jumphost" ] ; then exit ; fi
 	cp ${REPO_DIR}/udf/kubespray/kubeconfig.yaml ~/.kube/config
 	kubectl get nodes -o wide --context=kubernetes1-admin.cluster1.cluster.local
 	kubectl get nodes -o wide --context=kubernetes2-admin.cluster2.cluster.local
@@ -300,14 +300,14 @@ restart-istiod:
 	kubectl wait --timeout=2m --for=condition=Ready pods --all -n ${AM_NAMESPACE}
 
 node-region-labels: ## Add region node labels for locality load balancing
-	@if [ `hostname` = "k8s-1-master" ] ; then \
+	if [ `hostname` = "k8s-1-master" ] ; then \
 		kubectl label node k8s-1-master topology.kubernetes.io/region=region1 --overwrite=true ; \
 		kubectl label node k8s-1-node1 topology.kubernetes.io/region=region1 --overwrite=true ; \
 		kubectl label node k8s-1-node2 topology.kubernetes.io/region=region1 --overwrite=true ; \
 		kubectl label node k8s-1-node3 topology.kubernetes.io/region=region1 --overwrite=true ; \
 		kubectl label node k8s-1-node4 topology.kubernetes.io/region=region1 --overwrite=true ; \
 	fi
-	@if [ `hostname` = "k8s-2-master" ] ; then \
+	if [ `hostname` = "k8s-2-master" ] ; then \
 		kubectl label node k8s-2-master topology.kubernetes.io/region=region2 --overwrite=true ; \
 		kubectl label node k8s-2-node1 topology.kubernetes.io/region=region2 --overwrite=true ; \
 		kubectl label node k8s-2-node2 topology.kubernetes.io/region=region2 --overwrite=true ; \
@@ -316,14 +316,14 @@ node-region-labels: ## Add region node labels for locality load balancing
 	fi
 
 node-zone-labels: ## Add zone node labels for locality load balancing
-	@if [ `hostname` = "k8s-1-master" ] ; then \
+	if [ `hostname` = "k8s-1-master" ] ; then \
 		kubectl label node k8s-1-master topology.kubernetes.io/zone=zone1 --overwrite=true ; \
 		kubectl label node k8s-1-node1 topology.kubernetes.io/zone=zone1 --overwrite=true ; \
 		kubectl label node k8s-1-node2 topology.kubernetes.io/zone=zone1 --overwrite=true ; \
 		kubectl label node k8s-1-node3 topology.kubernetes.io/zone=zone2 --overwrite=true ; \
 		kubectl label node k8s-1-node4 topology.kubernetes.io/zone=zone2 --overwrite=true ; \
 	fi
-	@if [ `hostname` = "k8s-2-master" ] ; then \
+	if [ `hostname` = "k8s-2-master" ] ; then \
 		kubectl label node k8s-2-master topology.kubernetes.io/zone=zone3 --overwrite=true ; \
 		kubectl label node k8s-2-node1 topology.kubernetes.io/zone=zone3 --overwrite=true ; \
 		kubectl label node k8s-2-node2 topology.kubernetes.io/zone=zone3 --overwrite=true ; \
@@ -332,14 +332,14 @@ node-zone-labels: ## Add zone node labels for locality load balancing
 	fi
 
 node-subzone-labels: ## Add subzone node labels for locality load balancing
-	@if [ `hostname` = "k8s-1-master" ] ; then \
+	if [ `hostname` = "k8s-1-master" ] ; then \
 		kubectl label node k8s-1-master topology.kubernetes.io/subzone=sub1 --overwrite=true ; \
 		kubectl label node k8s-1-node1 topology.kubernetes.io/subzone=sub1 --overwrite=true ; \
 		kubectl label node k8s-1-node2 topology.kubernetes.io/subzone=sub2 --overwrite=true ; \
 		kubectl label node k8s-1-node3 topology.kubernetes.io/subzone=sub1 --overwrite=true ; \
 		kubectl label node k8s-1-node4 topology.kubernetes.io/subzone=sub2 --overwrite=true ; \
 	fi
-	@if [ `hostname` = "k8s-2-master" ] ; then \
+	if [ `hostname` = "k8s-2-master" ] ; then \
 		kubectl label node k8s-2-master topology.kubernetes.io/subzone=sub3 --overwrite=true ; \
 		kubectl label node k8s-2-node1 topology.kubernetes.io/subzone=sub3 --overwrite=true ; \
 		kubectl label node k8s-2-node2 topology.kubernetes.io/subzone=sub4 --overwrite=true ; \
