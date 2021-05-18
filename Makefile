@@ -68,40 +68,40 @@ calico_patch: ## Patch calico on all clusters
 ### AspenMesh ###
 #################
 
-install_am1: ## Install aspen mesh in cluster1
+aspen_install_cluster1: ## Install aspen mesh in cluster1
 	./install/aspenmesh.sh install cluster1
 
-upgrade_am1: ## Upgrade aspen mesh in cluster1
+aspen_upgrade_cluster1: ## Upgrade aspen mesh in cluster1
 	./install/aspenmesh.sh update cluster1
 
-remove_am1: ## Uninstall aspen mesh in cluster1
+aspen_remove_cluster1: ## Uninstall aspen mesh in cluster1
 	./install/aspenmesh.sh remove cluster1
 
-install_am2: ## Install aspen mesh in cluster2
+aspen_install_cluster2: ## Install aspen mesh in cluster2
 	./install/aspenmesh.sh install cluster2
 
-upgrade_am2: ## Upgrade aspen mesh in cluster2
+aspen_upgrade_cluster2: ## Upgrade aspen mesh in cluster2
 	./install/aspenmesh.sh update cluster2
 
-remove_am2: ## Uninstall aspen mesh in cluster2
+aspen_remove_cluster2: ## Uninstall aspen mesh in cluster2
 	./install/aspenmesh.sh remove cluster2
 
-install_multi_secrets: ## Install multi-cluster remote secrets in both clusters
+aspen_multi_secrets: ## Install multi-cluster remote secrets in both clusters
 	./install/aspenmesh.sh install-remote-secret cluster1
 	./install/aspenmesh.sh install-remote-secret cluster2
 
-post_install: ## Post installation steps
+aspen_post_install: ## Post installation steps
 	${KUBECTL1} apply -f ./install/aspenmesh/services || true
 	${KUBECTL2} apply -f ./install/aspenmesh/services || true
 
-post_uninstall:  ## Post uninstallation steps
+aspen_post_uninstall:  ## Post uninstallation steps
 	${KUBECTL1} delete -f ./install/aspenmesh/services || true
 	${KUBECTL2} delete -f ./install/aspenmesh/services || true
 
-reinstall_am1: post_uninstall uninstall_am install_am1 post_install ## Reinstall aspenmesh in cluster1
-reinstall_am2: post_uninstall uninstall_am install_am2 post_install ## Reinstall aspenmesh in cluster2
+aspen_reinstall_cluster1: aspen_post_uninstall aspen_uninstall_am aspen_install_cluster1 aspen_post_install ## Reinstall aspenmesh in cluster1
+aspen_reinstall_cluster2: aspen_post_uninstall aspen_uninstall_am aspen_install_cluster2 aspen_post_install ## Reinstall aspenmesh in cluster2
 
-install_istioctl:  ## Install istioctl
+istioctl_install:  ## Install istioctl
 	curl -sL https://istio.io/downloadIstioctl | ISTIO_VERSION=${ISTIO_VERSION} sh - && \
 	sudo cp ~/.istioctl/bin/istioctl /usr/local/bin
 
