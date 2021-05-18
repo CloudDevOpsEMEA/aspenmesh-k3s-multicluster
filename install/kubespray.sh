@@ -3,9 +3,9 @@
 ROOT_DIR=$(pwd)
 HOME_DIR=/home/ubuntu
 REPO_DIR=${HOME_DIR}/aspenmesh-k8s-multicluster
-KUBESPRAY_DIR=${REPO_DIR}/kubespray/${KUBESPRAY_VERSION}
 
 source ${REPO_DIR}/environment.sh
+KUBESPRAY_DIR=${REPO_DIR}/kubespray/${KUBESPRAY_VERSION}
 
 if [[ $2 = "cluster1" ]]; then
   KUBESPRAY_CLUSTER_NAME=${KUBESPRAY_CLUSTER1_NAME}
