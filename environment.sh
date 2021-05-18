@@ -2,7 +2,7 @@
 
 # Check local requirements (binaries used during the installation process)
 function check_local_requirements {
-  deps=( kubectl helm yq k9s )
+  deps=( kubectl helm k9s )
 
   for dep in "${deps[@]}"
   do
