@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
 ROOT_DIR=$(pwd)
-source ${ROOT_DIR}/environment.sh
+HOME_DIR=/home/ubuntu
+REPO_DIR=${HOME_DIR}/aspenmesh-k8s-multicluster
 
+source ${REPO_DIR}/environment.sh
 
 AM_DIR=${ROOT_DIR}/aspenmesh/aspenmesh-${AM_VERSION}
 AM_HELM_CHART_DIR=${AM_DIR}/manifests/charts

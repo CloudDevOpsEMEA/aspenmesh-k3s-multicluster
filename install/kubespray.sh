@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+ROOT_DIR=$(pwd)
 HOME_DIR=/home/ubuntu
 REPO_DIR=${HOME_DIR}/aspenmesh-k8s-multicluster
 KUBESPRAY_DIR=${REPO_DIR}/kubespray/${KUBESPRAY_VERSION}

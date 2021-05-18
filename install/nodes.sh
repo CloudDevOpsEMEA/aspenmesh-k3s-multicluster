@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 
 ROOT_DIR=$(pwd)
-
-GIT_REPO=https://github.com/CloudDevOpsEMEA/udf-aspenmesh-k8s
-
 HOME_DIR=/home/ubuntu
-REPO_DIR=${HOME_DIR}/udf-aspenmesh-k8s
+REPO_DIR=${HOME_DIR}/aspenmesh-k8s-multicluster
+
+GIT_REPO=https://github.com/CloudDevOpsEMEA/aspenmesh-k8s-multicluster
 
 NODES=( jumphost k8s-1-master k8s-1-node1 k8s-1-node2 k8s-1-node3 k8s-1-node4 k8s-2-master k8s-2-node1 k8s-2-node2 k8s-2-node3 k8s-2-node4 )
 K8S_NODES=( k8s-1-master k8s-1-node1 k8s-1-node2 k8s-1-node3 k8s-1-node4 k8s-2-master k8s-2-node1 k8s-2-node2 k8s-2-node3 k8s-2-node4 )

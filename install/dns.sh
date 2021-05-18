@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
 ROOT_DIR=$(pwd)
-
 HOME_DIR=/home/ubuntu
-REPO_DIR=${HOME_DIR}/udf-aspenmesh-k8s
+REPO_DIR=${HOME_DIR}/aspenmesh-k8s-multicluster
 DNS_CONF_DIR=${REPO_DIR}/install/dns
 
 NODES=( jumphost k8s-1-master k8s-1-node1 k8s-1-node2 k8s-1-node3 k8s-1-node4 k8s-2-master k8s-2-node1 k8s-2-node2 k8s-2-node3 k8s-2-node4 )
