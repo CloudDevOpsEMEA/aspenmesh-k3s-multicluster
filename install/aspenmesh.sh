@@ -6,9 +6,9 @@ REPO_DIR=${HOME_DIR}/aspenmesh-k8s-multicluster
 
 source ${REPO_DIR}/environment.sh
 
-AM_DIR=${ROOT_DIR}/aspenmesh/aspenmesh-${AM_VERSION}
+AM_DIR=${REPO_DIR}/aspenmesh/aspenmesh-${AM_VERSION}
 AM_HELM_CHART_DIR=${AM_DIR}/manifests/charts
-AM_SVC_DIR=${ROOT_DIR}/install/aspenmesh/services
+
 
 if [[ $1 = "istioctl" ]]; then
   curl -sL https://istio.io/downloadIstioctl | ISTIO_VERSION=${ISTIO_VERSION} sh - && \
@@ -22,29 +22,31 @@ if [[ $2 = "cluster1" ]]; then
   AM_CLUSTER_NAME_REMOTE=${AM_CLUSTER2_NAME}
   AM_NETWORK=${AM_CLUSTER1_NETWORK}
   AM_CLUSTER_INGRESS_IP=${AM_CLUSTER1_INGRESS_IP}
+  AM_SVC_DIR=${REPO_DIR}/install/aspenmesh/services/${AM_CLUSTER1_NAME}
 elif [[ $2 = "cluster2" ]]; then
   KUBESPRAY_CLUSTER_NAME=${KUBESPRAY_CLUSTER2_NAME}
   AM_CLUSTER_NAME=${AM_CLUSTER2_NAME}
   AM_CLUSTER_NAME_REMOTE=${AM_CLUSTER1_NAME}
   AM_NETWORK=${AM_CLUSTER2_NETWORK}
   AM_CLUSTER_INGRESS_IP=${AM_CLUSTER2_INGRESS_IP}
+  AM_SVC_DIR=${REPO_DIR}/install/aspenmesh/services/${AM_CLUSTER2_NAME}
 else
   echo "please specify action ./aspenmesh.sh install/update/remove/istioctl/services cluster1/cluster2"
   exit 1
 fi
 
-AM_CERT_DIR=${ROOT_DIR}/install/certs/${AM_CLUSTER_NAME}
-AM_VALUES=${ROOT_DIR}/install/aspenmesh/values-${AM_CLUSTER_NAME}.yaml
-AM_MULTISECRET=${ROOT_DIR}/install/aspenmesh/multisecrets/secret-${AM_CLUSTER_NAME}.yaml
-AM_MULTISECRET_REMOTE=${ROOT_DIR}/install/aspenmesh/multisecrets/secret-${AM_CLUSTER_NAME_REMOTE}.yaml
+AM_CERT_DIR=${REPO_DIR}/install/certs/${AM_CLUSTER_NAME}
+AM_VALUES=${REPO_DIR}/install/aspenmesh/values-${AM_CLUSTER_NAME}.yaml
+AM_MULTISECRET=${REPO_DIR}/install/aspenmesh/multisecrets/secret-${AM_CLUSTER_NAME}.yaml
+AM_MULTISECRET_REMOTE=${REPO_DIR}/install/aspenmesh/multisecrets/secret-${AM_CLUSTER_NAME_REMOTE}.yaml
 
-KUBECONFIG=${ROOT_DIR}/install/kubespray/${KUBESPRAY_CLUSTER_NAME}-kubeconfig.yaml
+KUBECONFIG=${REPO_DIR}/install/kubespray/${KUBESPRAY_CLUSTER_NAME}-kubeconfig.yaml
 
 KUBECTL="kubectl --kubeconfig=${KUBECONFIG}"
 HELM="helm --kubeconfig=${KUBECONFIG}"
 ISTIOCTL="istioctl --kubeconfig=${KUBECONFIG}"
 
-PATCH_INGRESS_FILE=${ROOT_DIR}/install/aspenmesh/patches/patch-ingress-${AM_CLUSTER_NAME}.yaml
+PATCH_INGRESS_FILE=${REPO_DIR}/install/aspenmesh/patches/patch-ingress-${AM_CLUSTER_NAME}.yaml
 
 function patch_service_ingress {
   echo "spec:" > ${PATCH_INGRESS_FILE}

@@ -56,6 +56,7 @@ gateways:
       ISTIO_META_REQUESTED_NETWORK_VIEW: "network1"
     labels:
       topology.istio.io/network: network1
+    loadBalancerIP: 10.1.10.50
 global: 
   meshID: mesh1
   multiCluster:
