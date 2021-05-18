@@ -1,0 +1,88 @@
+--- 
+aspen-mesh-controlplane: 
+  clusterId: cluster2
+  userAuth: 
+    type: none
+aspen-mesh-event-storage: 
+  config: 
+    cluster_size: 1
+    seed_size: 1
+  persistence: 
+    size: 2Gi
+aspen-mesh-metrics-collector: 
+  server: 
+    persistentVolume: 
+      size: 2Gi
+aspen-mesh-secure-ingress: 
+  enabled: true
+  externalDnsEnabled: false
+  lets-encrypt-email: ""
+external-dns: 
+  enabled: false
+gateways: 
+  istio-egressgateway:
+    name: istio-egressgateway
+    autoscaleMax: 1
+    autoscaleMin: 1
+    enabled: true
+    env: 
+      ISTIO_META_REQUESTED_NETWORK_VIEW: external
+  istio-ingressgateway:
+    name: istio-ingressgateway
+    autoscaleMax: 1
+    autoscaleMin: 1
+    enabled: true
+    ports:
+    - port: 15021
+      targetPort: 15021
+      name: status-port
+    - port: 80
+      targetPort: 8080
+      name: http2
+    - port: 443
+      targetPort: 8443
+      name: https
+    - port: 15012
+      targetPort: 15012
+      name: tcp-istiod
+    - port: 15443
+      targetPort: 15443
+      name: tls
+    - port: 15017
+      targetPort: 15017
+      name: tls-webhook
+    env:
+      ISTIO_META_ROUTER_MODE: "sni-dnat"
+      ISTIO_META_REQUESTED_NETWORK_VIEW: "network2"
+    labels:
+      topology.istio.io/network: network2
+global: 
+  meshID: mesh1
+  multiCluster:
+    enabled: true
+    clusterName: cluster2
+    includeEnvoyFilter: false
+    globalDomainSuffix: svc.cluster.local
+  network: network2
+jaeger: 
+  cassandra: 
+    config: 
+      cluster_size: 1
+      seed_size: 1
+    persistence: 
+      size: 2Gi
+  collector: 
+    autoscaling: 
+      maxReplicas: 3
+      minReplicas: 1
+  enabled: true
+  ingester: 
+    autoscaling: 
+      maxReplicas: 3
+      minReplicas: 1
+meshConfig:
+  defaultConfig:
+    proxyMetadata:
+      ISTIO_META_DNS_CAPTURE: "true"
+prometheus: 
+  enabled: true

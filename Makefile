@@ -31,269 +31,111 @@ CERT_DIR=./udf/certs
 CERT_DIR_CLUSTER_1=${CERT_DIR}/cluster1
 CERT_DIR_CLUSTER_2=${CERT_DIR}/cluster2
 
-KUBESPRAY_BRANCH=release-2.15
-# KUBESPRAY_BRANCH=master
-
 
 ##################
 ### Kubernetes ###
 ##################
 
-############################## CLUSTER1 ##############################
+install_k8s_cluster1: ## Install k8s cluster1 using kubespray
+	./install/kubespray.sh create cluster1
 
-install-k8s-cluster1: ## Install k8s cluster1 using kubespray
-	cd ${KUBESPRAY_DIR} && \
-	sudo pip3 install -r requirements.txt && \
-	ansible-playbook -i ${REPO_DIR}/udf/kubespray/cluster1/hosts.yaml  --become --become-user=root cluster.yml
-	sudo cp /etc/kubernetes/admin.conf ~/.kube/config
-	# kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/livenessProbe/failureThreshold", "value":10}]'
-	# kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/livenessProbe/timeoutSeconds", "value":10}]'
-	# kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/readinessProbe/failureThreshold", "value":10}]'
-	# kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/readinessProbe/timeoutSeconds", "value":10}]'
-	# kubectl patch -n kube-system deployment calico-kube-controllers --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/readinessProbe/failureThreshold", "value":10}]'
-	# kubectl patch -n kube-system deployment calico-kube-controllers --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/readinessProbe/timeoutSeconds", "value":10}]'
-	# kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/resources/limits/cpu", "value":"500m"}]'
+reset_k8s_cluster1: ## Reset k8s cluster1 using kubespray
+	./install/kubespray.sh reset cluster1
 
-upgrade-k8s-cluster1: ## Upgrade k8s cluster1 using kubespray
-	cd ${KUBESPRAY_DIR} && \
-	sudo pip3 install -r requirements.txt && \
-	ansible-playbook -i ${REPO_DIR}/udf/kubespray/cluster1/hosts.yaml  --become --become-user=root -e kube_version=v1.20.6 -e upgrade_cluster_setup=true cluster.yml
+install_k8s_cluster2: ## Install k8s cluster2 using kubespray
+	./install/kubespray.sh create cluster2
 
-reset-k8s-cluster1: ## Reset k8s cluster1 using kubespray
-	cd ${KUBESPRAY_DIR} && \
-	sudo pip3 install -r requirements.txt && \
-	ansible-playbook -i ${REPO_DIR}/udf/kubespray/cluster1/hosts.yaml --become --become-user=root reset.yml
+reset_k8s_cluster2: ## Reset k8s cluster2 using kubespray
+	./install/kubespray.sh reset cluster2
 
+update_kubeconfigs: ## Update kubectl kubeconfigs
+	./install/kubespray.sh update_kubeconfigs
 
-############################## CLUSTER2 ##############################
-
-install-k8s-cluster2: ## Install k8s cluster2 using kubespray
-	cd ${KUBESPRAY_DIR} && \
-	sudo pip3 install -r requirements.txt && \
-	ansible-playbook -i ${REPO_DIR}/udf/kubespray/cluster2/hosts.yaml  --become --become-user=root cluster.yml
-	sudo cp /etc/kubernetes/admin.conf ~/.kube/config
-	# kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/livenessProbe/failureThreshold", "value":10}]'
-	# kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/livenessProbe/timeoutSeconds", "value":10}]'
-	# kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/readinessProbe/failureThreshold", "value":10}]'
-	# kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/readinessProbe/timeoutSeconds", "value":10}]'
-	# kubectl patch -n kube-system deployment calico-kube-controllers --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/readinessProbe/failureThreshold", "value":10}]'
-	# kubectl patch -n kube-system deployment calico-kube-controllers --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/readinessProbe/timeoutSeconds", "value":10}]'
-	# kubectl patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/resources/limits/cpu", "value":"500m"}]'
-
-upgrade-k8s-cluster2: ## Upgrade k8s cluster2 using kubespray
-	cd ${KUBESPRAY_DIR} && \
-	sudo pip3 install -r requirements.txt && \
-	ansible-playbook -i ${REPO_DIR}/udf/kubespray/cluster2/hosts.yaml  --become --become-user=root -e kube_version=v1.20.6 -e upgrade_cluster_setup=true cluster.yml
-
-reset-k8s-cluster2: ## Reset k8s cluster2 using kubespray
-	cd ${KUBESPRAY_DIR} && \
-	sudo pip3 install -r requirements.txt && \
-	ansible-playbook -i ${REPO_DIR}/udf/kubespray/cluster2/hosts.yaml --become --become-user=root reset.yml
 
 #################
 ### AspenMesh ###
 #################
 
-############################## CLUSTER1 ##############################
+install_am1: ## Install aspen mesh in cluster1
+	./install/aspenmesh.sh install cluster1
 
-install-am1: ## Install aspen mesh in cluster1
-	kubectl create ns ${AM_NAMESPACE} || true
-	kubectl label namespace ${AM_NAMESPACE} topology.istio.io/network=network1 || true
-	kubectl create secret generic cacerts -n ${AM_NAMESPACE} \
-		--from-file=${CERT_DIR_CLUSTER_1}/ca-cert.pem \
-		--from-file=${CERT_DIR_CLUSTER_1}/ca-key.pem \
-		--from-file=${CERT_DIR_CLUSTER_1}/root-cert.pem \
-		--from-file=${CERT_DIR_CLUSTER_1}/cert-chain.pem  || true
-	helm install istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
-	helm install istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
-	sleep 30
-	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
-	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
-	kubectl patch svc -n istio-system istio-ingressgateway -p '{"spec":{"externalIPs": ["10.1.10.50"]}}'
-	kubectl wait --timeout=5m --for=condition=Ready pods --all -n ${AM_NAMESPACE}
+upgrade_am1: ## Upgrade aspen mesh in cluster1
+	./install/aspenmesh.sh update cluster1
 
-upgrade-am1: ## Upgrade aspen mesh in cluster1
-	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
-	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
-	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
-	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_1} || true
-	kubectl patch svc -n istio-system istio-ingressgateway -p '{"spec":{"externalIPs": ["10.1.10.50"]}}'
+remove_am1: ## Uninstall aspen mesh in cluster1
+	./install/aspenmesh.sh remove cluster1
 
+install_am2: ## Install aspen mesh in cluster2
+	./install/aspenmesh.sh install cluster2
 
-############################## CLUSTER2 ##############################
+upgrade_am2: ## Upgrade aspen mesh in cluster2
+	./install/aspenmesh.sh update cluster2
 
-install-am2: ## Install aspen mesh in cluster2
-	kubectl create ns ${AM_NAMESPACE} || true
-	kubectl label namespace ${AM_NAMESPACE} topology.istio.io/network=network2 || true
-	kubectl create secret generic cacerts -n ${AM_NAMESPACE} \
-		--from-file=${CERT_DIR_CLUSTER_2}/ca-cert.pem \
-		--from-file=${CERT_DIR_CLUSTER_2}/ca-key.pem \
-		--from-file=${CERT_DIR_CLUSTER_2}/root-cert.pem \
-		--from-file=${CERT_DIR_CLUSTER_2}/cert-chain.pem  || true
-	helm install istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
-	helm install istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
-	sleep 30
-	helm install istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
-	helm install istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
-	kubectl patch svc -n istio-system istio-ingressgateway -p '{"spec":{"externalIPs": ["10.1.20.50"]}}'
-	kubectl wait --timeout=5m --for=condition=Ready pods --all -n ${AM_NAMESPACE}
+remove_am2: ## Uninstall aspen mesh in cluster2
+	./install/aspenmesh.sh remove cluster2
 
-upgrade-am2: ## Upgrade aspen mesh in cluster2
-	helm upgrade istio-base ${CHART_DIR}/base --namespace ${AM_NAMESPACE} || true
-	helm upgrade istiod ${CHART_DIR}/istio-control/istio-discovery --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
-	helm upgrade istio-ingress ${CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
-	helm upgrade istio-egress ${CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES_2} || true
-	kubectl patch svc -n istio-system istio-ingressgateway -p '{"spec":{"externalIPs": ["10.1.20.50"]}}'
+install_multi_secrets: ## Install multi-cluster remote secrets in both clusters
+	./install/aspenmesh.sh install-remote-secret cluster1
+	./install/aspenmesh.sh install-remote-secret cluster2
 
-uninstall-am: ## Uninstall aspen mesh in cluster
-	helm uninstall istio-ewgw --namespace ${AM_NAMESPACE} || true
-	helm uninstall istio-egress --namespace ${AM_NAMESPACE} || true
-	helm uninstall istio-ingress --namespace ${AM_NAMESPACE} || true
-	helm uninstall istiod --namespace ${AM_NAMESPACE} || true
-	helm uninstall istio-base --namespace ${AM_NAMESPACE} || true
-	kubectl delete ns ${AM_NAMESPACE} || true
+post_install: ## Post installation steps
+	${KUBECTL1} apply -f ./install/aspenmesh/services || true
+	${KUBECTL2} apply -f ./install/aspenmesh/services || true
 
-install-multi-remote-secret: ## Install multi-cluster remote secrets
-	if [ `hostname` != "jumphost" ] ; then exit ; fi
-	istioctl x create-remote-secret --context="kubernetes1-admin.cluster1.cluster.local" --name=cluster1 | kubectl apply -f - --context="kubernetes2-admin.cluster2.cluster.local"
-	istioctl x create-remote-secret --context="kubernetes2-admin.cluster2.cluster.local" --name=cluster2 | kubectl apply -f - --context="kubernetes1-admin.cluster1.cluster.local"
+post_uninstall:  ## Post uninstallation steps
+	${KUBECTL1} delete -f ./install/aspenmesh/services || true
+	${KUBECTL2} delete -f ./install/aspenmesh/services || true
 
-post-install: ## Post installation steps
-	kubectl apply -f ./udf/aspenmesh/services || true
+reinstall_am1: post_uninstall uninstall_am install_am1 post_install ## Reinstall aspenmesh in cluster1
+reinstall_am2: post_uninstall uninstall_am install_am2 post_install ## Reinstall aspenmesh in cluster2
 
-post-uninstall:  ## Post uninstallation steps
-	kubectl delete -f ./udf/aspenmesh/services || true
-
-reinstall-am1: post-uninstall uninstall-am install-am1 post-install ## Reinstall aspenmesh in cluster1
-reinstall-am2: post-uninstall uninstall-am install-am2 post-install ## Reinstall aspenmesh in cluster2
-
-istioctl:  ## Install istioctl
+install_istioctl:  ## Install istioctl
 	curl -sL https://istio.io/downloadIstioctl | ISTIO_VERSION=${ISTIO_VERSION} sh - && \
 	sudo cp ~/.istioctl/bin/istioctl /usr/local/bin
+
 
 ###############
 ### Helpers ###
 ###############
 
-git-clone-all: ## Clone all git repos
-	ssh k8s-1-master 'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null' || true
-	ssh k8s-1-node1  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null' || true
-	ssh k8s-1-node2  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null' || true
-	ssh k8s-1-node3  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null' || true
-	ssh k8s-1-node4  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null' || true
-	ssh k8s-2-master 'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null' || true
-	ssh k8s-2-node1  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null' || true
-	ssh k8s-2-node2  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null' || true
-	ssh k8s-2-node3  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null' || true
-	ssh k8s-2-node4  'cd ${HOME_DIR} ; git clone ${GIT_REPO} > /dev/null' || true
+hosts_apt_install: ## Install packages on all nodes
+	./install/nodes.sh apt_install
 
-git-pull-all: ## Pull all git repos
-	ssh jumphost     'cd ${REPO_DIR}; git pull > /dev/null ; sudo updatedb'
-	ssh k8s-1-master 'cd ${REPO_DIR}; git pull > /dev/null ; sudo updatedb'
-	ssh k8s-1-node1  'cd ${REPO_DIR}; git pull > /dev/null ; sudo updatedb'
-	ssh k8s-1-node2  'cd ${REPO_DIR}; git pull > /dev/null ; sudo updatedb'
-	ssh k8s-1-node3  'cd ${REPO_DIR}; git pull > /dev/null ; sudo updatedb'
-	ssh k8s-1-node4  'cd ${REPO_DIR}; git pull > /dev/null ; sudo updatedb'
-	ssh k8s-2-master 'cd ${REPO_DIR}; git pull > /dev/null ; sudo updatedb'
-	ssh k8s-2-node1  'cd ${REPO_DIR}; git pull > /dev/null ; sudo updatedb'
-	ssh k8s-2-node2  'cd ${REPO_DIR}; git pull > /dev/null ; sudo updatedb'
-	ssh k8s-2-node3  'cd ${REPO_DIR}; git pull > /dev/null ; sudo updatedb'
-	ssh k8s-2-node4  'cd ${REPO_DIR}; git pull > /dev/null ; sudo updatedb'
+hosts_apt_fix: ## Fix locked packages on all nodes
+	./install/nodes.sh apt_fix
 
-reboot-k8s: reboot-k8s-cluster1 reboot-k8s-cluster2 ## Reboot all k8s hosts
+hosts_apt_update: ## Upgrade packages on all nodes
+	./install/nodes.sh apt_update
 
-reboot-k8s-cluster1: ## Reboot k8s cluster1 hosts
-	ssh k8s-1-master sudo reboot || true
-	ssh k8s-1-node1  sudo reboot || true
-	ssh k8s-1-node2  sudo reboot || true
-	ssh k8s-1-node3  sudo reboot || true
-	ssh k8s-1-node4  sudo reboot || true
+hosts_git_clone: ## Clone repo on all nodes
+	./install/nodes.sh git_clone
 
-reboot-k8s-cluster2: ## Reboot k8s cluster2 hosts
-	ssh k8s-2-master sudo reboot || true
-	ssh k8s-2-node1  sudo reboot || true
-	ssh k8s-2-node2  sudo reboot || true
-	ssh k8s-2-node3  sudo reboot || true
-	ssh k8s-2-node4  sudo reboot || true
+hosts_git_pull: ## Pull repo on all nodes
+	./install/nodes.sh git_pull
 
-upgrade-apt-packages: ## Upgrade apt packages
-	ssh jumphost     'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
-	ssh k8s-1-master 'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
-	ssh k8s-1-node1  'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
-	ssh k8s-1-node2  'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
-	ssh k8s-1-node3  'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
-	ssh k8s-1-node4  'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
-	ssh k8s-2-master 'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
-	ssh k8s-2-node1  'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
-	ssh k8s-2-node2  'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
-	ssh k8s-2-node3  'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
-	ssh k8s-2-node4  'sudo apt-get -y update ; sudo apt-get -y upgrade ; sudo apt-get -y autoremove'
+hosts_reboot_k8s: ## Reboot all k8s nodes
+	./install/nodes.sh reboot_k8s
 
-enable-multi-nic: ## Enable multiple nics
-	ssh jumphost     "sudo apt-get -y install net-tools ; sudo ${REPO_DIR}/udf/common/network-3nic.sh" ; sleep 5 || true
-	ssh k8s-1-master "sudo apt-get -y install net-tools ; sudo ${REPO_DIR}/udf/common/network-2nic.sh" || true
-	ssh k8s-1-node1  "sudo apt-get -y install net-tools ; sudo ${REPO_DIR}/udf/common/network-2nic.sh" || true
-	ssh k8s-1-node2  "sudo apt-get -y install net-tools ; sudo ${REPO_DIR}/udf/common/network-2nic.sh" || true
-	ssh k8s-1-node3  "sudo apt-get -y install net-tools ; sudo ${REPO_DIR}/udf/common/network-2nic.sh" || true
-	ssh k8s-1-node4  "sudo apt-get -y install net-tools ; sudo ${REPO_DIR}/udf/common/network-2nic.sh" || true
-	ssh k8s-2-master "sudo apt-get -y install net-tools ; sudo ${REPO_DIR}/udf/common/network-2nic.sh" || true
-	ssh k8s-2-node1  "sudo apt-get -y install net-tools ; sudo ${REPO_DIR}/udf/common/network-2nic.sh" || true
-	ssh k8s-2-node2  "sudo apt-get -y install net-tools ; sudo ${REPO_DIR}/udf/common/network-2nic.sh" || true
-	ssh k8s-2-node3  "sudo apt-get -y install net-tools ; sudo ${REPO_DIR}/udf/common/network-2nic.sh" || true
-	ssh k8s-2-node4  "sudo apt-get -y install net-tools ; sudo ${REPO_DIR}/udf/common/network-2nic.sh" || true
+hosts_reboot_k8s_cluster1: ## Reboot all k8s nodes from cluster1
+	./install/nodes.sh reboot_k8s_cluster1
 
-enable-multi-routing: ## Enable multiple network routing
-	ssh jumphost     "sudo iptables -A FORWARD -i lo -j ACCEPT ; sudo iptables -A FORWARD -i ens6 -j ACCEPT ; sudo iptables -A FORWARD -i ens7 -j ACCEPT"
-	ssh jumphost     "sudo iptables -t nat -A POSTROUTING -o ens6 -j MASQUERADE ; sudo iptables -t nat -A POSTROUTING -o ens7 -j MASQUERADE"
-	ssh jumphost     "sudo iptables-save"
-	ssh k8s-1-master "sudo ip route add 10.1.20.0/24 via 10.1.10.4" || true
-	ssh k8s-1-node1  "sudo ip route add 10.1.20.0/24 via 10.1.10.4" || true
-	ssh k8s-1-node2  "sudo ip route add 10.1.20.0/24 via 10.1.10.4" || true
-	ssh k8s-1-node3  "sudo ip route add 10.1.20.0/24 via 10.1.10.4" || true
-	ssh k8s-1-node4  "sudo ip route add 10.1.20.0/24 via 10.1.10.4" || true
-	ssh k8s-2-master "sudo ip route add 10.1.10.0/24 via 10.1.20.4" || true
-	ssh k8s-2-node1  "sudo ip route add 10.1.10.0/24 via 10.1.20.4" || true
-	ssh k8s-2-node2  "sudo ip route add 10.1.10.0/24 via 10.1.20.4" || true
-	ssh k8s-2-node3  "sudo ip route add 10.1.10.0/24 via 10.1.20.4" || true
-	ssh k8s-2-node4  "sudo ip route add 10.1.10.0/24 via 10.1.20.4" || true
+hosts_reboot_k8s_cluster2: ## Reboot all k8s nodes from cluster2
+	./install/nodes.sh reboot_k8s_cluster2
 
-update-kubeconfig: ## Update kubeconfig in all hosts
-	if [ `hostname` != "jumphost" ] ; then exit ; fi
-	cp ${REPO_DIR}/udf/kubespray/kubeconfig.yaml ~/.kube/config
-	kubectl get nodes -o wide --context=kubernetes1-admin.cluster1.cluster.local
-	kubectl get nodes -o wide --context=kubernetes2-admin.cluster2.cluster.local
-	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster1.yaml k8s-1-node1:${HOME_DIR}/.kube/config|| true
-	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster1.yaml k8s-1-node2:${HOME_DIR}/.kube/config|| true
-	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster1.yaml k8s-1-node3:${HOME_DIR}/.kube/config|| true
-	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster1.yaml k8s-1-node4:${HOME_DIR}/.kube/config|| true
-	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster2.yaml k8s-2-node1:${HOME_DIR}/.kube/config|| true
-	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster2.yaml k8s-2-node2:${HOME_DIR}/.kube/config|| true
-	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster2.yaml k8s-2-node3:${HOME_DIR}/.kube/config|| true
-	scp ${REPO_DIR}/udf/kubespray/kubeconfig-cluster2.yaml k8s-2-node4:${HOME_DIR}/.kube/config|| true
+hosts_enable_multinic: ## Enable multiple nics on all hosts
+	./install/nodes.sh enable_multinic
 
-force-apt-packages:
-	ssh k8s-1-master 'sudo apt-get -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install containerd.io=1.3.9-1 docker-ce-cli=5:19.03.14~3-0~ubuntu-focal docker-ce=5:19.03.14~3-0~ubuntu-focal --allow-downgrades --allow-change-held-packages'
-	ssh k8s-1-node1  'sudo apt-get -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install containerd.io=1.3.9-1 docker-ce-cli=5:19.03.14~3-0~ubuntu-focal docker-ce=5:19.03.14~3-0~ubuntu-focal --allow-downgrades --allow-change-held-packages'
-	ssh k8s-1-node2  'sudo apt-get -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install containerd.io=1.3.9-1 docker-ce-cli=5:19.03.14~3-0~ubuntu-focal docker-ce=5:19.03.14~3-0~ubuntu-focal --allow-downgrades --allow-change-held-packages'
-	ssh k8s-1-node3  'sudo apt-get -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install containerd.io=1.3.9-1 docker-ce-cli=5:19.03.14~3-0~ubuntu-focal docker-ce=5:19.03.14~3-0~ubuntu-focal --allow-downgrades --allow-change-held-packages'
-	ssh k8s-1-node4  'sudo apt-get -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install containerd.io=1.3.9-1 docker-ce-cli=5:19.03.14~3-0~ubuntu-focal docker-ce=5:19.03.14~3-0~ubuntu-focal --allow-downgrades --allow-change-held-packages'
-	ssh k8s-2-master 'sudo apt-get -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install containerd.io=1.3.9-1 docker-ce-cli=5:19.03.14~3-0~ubuntu-focal docker-ce=5:19.03.14~3-0~ubuntu-focal --allow-downgrades --allow-change-held-packages'
-	ssh k8s-2-node1  'sudo apt-get -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install containerd.io=1.3.9-1 docker-ce-cli=5:19.03.14~3-0~ubuntu-focal docker-ce=5:19.03.14~3-0~ubuntu-focal --allow-downgrades --allow-change-held-packages'
-	ssh k8s-2-node2  'sudo apt-get -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install containerd.io=1.3.9-1 docker-ce-cli=5:19.03.14~3-0~ubuntu-focal docker-ce=5:19.03.14~3-0~ubuntu-focal --allow-downgrades --allow-change-held-packages'
-	ssh k8s-2-node3  'sudo apt-get -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install containerd.io=1.3.9-1 docker-ce-cli=5:19.03.14~3-0~ubuntu-focal docker-ce=5:19.03.14~3-0~ubuntu-focal --allow-downgrades --allow-change-held-packages'
-	ssh k8s-2-node4  'sudo apt-get -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install containerd.io=1.3.9-1 docker-ce-cli=5:19.03.14~3-0~ubuntu-focal docker-ce=5:19.03.14~3-0~ubuntu-focal --allow-downgrades --allow-change-held-packages'
+hosts_enable_multirouting: ## Enable multiple network routing
+	./install/nodes.sh enable_multirouting
 
-update-dns-resolv: ## Update DNS on all nodes to include jumphost DNS server
-	ssh k8s-1-master 'cd ${REPO_DIR}/udf/dns ; make configure-dns'
-	ssh k8s-1-node1  'cd ${REPO_DIR}/udf/dns ; make configure-dns'
-	ssh k8s-1-node2  'cd ${REPO_DIR}/udf/dns ; make configure-dns'
-	ssh k8s-1-node3  'cd ${REPO_DIR}/udf/dns ; make configure-dns'
-	ssh k8s-1-node4  'cd ${REPO_DIR}/udf/dns ; make configure-dns'
-	ssh k8s-2-master 'cd ${REPO_DIR}/udf/dns ; make configure-dns'
-	ssh k8s-2-node1  'cd ${REPO_DIR}/udf/dns ; make configure-dns'
-	ssh k8s-2-node2  'cd ${REPO_DIR}/udf/dns ; make configure-dns'
-	ssh k8s-2-node3  'cd ${REPO_DIR}/udf/dns ; make configure-dns'
-	ssh k8s-2-node4  'cd ${REPO_DIR}/udf/dns ; make configure-dns'
+dns_dnsmasq: ## Install and setup dnsmasq (jumphost only)
+	./udf/dns.sh dnsmasq
+
+dns_dnsclient: ## Set DNS client configuration
+	./udf/dns.sh dnsclient
+
+dns_hosts: ## Update /etc/hosts file for dnsmasq server (jumphost only)
+	./udf/dns.sh hosts
 
 restart-istiod:
 	kubectl -n ${AM_NAMESPACE} rollout restart deployments/istiod

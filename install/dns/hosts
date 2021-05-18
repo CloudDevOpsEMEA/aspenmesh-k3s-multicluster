@@ -1,0 +1,33 @@
+127.0.0.1 localhost
+
+# The following lines are desirable for IPv6 capable hosts
+::1 ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts
+
+# DNSMasq entries for UDF nodes
+10.1.1.4  jumphost
+10.1.1.5  k8s-1-master
+10.1.1.6  k8s-1-node1
+10.1.1.7  k8s-1-node2
+10.1.1.8  k8s-2-master
+10.1.1.9  k8s-2-node1
+10.1.1.10 k8s-2-node2
+
+10.1.1.11 k8s-1-node3
+10.1.1.12 k8s-1-node4
+
+10.1.1.13 k8s-2-node3
+10.1.1.14 k8s-2-node4
+
+10.1.10.5 k8s-apiserver-cluster1
+10.1.20.8 k8s-apiserver-cluster2
+
+10.1.10.50 istio-ingress-cluster1
+10.1.20.50 istio-ingress-cluster2
+
+# DNSMasq entries for Istio workloads
+10.1.1.5 httpbin
