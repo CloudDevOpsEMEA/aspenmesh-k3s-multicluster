@@ -49,7 +49,7 @@ PATCH_INGRESS_FILE=${ROOT_DIR}/install/aspenmesh/patches/patch-ingress-${AM_CLUS
 function patch_service_ingress {
   echo "spec:" > ${PATCH_INGRESS_FILE}
   echo "  externalIPs:" >> ${PATCH_INGRESS_FILE}
-  echo "    -  \"${AM_CLUSTER_INGRESS_IP}\"" >> ${PATCH_NLB_FILE}
+  echo "    -  \"${AM_CLUSTER_INGRESS_IP}\"" >> ${PATCH_INGRESS_FILE}
 
   
   echo "${KUBECTL} patch svc -n istio-system istio-ingressgateway -p \"$(cat ${PATCH_INGRESS_FILE})\""
