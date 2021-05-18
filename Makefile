@@ -164,6 +164,7 @@ nginx_install_nginx_plus: ## Install Nginx Plus on nodes
 	./install/nginx.sh install cluster2
 
 nginx_config: ## Refresh master nodes nginx configuration
+	./install/nginx.sh config jumphost
 	./install/nginx.sh config cluster1
 	./install/nginx.sh config cluster2
 
