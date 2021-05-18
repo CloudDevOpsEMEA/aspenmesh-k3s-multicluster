@@ -91,8 +91,8 @@ aspen_multi_secrets: ## Install multi-cluster remote secrets in both clusters
 	./install/aspenmesh.sh install-remote-secret cluster2
 
 aspen_post_install: ## Post installation steps
-	${KUBECTL1} apply -f ./install/aspenmesh/services || true
-	${KUBECTL2} apply -f ./install/aspenmesh/services || true
+	./install/aspenmesh.sh services cluster1
+	./install/aspenmesh.sh services cluster2
 
 aspen_post_uninstall:  ## Post uninstallation steps
 	${KUBECTL1} delete -f ./install/aspenmesh/services || true
