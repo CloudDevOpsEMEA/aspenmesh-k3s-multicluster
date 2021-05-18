@@ -56,7 +56,7 @@ install_kubectl: ## Install kubectl on all cluster nodes
 	./install/kubespray.sh kubectl cluster1
 	./install/kubespray.sh kubectl cluster2
 
-install_kubectl: ## Install k9s on all cluster nodes
+install_k9s: ## Install k9s on all cluster nodes
 	./install/kubespray.sh k9s cluster1
 	./install/kubespray.sh k9s cluster2
 
