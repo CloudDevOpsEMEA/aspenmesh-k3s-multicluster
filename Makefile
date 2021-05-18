@@ -141,13 +141,17 @@ hosts_enable_multirouting: ## Enable multiple network routing
 	./install/nodes.sh enable_multirouting
 
 dns_dnsmasq: ## Install and setup dnsmasq (jumphost only)
-	./udf/dns.sh dnsmasq
+	./install/dns.sh dnsmasq
 
 dns_dnsclient: ## Set DNS client configuration
-	./udf/dns.sh dnsclient
+	./install/dns.sh dnsclient
 
 dns_hosts: ## Update /etc/hosts file for dnsmasq server (jumphost only)
-	./udf/dns.sh hosts
+	./install/dns.sh hosts
+
+nginx_config: ## Refresh master nodes nginx configuration
+	./install/nginx.sh config cluster1
+	./install/nginx.sh config cluster2
 
 restart-istiod:
 	kubectl -n ${AM_NAMESPACE} rollout restart deployments/istiod
