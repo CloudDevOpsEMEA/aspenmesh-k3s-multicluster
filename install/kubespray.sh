@@ -10,12 +10,10 @@ KUBESPRAY_DIR=${REPO_DIR}/kubespray/${KUBESPRAY_VERSION}
 if [[ $2 = "cluster1" ]]; then
   KUBESPRAY_CLUSTER_NAME=${KUBESPRAY_CLUSTER1_NAME}
   KUBESPRAY_INVENTORY=${REPO_DIR}/install/kubespray/${KUBESPRAY_CLUSTER1_NAME}/hosts.yaml
-  KUBECTL_ALIAS=k1
   K8S_NODES=( k8s-1-master k8s-1-node1 k8s-1-node2 k8s-1-node3 k8s-1-node4 )
 elif [[ $2 = "cluster2" ]]; then
   KUBESPRAY_CLUSTER_NAME=${KUBESPRAY_CLUSTER2_NAME}
   KUBESPRAY_INVENTORY=${REPO_DIR}/install/kubespray/${KUBESPRAY_CLUSTER2_NAME}/hosts.yaml
-  KUBECTL_ALIAS=k2
   K8S_NODES=( k8s-2-master k8s-2-node1 k8s-2-node2 k8s-2-node3 k8s-2-node4 )
 else
   echo "please specify action ./kubespray.sh create/reset/info/k9s cluster1/cluster2"
@@ -32,6 +30,7 @@ function do_k8s_nodes {
 
 KUBECONFIG_ARTIFACT=${REPO_DIR}/install/kubespray/${KUBESPRAY_CLUSTER_NAME}/artifacts/admin.conf
 KUBECONFIG=${REPO_DIR}/install/kubespray/${KUBESPRAY_CLUSTER_NAME}-kubeconfig.yaml
+KUBECTL="kubectl --kubeconfig ${REPO_DIR}/install/kubespray/${KUBESPRAY_CLUSTER_NAME}-kubeconfig.yaml"
 
 if [[ $1 = "create" ]]; then
 	cd ${KUBESPRAY_DIR}
@@ -70,7 +69,7 @@ if [[ $1 = "k9s" ]]; then
 fi
 
 if [[ $1 = "calico_patch" ]]; then
-  ${KUBECTL_ALIAS} patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/resources/limits/cpu", "value":"500m"}]'
+  ${KUBECTL} patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/resources/limits/cpu", "value":"500m"}]'
   exit 0
 fi
 
