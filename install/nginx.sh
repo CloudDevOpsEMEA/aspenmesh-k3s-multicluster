@@ -13,10 +13,10 @@ if [[ $2 = "cluster1" ]]; then
   NGINX_CLUSTER_CONF_DIR=${REPO_DIR}/install/nginx/${AM_CLUSTER1_NAME}
   SSH_NODE=k8s-1-master
 elif [[ $2 = "cluster2" ]]; then
-  NGINX_CONF_DIR=${REPO_DIR}/install/nginx/${AM_CLUSTER2_NAME}
+  NGINX_CLUSTER_CONF_DIR=${REPO_DIR}/install/nginx/${AM_CLUSTER2_NAME}
   SSH_NODE=k8s-2-master
 elif [[ $2 = "jumphost" ]]; then
-  NGINX_CONF_DIR=${REPO_DIR}/install/nginx/jumphost
+  NGINX_CLUSTER_CONF_DIR=${REPO_DIR}/install/nginx/jumphost
   SSH_NODE=jumphost
 else
   echo "please specify action ./nginx.sh config cluster1/cluster2"
