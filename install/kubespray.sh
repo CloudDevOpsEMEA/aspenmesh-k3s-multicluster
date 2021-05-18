@@ -69,6 +69,10 @@ if [[ $1 = "k9s" ]]; then
   exit 0
 fi
 
+if [[ $1 = "calico_patch" ]]; then
+  ${KUBECTL_ALIAS} patch -n kube-system daemonsets calico-node --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/resources/limits/cpu", "value":"500m"}]'
+  exit 0
+fi
 
-echo "please specify action ./kubespray.sh create/reset/kubeconfig/kubectl/k9s cluster1/cluster2"
+echo "please specify action ./kubespray.sh create/reset/kubeconfig/kubectl/k9s/calico_patch cluster1/cluster2"
 exit 1

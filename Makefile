@@ -60,6 +60,9 @@ k9s_install: ## Install k9s on all cluster nodes
 	./install/kubespray.sh k9s cluster1
 	./install/kubespray.sh k9s cluster2
 
+calico_patch: ## Patch calico on all clusters
+	./install/kubespray.sh calico_patch cluster1
+	./install/kubespray.sh calico_patch cluster2
 
 #################
 ### AspenMesh ###
