@@ -39,7 +39,6 @@ AM_MULTISECRET=${ROOT_DIR}/install/aspenmesh/multisecrets/secret-${AM_CLUSTER_NA
 AM_MULTISECRET_REMOTE=${ROOT_DIR}/install/aspenmesh/multisecrets/secret-${AM_CLUSTER_NAME_REMOTE}.yaml
 
 KUBECONFIG=${ROOT_DIR}/install/kubespray/${KUBESPRAY_CLUSTER_NAME}-kubeconfig.yaml
-KUBECONTEXT=`cat ${KUBECONFIG} | yq -r '.contexts[0].name'`
 
 KUBECTL="kubectl --kubeconfig=${KUBECONFIG}"
 HELM="helm --kubeconfig=${KUBECONFIG}"
@@ -70,8 +69,8 @@ if [[ $1 = "install" ]]; then
   ${HELM} install istio-ingress ${AM_HELM_CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES}
   ${HELM} install istio-egress ${AM_HELM_CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES}
   sleep 10 && patch_service_ingress
-  ${ISTIOCTL} x create-remote-secret --context="${KUBECONTEXT}" --name=${AM_CLUSTER_NAME} > ${AM_MULTISECRET}
-  ${KUBECTL} apply -f ${AM_MULTISECRET_REMOTE} --context="${KUBECONTEXT}"
+  ${ISTIOCTL} x create-remote-secret --name=${AM_CLUSTER_NAME} > ${AM_MULTISECRET}
+  ${KUBECTL} apply -f ${AM_MULTISECRET_REMOTE}
   ${KUBECTL} wait --timeout=5m --for=condition=Ready pods --all -n ${AM_NAMESPACE}
   exit 0
 fi
@@ -82,14 +81,14 @@ if [[ $1 = "update" ]]; then
   ${HELM} upgrade istio-ingress ${AM_HELM_CHART_DIR}/gateways/istio-ingress --namespace ${AM_NAMESPACE} --values ${AM_VALUES} || true
   ${HELM} upgrade istio-egress ${AM_HELM_CHART_DIR}/gateways/istio-egress --namespace ${AM_NAMESPACE} --values ${AM_VALUES} || true
   sleep 10 && patch_service_ingress || true
-  ${ISTIOCTL} x create-remote-secret --context="${KUBECONTEXT}" --name=${AM_CLUSTER_NAME} > ${AM_MULTISECRET} || true
+  ${ISTIOCTL} x create-remote-secret --name=${AM_CLUSTER_NAME} > ${AM_MULTISECRET} || true
   ${KUBECTL} wait --timeout=5m --for=condition=Ready pods --all -n ${AM_NAMESPACE}
   exit 0
 fi
 
 if [[ $1 = "install-remote-secret" ]]; then
-  echo "${KUBECTL} apply -f ${AM_MULTISECRET_REMOTE} --context=\"${KUBECONTEXT}\""
-  ${KUBECTL} apply -f ${AM_MULTISECRET_REMOTE} --context="${KUBECONTEXT}" || true
+  echo "${KUBECTL} apply -f ${AM_MULTISECRET_REMOTE}"
+  ${KUBECTL} apply -f ${AM_MULTISECRET_REMOTE}|| true
   exit 0
 fi
 
