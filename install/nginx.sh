@@ -11,17 +11,20 @@ NGINX_CONF_DIR=${REPO_DIR}/install/nginx
 
 if [[ $2 = "cluster1" ]]; then
   NGINX_CLUSTER_CONF_DIR=${REPO_DIR}/install/nginx/${AM_CLUSTER1_NAME}
-  MASTER_NODE=k8s-1-master
+  SSH_NODE=k8s-1-master
 elif [[ $2 = "cluster2" ]]; then
   NGINX_CONF_DIR=${REPO_DIR}/install/nginx/${AM_CLUSTER2_NAME}
-  MASTER_NODE=k8s-2-master
+  SSH_NODE=k8s-2-master
+elif [[ $2 = "jumphost" ]]; then
+  NGINX_CONF_DIR=${REPO_DIR}/install/nginx/jumphost
+  SSH_NODE=jumphost
 else
   echo "please specify action ./nginx.sh config cluster1/cluster2"
   exit 1
 fi
 
 if [[ $1 = "install" ]]; then
-  ssh ${MASTER_NODE} " sudo mkdir -p /etc/ssl/nginx
+  ssh ${SSH_NODE} "sudo mkdir -p /etc/ssl/nginx
     sudo cp ${NGINX_CONF_DIR}/nginx-repo.crt /etc/ssl/nginx/
     sudo cp ${NGINX_CONF_DIR}/nginx-repo.key /etc/ssl/nginx/
     sudo wget -P /tmp https://cs.nginx.com/static/keys/nginx_signing.key && sudo apt-key add /tmp/nginx_signing.key
@@ -41,7 +44,7 @@ if [[ $1 = "install" ]]; then
 fi
 
 if [[ $1 = "config" ]]; then
-  ssh ${MASTER_NODE} "sudo rm -rf /etc/nginx/conf.d/*.conf ; \
+  ssh ${SSH_NODE} "sudo rm -rf /etc/nginx/conf.d/*.conf ; \
     sudo cp ${NGINX_CLUSTER_CONF_DIR}/conf.d/*.conf /etc/nginx/conf.d/ ; \
     sudo cp ${NGINX_CLUSTER_CONF_DIR}/nginx.conf /etc/nginx/nginx.conf ; \
     sudo cp ${CERT_DIR}/wildcard/aspendemo.org-bundle.pem /etc/ssl/nginx/cert.pem ; \

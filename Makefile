@@ -149,6 +149,11 @@ dns_dnsclient: ## Set DNS client configuration
 dns_hosts: ## Update /etc/hosts file for dnsmasq server (jumphost only)
 	./install/dns.sh hosts
 
+nginx_install_nginx_plus: ## Install Nginx Plus on nodes
+	./udf/nginx.sh install jumphost
+	./udf/nginx.sh install cluster1
+	./udf/nginx.sh install cluster2
+
 nginx_config: ## Refresh master nodes nginx configuration
 	./install/nginx.sh config cluster1
 	./install/nginx.sh config cluster2
