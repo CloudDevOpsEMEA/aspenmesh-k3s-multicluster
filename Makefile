@@ -36,27 +36,27 @@ CERT_DIR_CLUSTER_2=${CERT_DIR}/cluster2
 ### Kubernetes ###
 ##################
 
-install_k8s_cluster1: ## Install k8s cluster1 using kubespray
+kubespray_install_cluster1: ## Install k8s cluster1 using kubespray
 	./install/kubespray.sh create cluster1
 
-reset_k8s_cluster1: ## Reset k8s cluster1 using kubespray
+kubespray_reset_cluster1: ## Reset k8s cluster1 using kubespray
 	./install/kubespray.sh reset cluster1
 
-install_k8s_cluster2: ## Install k8s cluster2 using kubespray
+kubespray_install_cluster2: ## Install k8s cluster2 using kubespray
 	./install/kubespray.sh create cluster2
 
-reset_k8s_cluster2: ## Reset k8s cluster2 using kubespray
+kubespray_reset_cluster2: ## Reset k8s cluster2 using kubespray
 	./install/kubespray.sh reset cluster2
 
-update_kubeconfig: ## Update kubectl kubeconfigs on all cluster nodes
+kubeconfig_update: ## Update kubectl kubeconfigs on all cluster nodes
 	./install/kubespray.sh kubeconfig cluster1
 	./install/kubespray.sh kubeconfig cluster2
 
-install_kubectl: ## Install kubectl on all cluster nodes
+kubectl_install: ## Install kubectl on all cluster nodes
 	./install/kubespray.sh kubectl cluster1
 	./install/kubespray.sh kubectl cluster2
 
-install_k9s: ## Install k9s on all cluster nodes
+k9s_install: ## Install k9s on all cluster nodes
 	./install/kubespray.sh k9s cluster1
 	./install/kubespray.sh k9s cluster2
 
