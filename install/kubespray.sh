@@ -9,12 +9,12 @@ KUBESPRAY_DIR=${REPO_DIR}/kubespray/${KUBESPRAY_VERSION}
 
 if [[ $2 = "cluster1" ]]; then
   KUBESPRAY_CLUSTER_NAME=${KUBESPRAY_CLUSTER1_NAME}
-  KUBESPRAY_INVENTORY=${HOME_DIR}/udf/kubespray/${KUBESPRAY_CLUSTER1_NAME}/hosts.yaml
+  KUBESPRAY_INVENTORY=${HOME_DIR}/install/kubespray/${KUBESPRAY_CLUSTER1_NAME}/hosts.yaml
   KUBECTL_ALIAS=k1
   K8S_NODES=( k8s-1-master k8s-1-node1 k8s-1-node2 k8s-1-node3 k8s-1-node4 )
 elif [[ $2 = "cluster2" ]]; then
   KUBESPRAY_CLUSTER_NAME=${KUBESPRAY_CLUSTER2_NAME}
-  KUBESPRAY_INVENTORY=${HOME_DIR}/udf/kubespray/${KUBESPRAY_CLUSTER2_NAME}/hosts.yaml
+  KUBESPRAY_INVENTORY=${HOME_DIR}/install/kubespray/${KUBESPRAY_CLUSTER2_NAME}/hosts.yaml
   KUBECTL_ALIAS=k2
   K8S_NODES=( k8s-2-master k8s-2-node1 k8s-2-node2 k8s-2-node3 k8s-2-node4 )
 else
