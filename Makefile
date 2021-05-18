@@ -48,8 +48,11 @@ install_k8s_cluster2: ## Install k8s cluster2 using kubespray
 reset_k8s_cluster2: ## Reset k8s cluster2 using kubespray
 	./install/kubespray.sh reset cluster2
 
-update_kubeconfigs: ## Update kubectl kubeconfigs
-	./install/kubespray.sh update_kubeconfigs
+update_kubeconfig_cluster1: ## Update kubectl kubeconfigs for cluster1
+	./install/kubespray.sh update_kubeconfigs cluster1
+
+update_kubeconfig_cluster2: ## Update kubectl kubeconfigs for cluster2
+	./install/kubespray.sh update_kubeconfigs cluster2
 
 
 #################

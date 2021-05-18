@@ -22,12 +22,14 @@ else
   exit 1
 fi
 
+KUBECONFIG_ARTIFACT=${REPO_DIR}/install/kubespray/${KUBESPRAY_CLUSTER_NAME}/artifacts/admin.conf
 KUBECONFIG=${REPO_DIR}/install/kubespray/${KUBESPRAY_CLUSTER_NAME}-kubeconfig.yaml
 
 if [[ $1 = "create" ]]; then
 	cd ${KUBESPRAY_DIR}
 	sudo pip3 install -r requirements.txt
 	ansible-playbook -i ${KUBESPRAY_INVENTORY} --become --become-user=root cluster.yml
+  cp ${KUBECONFIG_ARTIFACT} ${KUBECONFIG}
   exit 0
 fi
 
@@ -35,10 +37,12 @@ if [[ $1 = "reset" ]]; then
 	cd ${KUBESPRAY_DIR}
 	sudo pip3 install -r requirements.txt
 	ansible-playbook -i ${KUBESPRAY_INVENTORY} --become --become-user=root reset.yml
+  cp ${KUBECONFIG_ARTIFACT} ${KUBECONFIG}
   exit 0
 fi
 
 if [[ $1 = "update_kubeconfigs" ]]; then
+  cp ${KUBECONFIG_ARTIFACT} ${KUBECONFIG}
   for k8s_node in "${K8S_NODES[@]}"
   do
     scp ${KUBECONFIG} ${k8s_node}:${HOME_DIR}/.kube/config
