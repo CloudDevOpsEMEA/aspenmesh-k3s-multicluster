@@ -51,6 +51,7 @@ fi
 
 if [[ $1 = "kubeconfig" ]]; then
   cp ${KUBECONFIG_ARTIFACT} ${KUBECONFIG}
+  cp ${KUBECONFIG} ${HOME_DIR}/.kube/
   for k8s_node in "${K8S_NODES[@]}"
   do
     scp ${KUBECONFIG} ${k8s_node}:${HOME_DIR}/.kube/config
