@@ -25,6 +25,7 @@ if [[ $1 = "build_kic" ]]; then
 fi
 
 if [[ $1 = "push_kic" ]]; then
+  cd ${NGINX_KIC_DIR}
   make push PREFIX=${REGISTRY}/nginx-ingress-alpine                  VERSION=${NGINX_KIC_VERSION}
   make push PREFIX=${REGISTRY}/nginx-ingress-debian                  VERSION=${NGINX_KIC_VERSION}
   make push PREFIX=${REGISTRY}/nginx-opentracing-ingress-debian      VERSION=${NGINX_KIC_VERSION}
