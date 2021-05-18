@@ -140,6 +140,9 @@ hosts_enable_multinic: ## Enable multiple nics on all hosts
 hosts_enable_multirouting: ## Enable multiple network routing
 	./install/nodes.sh enable_multirouting
 
+hosts_install_root_ca: ## Install Aspendemo Root CA on all nodes
+	./install/nodes.sh install_root_ca
+
 dns_dnsmasq: ## Install and setup dnsmasq (jumphost only)
 	./install/dns.sh dnsmasq
 
@@ -149,6 +152,12 @@ dns_dnsclient: ## Set DNS client configuration
 dns_hosts: ## Update /etc/hosts file for dnsmasq server (jumphost only)
 	./install/dns.sh hosts
 
+nginx_kic_build: ## Build Nginx KIC container
+	./install/nginx.sh build_kic
+
+nginx_kic_push: ## Push Nginx KIC container
+	./install/nginx.sh push_kic
+
 nginx_install_nginx_plus: ## Install Nginx Plus on nodes
 	./install/nginx.sh install jumphost
 	./install/nginx.sh install cluster1
@@ -157,6 +166,12 @@ nginx_install_nginx_plus: ## Install Nginx Plus on nodes
 nginx_config: ## Refresh master nodes nginx configuration
 	./install/nginx.sh config cluster1
 	./install/nginx.sh config cluster2
+
+registry_up: ## Start docker registry and docker ui interface
+	./install/registry.sh up
+
+registry_logs: ## Print logs for docker registry and ui interface
+	./install/registry.sh logs
 
 restart-istiod:
 	kubectl -n ${AM_NAMESPACE} rollout restart deployments/istiod

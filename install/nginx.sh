@@ -7,7 +7,32 @@ CERT_DIR=${REPO_DIR}/install/certs
 
 source ${REPO_DIR}/environment.sh
 
+NGINX_KIC_VERSION=1.11.1
+NGINX_KIC_DIR=${REPO_DIR}/nginx/kic-${NGINX_KIC_VERSION}
 NGINX_CONF_DIR=${REPO_DIR}/install/nginx
+
+REGISTRY=registry.aspendemo.org:5000
+
+if [[ $1 = "build_kic" ]]; then
+  cd ${NGINX_KIC_DIR}
+  make alpine-image push                  PREFIX=${REGISTRY}/nginx-ingress-alpine                  TARGET=container VERSION=${NGINX_KIC_VERSION}
+  make debian-image push                  PREFIX=${REGISTRY}/nginx-ingress-debian                  TARGET=container VERSION=${NGINX_KIC_VERSION}
+  make debian-image-opentracing push      PREFIX=${REGISTRY}/nginx-opentracing-ingress-debian      TARGET=container VERSION=${NGINX_KIC_VERSION}
+  make debian-image-plus push             PREFIX=${REGISTRY}/nginx-plus-ingress-debian             TARGET=container VERSION=${NGINX_KIC_VERSION}
+  make debian-image-nap-plus push         PREFIX=${REGISTRY}/nginx-nap-plus-ingress-debian         TARGET=container VERSION=${NGINX_KIC_VERSION}
+  make debian-image-opentracing-plus push PREFIX=${REGISTRY}/nginx-opentracing-plus-ingress-debian TARGET=container VERSION=${NGINX_KIC_VERSION}
+  exit 0
+fi
+
+if [[ $1 = "push_kic" ]]; then
+  make push PREFIX=${REGISTRY}/nginx-ingress-alpine                  VERSION=${NGINX_KIC_VERSION}
+  make push PREFIX=${REGISTRY}/nginx-ingress-debian                  VERSION=${NGINX_KIC_VERSION}
+  make push PREFIX=${REGISTRY}/nginx-opentracing-ingress-debian      VERSION=${NGINX_KIC_VERSION}
+  make push PREFIX=${REGISTRY}/nginx-plus-ingress-debian             VERSION=${NGINX_KIC_VERSION}
+  make push PREFIX=${REGISTRY}/nginx-nap-plus-ingress-debian         VERSION=${NGINX_KIC_VERSION}
+  make push PREFIX=${REGISTRY}/nginx-opentracing-plus-ingress-debian VERSION=${NGINX_KIC_VERSION}
+  exit 0
+fi
 
 if [[ $2 = "cluster1" ]]; then
   NGINX_CLUSTER_CONF_DIR=${REPO_DIR}/install/nginx/${AM_CLUSTER1_NAME}

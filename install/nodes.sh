@@ -3,6 +3,7 @@
 ROOT_DIR=$(pwd)
 HOME_DIR=/home/ubuntu
 REPO_DIR=${HOME_DIR}/aspenmesh-k8s-multicluster
+CERT_DIR=${REPO_DIR}/install/certs
 
 GIT_REPO=https://github.com/CloudDevOpsEMEA/aspenmesh-k8s-multicluster
 
@@ -102,5 +103,10 @@ if [[ $1 = "enable_multirouting" ]]; then
   exit 0
 fi
 
-echo "please specify action ./nodes.sh apt_install/apt_fix/apt_update/git_clone/git_pull/reboot_k8s/reboot_k8s_cluster1/reboot_k8s_cluster2/enable_multinic"
+if [[ $1 = "install_root_ca" ]]; then
+  do_nodes "sudo cp ${CERT_DIR}/root-cert.pem /usr/local/share/ca-certificates/Aspendemo_Root_CA.crt ; sudo update-ca-certificates"
+  exit 0
+fi
+
+echo "please specify action ./nodes.sh apt_install/apt_fix/apt_update/git_clone/git_pull/reboot_k8s/reboot_k8s_cluster1/reboot_k8s_cluster2/enable_multinic/install_root_ca"
 exit 1
