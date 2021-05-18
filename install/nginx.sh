@@ -20,8 +20,8 @@ fi
 
 if [[ $1 = "config" ]]; then
   ssh ${MASTER_NODE} "sudo rm -rf /etc/nginx/conf.d/*.conf ; \
-    sudo cp ${NGINX_CONF_DIR}/jumphost/conf.d/*.conf /etc/nginx/conf.d/ ; \
-    sudo cp ${NGINX_CONF_DIR}/jumphost/nginx.conf /etc/nginx/nginx.conf ; \
+    sudo cp ${NGINX_CONF_DIR}/conf.d/*.conf /etc/nginx/conf.d/ ; \
+    sudo cp ${NGINX_CONF_DIR}/nginx.conf /etc/nginx/nginx.conf ; \
     sudo cp ${CERT_DIR}/wildcard/aspendemo.org-bundle.pem /etc/ssl/nginx/cert.pem ; \
     sudo cp ${CERT_DIR}/wildcard/aspendemo.org.key /etc/ssl/nginx/key.pem ; \
     sudo systemctl enable nginx.service ; \
