@@ -21,7 +21,10 @@ check_local_requirements
 export KUBESPRAY_VERSION=release-2.15
 
 export KUBESPRAY_CLUSTER1_NAME=cluster1
+export MASTER_IP_CLUSTER1=10.1.1.5
+
 export KUBESPRAY_CLUSTER2_NAME=cluster2
+export MASTER_IP_CLUSTER2=10.1.1.8
 
 ### ASPEN MESH SECTION ###
 
